@@ -1,2 +1,2 @@
 # sed-windows
-Instructions for building sed.exe as a native windows application
+Instructions for building GNU Sed 4.3 as a native windows application
