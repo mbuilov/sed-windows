@@ -17937,6 +17937,30 @@ diff -Naur sed-4.3-orig/make.bat sed-4.3/make.bat
 diff -Naur sed-4.3-orig/sed/execute.c sed-4.3/sed/execute.c
 --- sed-4.3-orig/sed/execute.c	2016-12-13 01:59:59.000000000 +0300
 +++ sed-4.3/sed/execute.c	2017-01-13 15:33:39.644700200 +0300
+@@ -28,6 +28,10 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <stdlib.h>
++#if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
++  || defined MSDOS || defined __EMX__
++#include <fcntl.h>
++#endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include "stat-macros.h"
+@@ -648,6 +652,12 @@
+       if (input->fp && unbuffered)
+         setvbuf (input->fp, NULL, _IONBF, 0);
+       output_file.fp = stdout;
++#if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
++  || defined MSDOS || defined __EMX__
++      if ('w' == write_mode[0] && 'b' == write_mode[1])
++        _setmode(_fileno(stdout), _O_BINARY);
++#else
++#endif
+     }
+ }
+ 
 @@ -1240,6 +1240,7 @@
          {
            if (strncmp(line.active + idx, trans[2*i], mbclen) == 0)
