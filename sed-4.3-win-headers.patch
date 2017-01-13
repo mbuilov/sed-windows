@@ -1,0 +1,205 @@
+diff -Naur sed-4.3/lib/ctype.h sed-4.3-good/lib/ctype.h
+--- sed-4.3/lib/ctype.h	2017-01-11 18:02:22.838319800 +0300
++++ sed-4.3-good/lib/ctype.h	2017-01-11 17:47:46.179080500 +0300
+@@ -32,7 +32,7 @@
+ 
+ /* Include the original <ctype.h>.  */
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\ctype.h"
+ 
+ #ifndef _GL_CTYPE_H
+ #define _GL_CTYPE_H
+diff -Naur sed-4.3/lib/errno.h sed-4.3-good/lib/errno.h
+--- sed-4.3/lib/errno.h	2017-01-11 18:02:22.888319900 +0300
++++ sed-4.3-good/lib/errno.h	2017-01-11 17:47:46.194680500 +0300
+@@ -24,7 +24,7 @@
+ 
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\errno.h"
+ 
+ #ifndef _GL_ERRNO_H
+ #define _GL_ERRNO_H
+diff -Naur sed-4.3/lib/fcntl.h sed-4.3-good/lib/fcntl.h
+--- sed-4.3/lib/fcntl.h	2017-01-11 18:02:22.978320000 +0300
++++ sed-4.3-good/lib/fcntl.h	2017-01-11 17:47:46.257080600 +0300
+@@ -58,7 +58,7 @@
+ # include <sys/stat.h>
+ #endif
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\fcntl.h"
+ 
+ #ifndef _GL_FCNTL_H
+ #define _GL_FCNTL_H
+diff -Naur sed-4.3/lib/limits.h sed-4.3-good/lib/limits.h
+--- sed-4.3/lib/limits.h	2017-01-11 18:02:23.108320200 +0300
++++ sed-4.3-good/lib/limits.h	2017-01-11 17:47:46.179080500 +0300
+@@ -24,7 +24,7 @@
+ 
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\limits.h"
+ 
+ #ifndef _GL_LIMITS_H
+ #define _GL_LIMITS_H
+diff -Naur sed-4.3/lib/locale.h sed-4.3-good/lib/locale.h
+--- sed-4.3/lib/locale.h	2017-01-11 18:02:23.148320200 +0300
++++ sed-4.3-good/lib/locale.h	2017-01-11 17:47:46.241480600 +0300
+@@ -35,7 +35,7 @@
+ #define _GL_ALREADY_INCLUDING_LOCALE_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\locale.h"
+ 
+ #undef _GL_ALREADY_INCLUDING_LOCALE_H
+ 
+diff -Naur sed-4.3/lib/stddef.h sed-4.3-good/lib/stddef.h
+--- sed-4.3/lib/stddef.h	2017-01-11 18:02:23.398320600 +0300
++++ sed-4.3-good/lib/stddef.h	2017-01-11 17:47:46.179080500 +0300
+@@ -52,7 +52,7 @@
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+ 
+-#  include ""
++#  include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stddef.h"
+ 
+ /* On NetBSD 5.0, the definition of NULL lacks proper parentheses.  */
+ #  if (0 \
+diff -Naur sed-4.3/lib/stdint.h sed-4.3-good/lib/stdint.h
+--- sed-4.3/lib/stdint.h	2017-01-11 18:02:23.448320700 +0300
++++ sed-4.3-good/lib/stdint.h	2017-01-11 17:47:46.241480600 +0300
+@@ -74,7 +74,7 @@
+      in <inttypes.h> would reinclude us, skipping our contents because
+      _GL_STDINT_H is defined.
+      The include_next requires a split double-inclusion guard.  */
+-# include ""
++# include "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\stdint.h"
+ #endif
+ 
+ #if ! defined _GL_STDINT_H && ! defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H
+diff -Naur sed-4.3/lib/stdio.h sed-4.3-good/lib/stdio.h
+--- sed-4.3/lib/stdio.h	2017-01-11 18:02:23.558320800 +0300
++++ sed-4.3-good/lib/stdio.h	2017-01-11 17:47:46.179080500 +0300
+@@ -40,7 +40,7 @@
+ #define _GL_ALREADY_INCLUDING_STDIO_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stdio.h"
+ 
+ #undef _GL_ALREADY_INCLUDING_STDIO_H
+ 
+diff -Naur sed-4.3/lib/stdlib.h sed-4.3-good/lib/stdlib.h
+--- sed-4.3/lib/stdlib.h	2017-01-11 18:02:23.648320900 +0300
++++ sed-4.3-good/lib/stdlib.h	2017-01-11 17:47:46.194680500 +0300
+@@ -25,7 +25,7 @@
+ /* Special invocation conventions inside some gnulib header files,
+    and inside some glibc header files, respectively.  */
+ 
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stdlib.h"
+ 
+ #else
+ /* Normal invocation convention.  */
+@@ -33,7 +33,7 @@
+ #ifndef _GL_STDLIB_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stdlib.h"
+ 
+ #ifndef _GL_STDLIB_H
+ #define _GL_STDLIB_H
+diff -Naur sed-4.3/lib/string.h sed-4.3-good/lib/string.h
+--- sed-4.3/lib/string.h	2017-01-11 18:02:23.728321100 +0300
++++ sed-4.3-good/lib/string.h	2017-01-11 17:47:46.194680500 +0300
+@@ -38,7 +38,7 @@
+ #define _GL_ALREADY_INCLUDING_STRING_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\string.h"
+ 
+ #undef _GL_ALREADY_INCLUDING_STRING_H
+ 
+diff -Naur sed-4.3/lib/sys/stat.h sed-4.3-good/lib/sys/stat.h
+--- sed-4.3/lib/sys/stat.h	2017-01-11 18:02:23.788321100 +0300
++++ sed-4.3-good/lib/sys/stat.h	2017-01-11 17:47:46.163480500 +0300
+@@ -29,7 +29,7 @@
+ #if defined __need_system_sys_stat_h
+ /* Special invocation convention.  */
+ 
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\sys\stat.h"
+ 
+ #else
+ /* Normal invocation convention.  */
+@@ -44,7 +44,7 @@
+ #include <time.h>
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\sys\stat.h"
+ 
+ #ifndef _GL_SYS_STAT_H
+ #define _GL_SYS_STAT_H
+diff -Naur sed-4.3/lib/sys/types.h sed-4.3-good/lib/sys/types.h
+--- sed-4.3/lib/sys/types.h	2017-01-11 18:02:23.898321300 +0300
++++ sed-4.3-good/lib/sys/types.h	2017-01-11 17:47:46.163480500 +0300
+@@ -25,7 +25,7 @@
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+ # define _GL_INCLUDING_SYS_TYPES_H
+-#include ""
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\sys\types.h"
+ # undef _GL_INCLUDING_SYS_TYPES_H
+ 
+ #ifndef _GL_SYS_TYPES_H
+diff -Naur sed-4.3/lib/time.h sed-4.3-good/lib/time.h
+--- sed-4.3/lib/time.h	2017-01-11 18:02:23.938321300 +0300
++++ sed-4.3-good/lib/time.h	2017-01-11 17:47:46.194680500 +0300
+@@ -32,13 +32,13 @@
+       && !defined __MINGW32__)                         \
+      || defined _GL_TIME_H)
+ 
+-# include ""
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\time.h"
+ 
+ #else
+ 
+ # define _GL_TIME_H
+ 
+-# include ""
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\time.h"
+ 
+ /* NetBSD 5.0 mis-defines NULL.  */
+ # include <stddef.h>
+diff -Naur sed-4.3/lib/wchar.h sed-4.3-good/lib/wchar.h
+--- sed-4.3/lib/wchar.h	2017-01-11 18:02:24.178321700 +0300
++++ sed-4.3-good/lib/wchar.h	2017-01-11 17:47:46.241480600 +0300
+@@ -84,7 +84,7 @@
+    Some builds of uClibc lack it.  */
+ /* The include_next requires a split double-inclusion guard.  */
+ #if 1
+-# include ""
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\wchar.h"
+ #endif
+ 
+ #undef _GL_ALREADY_INCLUDING_WCHAR_H
+diff -Naur sed-4.3/lib/wctype.h sed-4.3-good/lib/wctype.h
+--- sed-4.3/lib/wctype.h	2017-01-11 18:02:24.228321800 +0300
++++ sed-4.3-good/lib/wctype.h	2017-01-11 17:47:46.257080600 +0300
+@@ -68,7 +68,7 @@
+    BeOS 5 has the functions but no <wctype.h>.  */
+ /* The include_next requires a split double-inclusion guard.  */
+ #if 1
+-# include ""
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\wctype.h"
+ #endif
+ 
+ #ifndef _GL_WCTYPE_H

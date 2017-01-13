@@ -1,0 +1,41 @@
+How to create sed-4.3-build-VS..-xxx.patch
+
+1) get archive:            wget http://ftp.gnu.org/gnu/sed/sed-4.3.tar.xz
+2) unpack archive:         tar xf sed-4.3.tar.xz
+3) go to sed sources:      cd sed-4.3
+4) apply a patch:          patch -Np1 -i sed-4.3-src.patch
+5) run dos prompt:         cmd.exe /c "start cmd.exe"
+6) setup compiler:         "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+7) run bash:               bash
+8) check make is working:  make --version
+
+9) configure sed:
+  CC=cl CPP="cl -E" LD=lib ARFLAGS="/OUT:" ./configure --enable-threads=windows --disable-dependency-tracking --disable-silent-rules
+
+10) fix generated Makefile:
+  sed -i '/^NEXT/s/=.*/=""/'            Makefile
+  sed -i '/lib_libsed_a_AR/s/ lib/lib/' Makefile
+  sed -i '/sed_libver_a_AR/s/ sed/sed/' Makefile
+  sed -i 's/^AR = .*/AR = lib/'         Makefile
+  sed -i 's/^all-local:.*/all-local:/'  Makefile
+
+11) fix sed target:        echo 'sed_sed_LINK = link /DEFAULTLIB:LIBCPMT.lib /OUT:$@' >> Makefile
+12) add gen target:        echo 'gen: $(BUILT_SOURCES)' >> Makefile
+13) generate sed headers:  make gen
+
+14) fix sed-4.3-win-headers.patch - change paths to locations of Visual Studio 14.0 and WDK10
+
+sed -i '/Visual Studio/s@C:.*include@C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\include@' sed-4.3-win-headers.patch
+sed -i '/Windows Kits/s@C:.*ucrt@C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.14393.0\\ucrt@' sed-4.3-win-headers.patch
+
+15) patch generated headers: patch -Np1 -i sed-4.3-win-headers.patch
+16) do compile sed:          make > make.bat
+17) check build result:      sed/sed.exe --version
+
+compilation should be ok, native sed/sed.exe should be created
+
+Now it is possible to create a patch file - to compile sed.exe without any unix emulation layer:
+1) diff current directory with original just unpacked sed-4.3.tar.xz orig-dir
+2) remove unneeded built files in current directory (object files, libs, etc...)
+3) edit make.bat
+4) create a patch: diff -Naur {orig-dir} {curr-dir} > sed-4.3-build-VS..-xxx.patch

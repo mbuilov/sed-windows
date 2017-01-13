@@ -1,0 +1,173 @@
+diff -Naur sed-4.3-orig/lib/dfa.c sed-4.3-patched/lib/dfa.c
+--- sed-4.3-orig/lib/dfa.c	2016-12-19 19:49:33.000000000 +0300
++++ sed-4.3-patched/lib/dfa.c	2017-01-13 10:25:17.590125000 +0300
+@@ -769,13 +769,13 @@
+      Adjust the growth according to three constraints: NITEMS_INCR_MIN,
+      NITEMS_MAX, and what the C language can represent safely.  */
+ 
+-  ptrdiff_t n, nbytes;
++  ptrdiff_t n, nbytes, adjusted_nbytes;
+   if (INT_ADD_WRAPV (n0, n0 >> 1, &n))
+     n = PTRDIFF_MAX;
+   if (0 <= nitems_max && nitems_max < n)
+     n = nitems_max;
+ 
+-  ptrdiff_t adjusted_nbytes
++  adjusted_nbytes
+     = ((INT_MULTIPLY_WRAPV (n, item_size, &nbytes) || SIZE_MAX < nbytes)
+        ? MIN (PTRDIFF_MAX, SIZE_MAX)
+        : nbytes < DEFAULT_MXFAST ? DEFAULT_MXFAST : 0);
+@@ -2096,7 +2096,7 @@
+ static void
+ merge (position_set const *s1, position_set const *s2, position_set *m)
+ {
+-  return merge_constrained (s1, s2, -1, m);
++  merge_constrained (s1, s2, -1, m);
+ }
+ 
+ /* Delete a position from a set.  Return the nonzero constraint of the
+@@ -2232,8 +2232,9 @@
+ epsclosure (position_set *initial, struct dfa const *d)
+ {
+   position_set tmp;
++  size_t i, j;
+   alloc_position_set (&tmp, d->nleaves);
+-  for (size_t i = 0; i < d->tindex; ++i)
++  for (i = 0; i < d->tindex; ++i)
+     if (d->follows[i].nelem > 0 && d->tokens[i] >= NOTCHAR
+         && d->tokens[i] != BACKREF && d->tokens[i] != ANYCHAR
+         && d->tokens[i] != MBCSET && d->tokens[i] < CSET)
+@@ -2266,7 +2267,7 @@
+ 
+         delete (i, &d->follows[i]);
+ 
+-        for (size_t j = 0; j < d->tindex; j++)
++        for (j = 0; j < d->tindex; j++)
+           if (i != j && d->follows[j].nelem > 0)
+             replace (&d->follows[j], i, &d->follows[i], constraint, &tmp);
+ 
+@@ -2909,7 +2910,8 @@
+          rebuilt, whereas rarely-used ones are cleared away.  */
+       if (MAX_TRCOUNT <= d->trcount)
+         {
+-          for (state_num i = d->min_trcount; i < d->tralloc; i++)
++          state_num i;
++          for (i = d->min_trcount; i < d->tralloc; i++)
+             {
+               free (d->trans[i]);
+               free (d->fails[i]);
+@@ -2923,8 +2925,11 @@
+ 
+       /* Fill transition table with a default value which means that the
+          transited state has not been calculated yet.  */
+-      for (int i = 0; i < NOTCHAR; i++)
+-        trans[i] = -2;
++      {
++        int i;
++        for (i = 0; i < NOTCHAR; i++)
++          trans[i] = -2;
++      }
+     }
+ 
+   /* Set up the success bits for this state.  */
+@@ -2941,11 +2946,14 @@
+   /* Now go through the new transition table, and make sure that the trans
+      and fail arrays are allocated large enough to hold a pointer for the
+      largest state mentioned in the table.  */
+-  state_num maxstate = -1;
+-  for (int i = 0; i < NOTCHAR; i++)
+-    if (maxstate < trans[i])
+-      maxstate = trans[i];
+-  realloc_trans_if_necessary (d, maxstate);
++  {
++    state_num maxstate = -1;
++    int i;
++    for (i = 0; i < NOTCHAR; i++)
++      if (maxstate < trans[i])
++        maxstate = trans[i];
++    realloc_trans_if_necessary (d, maxstate);
++  }
+ 
+   return s;
+ }
+diff -Naur sed-4.3-orig/sed/execute.c sed-4.3-patched/sed/execute.c
+--- sed-4.3-orig/sed/execute.c	2016-12-13 01:59:59.000000000 +0300
++++ sed-4.3-patched/sed/execute.c	2017-01-13 10:11:06.590125000 +0300
+@@ -1240,6 +1240,7 @@
+         {
+           if (strncmp(line.active + idx, trans[2*i], mbclen) == 0)
+             {
++              size_t prev_idx = idx;
+               bool move_remain_buffer = false;
+               const char *tr = trans[2*i+1];
+               size_t trans_len = *tr == '\0' ? 1 : strlen (tr);
+@@ -1261,7 +1262,6 @@
+                   /* We must truncate the line buffer.  */
+                   move_remain_buffer = true;
+                 }
+-              size_t prev_idx = idx;
+               if (move_remain_buffer)
+                 {
+                   /* Move the remaining with \0.  */
+diff -Naur sed-4.3-orig/sed/regexp.c sed-4.3-patched/sed/regexp.c
+--- sed-4.3-orig/sed/regexp.c	2016-12-20 14:30:02.000000000 +0300
++++ sed-4.3-patched/sed/regexp.c	2017-01-13 10:11:16.012000000 +0300
+@@ -140,9 +140,11 @@
+       bad_prog(buf);
+     }
+ 
+-  int dfaopts = buffer_delimiter == '\n' ? 0 : DFA_EOL_NUL;
+-  new_regex->dfa = dfaalloc ();
+-  dfasyntax (new_regex->dfa, &localeinfo, syntax, dfaopts);
++  {
++    int dfaopts = buffer_delimiter == '\n' ? 0 : DFA_EOL_NUL;
++    new_regex->dfa = dfaalloc ();
++    dfasyntax (new_regex->dfa, &localeinfo, syntax, dfaopts);
++  }
+   dfacomp (new_regex->re, new_regex->sz, new_regex->dfa, 1);
+ 
+   /* The patterns which consist of only ^ or $ often appear in
+diff -Naur sed-4.3-orig/sed/sed.c sed-4.3-patched/sed/sed.c
+--- sed-4.3-orig/sed/sed.c	2016-11-27 20:15:52.000000000 +0300
++++ sed-4.3-patched/sed/sed.c	2017-01-13 10:11:28.308875000 +0300
+@@ -104,7 +104,6 @@
+   G_file_to_unlink = NULL;
+ }
+ 
+-static void usage (int);
+ static void
+ contact(int errmsg)
+ {
+diff -Naur sed-4.3-orig/sed/utils.c sed-4.3-patched/sed/utils.c
+--- sed-4.3-orig/sed/utils.c	2016-12-11 22:37:01.000000000 +0300
++++ sed-4.3-patched/sed/utils.c	2017-01-13 10:11:38.637000000 +0300
+@@ -171,16 +171,20 @@
+    /* The ownership might change, so omit some permissions at first
+       so unauthorized users cannot nip in before the file is ready.
+       mkstemp forces O_BINARY on cygwin, so use mkostemp instead.  */
+-  mode_t save_umask = umask (0700);
+-  int fd = mkostemp (template, 0);
+-  umask (save_umask);
+-  if (fd == -1)
+-    panic(_("couldn't open temporary file %s: %s"), template, strerror(errno));
++  {
++    mode_t save_umask = umask (0700);
++    int fd = mkostemp (template, 0);
++    umask (save_umask);
++    if (fd == -1)
++      panic(_("couldn't open temporary file %s: %s"), template, strerror(errno));
+ 
+-  *p_filename = template;
+-  FILE *fp = fdopen (fd, mode);
+-  register_open_file (fp, template);
+-  return fp;
++    *p_filename = template;
++    {
++      FILE *fp = fdopen (fd, mode);
++      register_open_file (fp, template);
++      return fp;
++    }
++  }
+ }
+ 
+ /* Panic on failing fwrite */
