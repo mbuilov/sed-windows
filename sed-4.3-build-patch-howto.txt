@@ -1,4 +1,4 @@
-How to create sed-4.3-build-VS..-xxx.patch
+How to build native sed.exe and create sed-4.3-build-VS..-xxx.patch
 
 1) get archive:            wget http://ftp.gnu.org/gnu/sed/sed-4.3.tar.xz
 2) unpack archive:         tar xf sed-4.3.tar.xz
