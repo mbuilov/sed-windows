@@ -1,0 +1,90 @@
+diff -Naur sed-4.3-orig/sed/execute.c sed-4.3-patched/sed/execute.c
+--- sed-4.3-orig/sed/execute.c	2016-12-13 01:59:59.000000000 +0300
++++ sed-4.3-patched/sed/execute.c	2017-01-13 10:11:06.590125000 +0300
+@@ -28,6 +28,11 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <stdlib.h>
++#if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
++  || defined MSDOS || defined __EMX__
++#include <io.h>
++#include <fcntl.h>
++#endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include "stat-macros.h"
+@@ -557,11 +562,13 @@
+   if (name[0] == '-' && name[1] == '\0' && !in_place_extension)
+     {
+       clearerr(stdin);	/* clear any stale EOF indication */
++      input->fp = stdin;
+ #if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
+   || defined MSDOS || defined __EMX__
+-      input->fp = ck_fdopen (fileno (stdin), "stdin", read_mode, false);
+-#else
+-      input->fp = stdin;
++      if ('r' == read_mode[0] && 'b' == read_mode[1])
++        setmode(fileno(input->fp), O_BINARY);
++      else
++        setmode(fileno(input->fp), O_TEXT);
+ #endif
+     }
+   else
+@@ -648,6 +655,13 @@
+       if (input->fp && unbuffered)
+         setvbuf (input->fp, NULL, _IONBF, 0);
+       output_file.fp = stdout;
++#if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
++  || defined MSDOS || defined __EMX__
++      if ('w' == write_mode[0] && 'b' == write_mode[1])
++        setmode(fileno(output_file.fp), O_BINARY);
++      else
++        setmode(fileno(output_file.fp), O_TEXT);
++#endif
+     }
+ }
+ 
+diff -Naur sed-4.3-orig/sed/sed.c sed-4.3-patched/sed/sed.c
+--- sed-4.3-orig/sed/sed.c	2016-11-27 20:15:52.000000000 +0300
++++ sed-4.3-patched/sed/sed.c	2017-01-13 10:11:28.308875000 +0300
+@@ -60,9 +60,9 @@
+ /* How do we edit files in-place? (we don't if NULL) */
+ char *in_place_extension = NULL;
+ 
+-/* The mode to use to read/write files, either "r"/"w" or "rb"/"wb".  */
+-char const *read_mode = "r";
+-char const *write_mode = "w";
++/* The mode to use to read/write files, either "rt"/"wt" or "rb"/"wb".  */
++char const *read_mode = "rt";
++char const *write_mode = "wt";
+ 
+ /* Do we need to be pedantically POSIX compliant? */
+ enum posixicity_types posixicity;
+@@ -104,7 +104,6 @@
+   G_file_to_unlink = NULL;
+ }
+ 
+-static void usage (int);
+ static void
+ contact(int errmsg)
+ {
+diff -Naur g/sed-4.4/sed/utils.c sed-4.4/sed/utils.c
+--- g/sed-4.4/sed/utils.c	2017-01-01 14:17:10.000000000 +0300
++++ sed-4.4/sed/utils.c	2017-03-09 13:51:33.103824100 +0300
+@@ -22,6 +22,7 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+@@ -172,7 +173,7 @@
+       so unauthorized users cannot nip in before the file is ready.
+       mkstemp forces O_BINARY on cygwin, so use mkostemp instead.  */
+   mode_t save_umask = umask (0700);
+-  int fd = mkostemp (template, 0);
++  int fd = mkostemp (template, ('w' == mode[0] && 'b' == mode[1]) ? O_BINARY : O_TEXT);
+   umask (save_umask);
+   if (fd == -1)
+     panic(_("couldn't open temporary file %s: %s"), template, strerror(errno));
