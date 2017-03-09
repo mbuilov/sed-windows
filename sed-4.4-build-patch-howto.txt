@@ -26,7 +26,7 @@ How to build native sed.exe and create sed-4.4-build-VS..-xxx.patch
 12) add gen target:        echo 'gen: $(BUILT_SOURCES)' >> Makefile
 13) generate sed headers:  make gen
 
-14) fix sed-4.3-win-headers.patch - change paths to locations of Visual Studio 14.0 and WDK10
+14) fix sed-4.3-win-headers.patch - change paths to locations of Visual Studio 2017 and WDK10
 
 sed -i '/Visual Studio/s@.:.*include@D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.10.25017\\include@' sed-4.3-win-headers.patch
 sed -i '/Windows Kits/s@.:.*ucrt@C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.14393.0\\ucrt@' sed-4.3-win-headers.patch

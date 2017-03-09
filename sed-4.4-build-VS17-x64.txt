@@ -7,7 +7,7 @@ From cygwin or other unix shell:
 3) go to sed sources:   cd sed-4.4
 4) apply a patch:       patch -Np1 -i sed-4.4-src.patch
 
-5) fix sed-4.4-build-VS17-x64.patch - change paths to locations of Visual Studio 14.0 and WDK10
+5) fix sed-4.4-build-VS17-x64.patch - change paths to locations of Visual Studio 2017 and WDK10
 
 sed -i '/Visual Studio/s@.:.*include@D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.10.25017\\include@' sed-4.4-build-VS17-x64.patch
 sed -i '/Windows Kits/s@.:.*ucrt@C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.14393.0\\ucrt@' sed-4.4-build-VS17-x64.patch
