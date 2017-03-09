@@ -1,0 +1,21 @@
+How to build native win32 sed.exe with Visual Studio 9.0
+
+From cygwin or other unix shell:
+
+1) get sed archive:     wget http://ftp.gnu.org/gnu/sed/sed-4.4.tar.xz
+2) unpack sed archive:  tar xf sed-4.4.tar.xz
+3) go to sed sources:   cd sed-4.4
+4) apply a patch:       patch -Np1 -i sed-4.4-src.patch
+
+5) Visual Studio 2008 C-compiler doesn't support C99, so apply one more patch:
+  patch -Np1 -i sed-4.4-src-non-c99.patch
+
+6) fix sed-4.4-build-VS9-x86.patch - change path to location of Visual Studio 9.0
+
+sed -i '/Visual Studio/s@C:.*include@C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\include@' sed-4.4-build-VS9-x86.patch
+
+7) patch sed headers:   patch -Np1 -i sed-4.4-build-VS9-x86.patch
+8) run dos prompt:      cmd.exe /c "start cmd.exe"
+9) setup compiler:      "c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86
+10) do compile:         make.bat
+11) check build result: sed\sed.exe --version
