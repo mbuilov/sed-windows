@@ -4,6 +4,8 @@ How to build native sed.exe and create sed-4.4-build-VS..-xxx.patch
 2) unpack archive:         tar xf sed-4.4.tar.xz
 3) go to sed sources:      cd sed-4.4
 4) apply a patch:          patch -Np1 -i sed-4.4-src.patch
+ to build with old non-c99 compiler apply one more patch:
+ patch -Np1 -i sed-4.4-src-non-c99.patch
 5) run dos prompt:         cmd.exe /c "start cmd.exe"
 6) setup compiler:         "D:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
 7) run bash:               bash
