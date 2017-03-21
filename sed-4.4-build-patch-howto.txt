@@ -42,7 +42,7 @@ From cygwin shell:
 10) configure sed:
   CFLAGS= CC=cl CPP="cl -E" LD=lib ARFLAGS="/OUT:" ./configure --enable-threads=windows --disable-dependency-tracking --disable-silent-rules
 
-11) configure script is not fully functional to create correct Makefile - it's need to be fixed manually:
+11) configure script is not fully functional to create correct Makefile - it needs to be fixed manually:
   sed -i '/^NEXT/s/=.*/=""/'            Makefile
   sed -i '/lib_libsed_a_AR/s/ lib/lib/' Makefile
   sed -i '/sed_libver_a_AR/s/ sed/sed/' Makefile
@@ -69,7 +69,7 @@ From cygwin shell:
 
   (patch location: https://github.com/mbuilov/sed-windows/blob/master/sed-4.3-win-headers.patch)
 
- b) now patch generated headers:
+ b) now patch generated headers with updated patch-file:
   patch -Np1 -i sed-4.3-win-headers.patch
 
 16) do compile sed:
