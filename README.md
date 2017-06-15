@@ -1,5 +1,9 @@
 # sed-windows
-Instructions for building Gnu Sed as a native windows application
+Instructions for building [Gnu Sed](https://www.gnu.org/software/sed) as a native windows application
+
+All patches under the same license as sources of [Gnu Sed](https://www.gnu.org/software/sed): [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) or later
+
+Author: Michael M. Builov (mbuilov@gmail.com)
 
 ## Pre-built executables:
 - [`sed-4.4.exe`](/sed-4.4.exe)     - sed 4.4 built for windowsXP x86
