@@ -1,0 +1,118 @@
+diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
+--- sed-4.5-orig/sed/execute.c	2018-03-30 05:56:36.000000000 +0300
++++ sed-4.5-patched/sed/execute.c	2018-07-11 17:02:02.700552900 +0300
+@@ -28,6 +28,11 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <stdlib.h>
++#if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
++  || defined MSDOS || defined __EMX__
++#include <io.h>
++#include <fcntl.h>
++#endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include "stat-macros.h"
+@@ -547,11 +552,13 @@
+   if (name[0] == '-' && name[1] == '\0' && !in_place_extension)
+     {
+       clearerr(stdin);	/* clear any stale EOF indication */
++      input->fp = stdin;
+ #if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
+   || defined MSDOS || defined __EMX__
+-      input->fp = ck_fdopen (fileno (stdin), "stdin", read_mode, false);
+-#else
+-      input->fp = stdin;
++      if ('r' == read_mode[0] && 'b' == read_mode[1])
++        setmode(fileno(input->fp), O_BINARY);
++      else
++        setmode(fileno(input->fp), O_TEXT);
+ #endif
+     }
+   else
+@@ -574,17 +581,22 @@
+   if (in_place_extension)
+     {
+       int input_fd;
+-      char *tmpdir, *p;
++      char *tmpdir;
+       security_context_t old_fscreatecon;
+       int reset_fscreatecon = 0;
++      size_t in_dir_len;
+       memset (&old_fscreatecon, 0, sizeof (old_fscreatecon));
+ 
+       /* get the base name */
+-      tmpdir = ck_strdup(input->in_file_name);
+-      if ((p = strrchr(tmpdir, '/')))
+-        *p = 0;
++      in_dir_len = dir_len(input->in_file_name);
++      if (in_dir_len)
++        {
++          char *tmpdir = xmalloc(in_dir_len + 1);
++          memcpy(tmpdir, input->in_file_name, in_dir_len);
++          tmpdir[in_dir_len] = '\0';
++        }
+       else
+-        strcpy(tmpdir, ".");
++        tmpdir = ck_strdup(".");
+ 
+       if (isatty (fileno (input->fp)))
+         panic(_("couldn't edit %s: is a terminal"), input->in_file_name);
+@@ -638,6 +650,13 @@
+       if (input->fp && unbuffered)
+         setvbuf (input->fp, NULL, _IONBF, 0);
+       output_file.fp = stdout;
++#if defined WIN32 || defined _WIN32 || defined __CYGWIN__ \
++  || defined MSDOS || defined __EMX__
++      if ('w' == write_mode[0] && 'b' == write_mode[1])
++        setmode(fileno(output_file.fp), O_BINARY);
++      else
++        setmode(fileno(output_file.fp), O_TEXT);
++#endif
+     }
+ }
+ 
+diff -Naur sed-4.5-orig/sed/sed.c sed-4.5-patched/sed/sed.c
+--- sed-4.5-orig/sed/sed.c	2018-03-30 05:56:36.000000000 +0300
++++ sed-4.5-patched/sed/sed.c	2018-07-11 16:58:42.930273200 +0300
+@@ -60,9 +60,9 @@
+ /* How do we edit files in-place? (we don't if NULL) */
+ char *in_place_extension = NULL;
+ 
+-/* The mode to use to read/write files, either "r"/"w" or "rb"/"wb".  */
+-char const *read_mode = "r";
+-char const *write_mode = "w";
++/* The mode to use to read/write files, either "rt"/"wt" or "rb"/"wb".  */
++char const *read_mode = "rt";
++char const *write_mode = "wt";
+ 
+ /* Do we need to be pedantically POSIX compliant? */
+ enum posixicity_types posixicity;
+@@ -104,7 +104,6 @@
+   G_file_to_unlink = NULL;
+ }
+ 
+-static void usage (int);
+ static void
+ contact(int errmsg)
+ {
+diff -Naur sed-4.5-orig/sed/utils.c sed-4.5-patched/sed/utils.c
+--- sed-4.5-orig/sed/utils.c	2018-03-30 05:56:36.000000000 +0300
++++ sed-4.5-patched/sed/utils.c	2018-07-11 16:58:42.930273200 +0300
+@@ -22,6 +22,7 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+@@ -172,7 +173,7 @@
+       so unauthorized users cannot nip in before the file is ready.
+       mkstemp forces O_BINARY on cygwin, so use mkostemp instead.  */
+   mode_t save_umask = umask (0700);
+-  int fd = mkostemp (template, 0);
++  int fd = mkostemp (template, ('w' == mode[0] && 'b' == mode[1]) ? O_BINARY : O_TEXT);
+   umask (save_umask);
+   if (fd == -1)
+     panic(_("couldn't open temporary file %s: %s"), template, strerror(errno));
