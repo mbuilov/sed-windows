@@ -19,7 +19,7 @@ From cygwin shell:
   cd sed-4.5
 
 4) apply a patch to correctly open files in text (default) or binary (if sed is run with '-b' switch) mode
-   and to correctly determine directory of input file in in-place editing mode (enabled via '-i' swith):
+   and to correctly determine directory of input file in in-place editing mode (enabled via '-i' switch):
   patch -Np1 -i sed-4.5-src.patch
   (patch location: https://github.com/mbuilov/sed-windows/blob/master/sed-4.5-src.patch)
 

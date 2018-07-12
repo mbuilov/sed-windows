@@ -1068,7 +1068,7 @@ diff -Naur sed-4.5-patched1/lib/gettimeofday.c sed-4.5-patched2/lib/gettimeofday
 diff -Naur sed-4.5-patched1/sed/execute.c sed-4.5-patched2/sed/execute.c
 --- sed-4.5-patched1/sed/execute.c	2018-01-04 03:36:29.000000000 +0300
 +++ sed-4.5-patched2/sed/execute.c	2018-07-12 13:29:43.341526000 +0300
-@@ -1232,7 +1232,7 @@
+@@ -1234,7 +1234,7 @@
  static void
  translate_mb (char *const *trans)
  {
@@ -1077,7 +1077,7 @@ diff -Naur sed-4.5-patched1/sed/execute.c sed-4.5-patched2/sed/execute.c
    mbstate_t mbstate = { 0, };
    for (idx = 0; idx < line.length;)
      {
-@@ -1270,7 +1270,7 @@
+@@ -1272,7 +1272,7 @@
                    /* We must truncate the line buffer.  */
                    move_remain_buffer = true;
                  }

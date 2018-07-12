@@ -13,7 +13,16 @@ diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
  #include <sys/types.h>
  #include <sys/stat.h>
  #include "stat-macros.h"
-@@ -547,11 +552,13 @@
+@@ -37,6 +42,8 @@
+ #include "acl.h"
+ #include "ignore-value.h"
+ 
++#include "dirname.h"
++
+ /* The number of extra bytes that must be allocated/usable, beyond
+    the declared "end" of each line buffer that may be passed to
+    match_regex.  This is imposed by its use of dfaexec.  */
+@@ -547,11 +554,13 @@
    if (name[0] == '-' && name[1] == '\0' && !in_place_extension)
      {
        clearerr(stdin);	/* clear any stale EOF indication */
@@ -30,7 +39,7 @@ diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
  #endif
      }
    else
-@@ -574,17 +581,22 @@
+@@ -574,17 +583,22 @@
    if (in_place_extension)
      {
        int input_fd;
@@ -48,7 +57,7 @@ diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
 +      in_dir_len = dir_len(input->in_file_name);
 +      if (in_dir_len)
 +        {
-+          char *tmpdir = xmalloc(in_dir_len + 1);
++          tmpdir = xmalloc(in_dir_len + 1);
 +          memcpy(tmpdir, input->in_file_name, in_dir_len);
 +          tmpdir[in_dir_len] = '\0';
 +        }
@@ -58,7 +67,7 @@ diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
  
        if (isatty (fileno (input->fp)))
          panic(_("couldn't edit %s: is a terminal"), input->in_file_name);
-@@ -638,6 +650,13 @@
+@@ -638,6 +652,13 @@
        if (input->fp && unbuffered)
          setvbuf (input->fp, NULL, _IONBF, 0);
        output_file.fp = stdout;
