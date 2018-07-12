@@ -3,7 +3,11 @@ Instructions for building [Gnu Sed](https://www.gnu.org/software/sed) as a nativ
 
 All patches under the same license as sources of [Gnu Sed](https://www.gnu.org/software/sed): [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) or later
 
-Author: Michael M. Builov (mbuilov@gmail.com)
+Author of the patches: Michael M. Builov (mbuilov@gmail.com)
+
+## Fixed bugs:
+- incorrect behavior in binary mode ('-b' switch) (https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25459)
+- wrong directory of input file in in-place editing mode ('-i' switch) (sed: cannot rename ./sed8JEw8l: Improper link)
 
 ## Pre-built executables:
 - [`sed-4.5.exe`](/sed-4.5.exe)     - sed 4.5 built for windowsXP x86
