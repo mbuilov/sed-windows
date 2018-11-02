@@ -1,6 +1,6 @@
 diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
 --- sed-4.5-orig/sed/execute.c	2018-03-30 05:56:36.000000000 +0300
-+++ sed-4.5-patched/sed/execute.c	2018-07-11 17:02:02.700552900 +0300
++++ sed-4.5-patched/sed/execute.c	2018-11-02 13:12:10.072163600 +0300
 @@ -28,6 +28,11 @@
  #include <errno.h>
  #include <string.h>
@@ -83,8 +83,8 @@ diff -Naur sed-4.5-orig/sed/execute.c sed-4.5-patched/sed/execute.c
  
 diff -Naur sed-4.5-orig/sed/sed.c sed-4.5-patched/sed/sed.c
 --- sed-4.5-orig/sed/sed.c	2018-03-30 05:56:36.000000000 +0300
-+++ sed-4.5-patched/sed/sed.c	2018-07-11 16:58:42.930273200 +0300
-@@ -60,9 +60,9 @@
++++ sed-4.5-patched/sed/sed.c	2018-11-02 13:14:07.615886700 +0300
+@@ -60,9 +60,12 @@
  /* How do we edit files in-place? (we don't if NULL) */
  char *in_place_extension = NULL;
  
@@ -94,10 +94,13 @@ diff -Naur sed-4.5-orig/sed/sed.c sed-4.5-patched/sed/sed.c
 +/* The mode to use to read/write files, either "rt"/"wt" or "rb"/"wb".  */
 +char const *read_mode = "rt";
 +char const *write_mode = "wt";
++
++/* Locale to set at startup.  */
++char const *def_locale = "";
  
  /* Do we need to be pedantically POSIX compliant? */
  enum posixicity_types posixicity;
-@@ -104,7 +104,6 @@
+@@ -104,7 +107,6 @@
    G_file_to_unlink = NULL;
  }
  
@@ -105,9 +108,87 @@ diff -Naur sed-4.5-orig/sed/sed.c sed-4.5-patched/sed/sed.c
  static void
  contact(int errmsg)
  {
+@@ -118,6 +120,9 @@
+      get reports for other people's bugs.  */
+   if (!errmsg)
+     fprintf(out, _("E-mail bug reports to: <%s>.\n"), PACKAGE_BUGREPORT);
++
++  if (!errmsg)
++    fprintf(out, _("Patched by: Michael M. Builov <mbuilov@gmail.com>.\n"));
+ }
+ 
+ _Noreturn static void
+@@ -154,6 +159,8 @@
+                  open files in binary mode (CR+LFs are not" \
+                  " processed specially)\n"));
+ #endif
++  fprintf(out, _("  -C, --ignore-locale\n\
++                 ignore system locale, operate in the default \"C\" locale\n"));
+   fprintf(out, _("  -l N, --line-length=N\n\
+                  specify the desired line-wrap length for the `l' command\n"));
+   fprintf(out, _("  --posix\n\
+@@ -192,15 +199,16 @@
+ main (int argc, char **argv)
+ {
+ #ifdef REG_PERL
+-#define SHORTOPTS "bsnrzRuEe:f:l:i::V:"
++#define SHORTOPTS "bCsnrzRuEe:f:l:i::V:"
+ #else
+-#define SHORTOPTS "bsnrzuEe:f:l:i::V:"
++#define SHORTOPTS "bCsnrzuEe:f:l:i::V:"
+ #endif
+ 
+   enum { SANDBOX_OPTION = CHAR_MAX+1 };
+ 
+   static const struct option longopts[] = {
+     {"binary", 0, NULL, 'b'},
++    {"ignore-locale", 0, NULL, 'C'},
+     {"regexp-extended", 0, NULL, 'r'},
+ #ifdef REG_PERL
+     {"regexp-perl", 0, NULL, 'R'},
+@@ -231,9 +239,27 @@
+ 
+   program_name = argv[0];
+   initialize_main (&argc, &argv);
++
++  /* Suppress error reporting in getopt.  */
++  opterr = 0;
++
++  while ((opt = getopt_long(argc, argv, SHORTOPTS, longopts, NULL)) != EOF)
++    {
++      switch (opt)
++        {
++        case 'C':
++          def_locale = "C";
++          break;
++        }
++    }
++
++  /* Restore getopt behaviour.  */
++  opterr = 1;
++  optind = 1;
++
+ #if HAVE_SETLOCALE
+   /* Set locale according to user's wishes.  */
+-  setlocale (LC_ALL, "");
++  setlocale (LC_ALL, def_locale);
+ #endif
+   set_program_name (argv[0]);
+   initialize_mbcs ();
+@@ -320,6 +346,10 @@
+           write_mode = "wb";
+           break;
+ 
++        case 'C':
++          /* already processed */
++          break;
++
+         case 'E':
+         case 'r':
+ #ifdef REG_PERL
 diff -Naur sed-4.5-orig/sed/utils.c sed-4.5-patched/sed/utils.c
 --- sed-4.5-orig/sed/utils.c	2018-03-30 05:56:36.000000000 +0300
-+++ sed-4.5-patched/sed/utils.c	2018-07-11 16:58:42.930273200 +0300
++++ sed-4.5-patched/sed/utils.c	2018-11-02 13:12:10.076163900 +0300
 @@ -22,6 +22,7 @@
  #include <errno.h>
  #include <string.h>
