@@ -8,6 +8,7 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 ## Fixed bugs:
 - incorrect behavior in binary mode ('-b' switch) (https://debbugs.gnu.org/cgi/bugreport.cgi?bug=25459)
 - wrong directory of input file in in-place editing mode ('-i' switch) (sed: cannot rename ./sed8JEw8l: Improper link)
+- new switch '-C' or '--ignore-locale' - forces Sed to use the standard "C" locale instead of the system one; this switch is most usable in binary mode, to avoid possible interpretation of input data as multi-byte encoded strings (depending on the system locale)
 
 ## Pre-built executables:
 - [`sed-4.5.exe`](/sed-4.5.exe)     - sed 4.5 built for windowsXP x86
