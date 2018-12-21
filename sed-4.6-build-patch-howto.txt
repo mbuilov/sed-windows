@@ -1,0 +1,199 @@
+Instructions how to build native sed.exe with Microsoft Visual Studio from CYGWIN shell.
+
+While building, it is possible to save build log and create a patch - for compiling sed.exe using only Microsoft Visual Studio tools, without need for CYGWIN.
+
+This is how sed-4.6-build-VS17-x64.patch was created.
+
+(sed-4.6-build-VS9-x86.patch was created analogously in Microsoft Visual Studio 2008 environment)
+
+
+From CYGWIN shell:
+
+1) get archive:
+  wget http://ftp.gnu.org/gnu/sed/sed-4.6.tar.xz
+
+2) unpack archive:
+  tar xf sed-4.6.tar.xz
+
+3) go to sed sources:
+  cd sed-4.6
+
+4) apply a patch to correctly open files in text (default) or binary (if sed is run with '-b' switch) mode
+   and to correctly determine directory of input file in in-place editing mode (enabled via '-i' switch):
+  patch -Np1 -i sed-4.6-src.patch
+  (patch location: https://github.com/mbuilov/sed-windows/blob/master/sed-4.6-src.patch)
+
+5) to build with old non-c99 compiler (such as Microsoft Visual Studio 2008) apply one more patch:
+  patch -Np1 -i sed-4.6-src-non-c99.patch
+  (patch location: https://github.com/mbuilov/sed-windows/blob/master/sed-4.6-src-non-c99.patch)
+
+6) now start dos prompt:
+  cmd.exe /c "start cmd.exe"
+
+7) setup compiler:
+  "D:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+  (if Microsoft Visual Studio 2017 is installed in "D:\Program Files (x86)")
+
+  --tip: for Visual Studio 2008:
+  "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86
+
+8) run bash from dos prompt (with environment prepared for compiling with Microsoft Visual Studio):
+  bash
+
+9) check Gnu Make is installed in CYGWIN and it is working:
+  make --version
+
+10) configure sed:
+  CFLAGS= CC=cl CPP="cl -E" LD=lib ARFLAGS="/OUT:" ./configure --enable-threads=windows --disable-dependency-tracking --disable-silent-rules --disable-nls
+
+11) configure script is not fully functional to create correct Makefile - it needs to be fixed manually:
+  sed -i '/^SUBDIRS/s/=.*/= ./'         Makefile
+  sed -i '/^NEXT/s/=.*/=""/'            Makefile
+  sed -i '/lib_libsed_a_AR/s/ lib/lib/' Makefile
+  sed -i '/sed_libver_a_AR/s/ sed/sed/' Makefile
+  sed -i 's@^AR = .*@AR = lib /nologo@' Makefile
+  sed -i 's/-c -o /-c -nologo -Fo/'     Makefile
+  sed -i '/$(RANLIB)/d'                 Makefile
+
+12) fix sed target in Makefile:
+  echo 'sed_sed_LINK = link /nologo /DEFAULTLIB:LIBCPMT.lib /OUT:$@' >> Makefile
+
+13) add gen target:
+  echo 'gen: $(BUILT_SOURCES)' >> Makefile
+
+14) execute Makefile to generate sed headers:
+  make gen
+
+15) some references to system header files are missing in generated headers - they need to be fixed manually.
+
+ a) set paths to locations of Visual Studio 2017 and WDK10 in sed-4.3-win-headers.patch (assume it was copied to the current directory):
+  for example, if Visual Studio 2017 is installed in "D:\Program Files (x86)" and WDK10 installed in "C:\Program Files (x86)"
+
+  sed -i '/Visual Studio/s@.:.*include@D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\include@' ./sed-4.3-win-headers.patch
+  sed -i '/Windows Kits/s@.:.*ucrt@C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.17763.0\\ucrt@' ./sed-4.3-win-headers.patch
+
+  (patch location: https://github.com/mbuilov/sed-windows/blob/master/sed-4.3-win-headers.patch)
+
+  --tip: for Visual Studio 2008:
+  sed -i '/Visual Studio/s@.:.*include@C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\include@' ./sed-4.3-win-headers.patch
+  sed -i '/Windows Kits/s@.:.*ucrt@C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\include@' ./sed-4.3-win-headers.patch
+
+ b) now patch generated headers with updated patch-file:
+  patch -Np1 -i sed-4.3-win-headers.patch
+
+  Note: ignore warnings:
+    lib/locale.h    may be patched with a message: "Hunk #1 succeeded at 38 (offset 3 lines)."
+    lib/sys/types.h may be patched with a message: "Hunk #1 succeeded at 36 (offset 11 lines)."
+    lib/wctype.h    may be patched with a message: "Hunk #1 succeeded at 70 (offset 2 lines)."
+
+16) do compile sed:
+  make > make.bat
+
+17) check build result:
+  ./sed/sed.exe --version
+
+  (should print sed version, e.g.: (GNU sed) 4.6)
+
+compilation should be ok, native ./sed/sed.exe should be created.
+
+
+Now it is possible to create a patch file - for compiling sed.exe using only Microsoft Visual Studio tools, without need for CYGWIN.
+
+1) create directory for unpached sed:
+  mkdir ../orig
+
+2) unpack sed:
+  tar xf ../sed-4.6.tar.xz -C ../orig/
+
+3) diff current directory with original just unpacked sed-4.6.tar.xz in '../orig' directory
+  diff -rql . ../orig/sed-4.6
+
+4) remove unneeded built files in the current directory (object files, libs, etc...)
+
+  rm -r \
+    ./Makefile \
+    ./stamp-h1 \
+    ./sed-4.3-win-headers.patch \
+    ./lib/*.obj \
+    ./lib/.dirstamp \
+    ./lib/.deps \
+    ./lib/glthread/*.obj \
+    ./lib/glthread/.dirstamp \
+    ./lib/glthread/.deps \
+    ./lib/libsed.a \
+    ./sed/*.obj \
+    ./sed/.dirstamp \
+    ./sed/.deps \
+    ./sed/sed.exe \
+    ./sed/libver.a \
+    ./po/Makefile \
+    ./po/Makefile.in \
+    ./po/POTFILES \
+    ./config.log \
+    ./config.status \
+    ./gnulib-tests/Makefile \
+    ./lib/*.h.orig \
+    ./lib/sys/*.h.orig
+
+5) after this, diff should show something like:
+
+  diff -rql . ../orig/sed-4.6
+  Only in .: config.h
+  Only in ./lib: alloca.h
+  Only in ./lib: ctype.h
+  Only in ./lib: errno.h
+  Only in ./lib: fcntl.h
+  Only in ./lib: getopt.h
+  Only in ./lib: getopt-cdefs.h
+  Only in ./lib: langinfo.h
+  Only in ./lib: limits.h
+  Only in ./lib: locale.h
+  Only in ./lib: selinux
+  Only in ./lib: stdalign.h
+  Only in ./lib: stddef.h
+  Only in ./lib: stdint.h
+  Only in ./lib: stdio.h
+  Only in ./lib: stdlib.h
+  Only in ./lib: string.h
+  Only in ./lib: sys
+  Only in ./lib: time.h
+  Only in ./lib: unistd.h
+  Only in ./lib: wchar.h
+  Only in ./lib: wctype.h
+  Only in .: make.bat
+  Files ./sed/execute.c and ../orig/sed-4.6/sed/execute.c differ
+  Files ./sed/sed.c and ../orig/sed-4.6/sed/sed.c differ
+  Only in ./sed: version.c
+  Only in ./sed: version.h
+
+If patch sed-4.6-src-non-c99.patch was applied, diff will show additional differences:
+
+Files ./lib/dfa.c and ../orig/sed-4.6/lib/dfa.c differ
+Files ./lib/gettimeofday.c and ../orig/sed-4.6/lib/gettimeofday.c differ
+Files ./lib/regexec.c and ../orig/sed-4.6/lib/regexec.c differ
+Files ./sed/debug.c and ../orig/sed-4.6/sed/debug.c differ
+Files ./sed/regexp.c and ../orig/sed-4.6/sed/regexp.c differ
+Files ./sed/utils.c and ../orig/sed-4.6/sed/utils.c differ
+
+6) edit make.bat
+
+  cp make.bat make.bat.old
+  sed -i -n '/^cl /p;/^lib /p;/^link /p' make.bat
+  sed -i 's@-DLOCALEDIR=."/usr/local/share/locale.".*-c -nologo -F@/DLOCALEDIR="" /c /nologo /F@' make.bat
+  sed -i 's@   -c -nologo -F@/c /nologo /F@' make.bat
+  sed -i 's@lib/glthread/@lib\\glthread\\@g' make.bat
+  sed -i 's@/Fosed/@/Fosed\\@;s@/Folib/@/Folib\\@' make.bat
+  sed -i 's@`if test -f .@@;s@.; then.*@@' make.bat
+  sed -i 's@`cygpath -w .@@;s@.`@@' make.bat
+  sed -i 's@ lib/@ lib\\@g;s@ sed/@ sed\\@g' make.bat
+  sed -i 's@-DHAVE_CONFIG_H -I.  -I. -I./lib -I./lib -I./sed@/Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\\lib /I.\\sed@' make.bat
+  sed -i 's@lib /nologo@lib /LTCG /nologo@' make.bat
+  sed -i 's@/OUT:lib/@/OUT:lib\\@;s@/OUT:sed/@/OUT:sed\\@' make.bat
+  sed -i 's@link /nologo@& /LTCG@' make.bat
+  rm make.bat.old
+
+7) finally, create a patch:
+  diff -Naur ../orig/sed-4.6 . > ../sed-4.6-build-VS17-x64.patch
+
+ or, for Visual Studio 2008:
+  diff -Naur ../orig/sed-4.6 . > ../sed-4.6-build-VS9-x86.patch

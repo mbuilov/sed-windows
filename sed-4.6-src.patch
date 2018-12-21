@@ -1,0 +1,162 @@
+diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
+--- sed-4.6/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
++++ sed-4.6-patched/sed/execute.c	2018-12-21 12:30:45.891911600 +0300
+@@ -37,6 +37,8 @@
+ #include "progname.h"
+ #include "xalloc.h"
+ 
++#include "dirname.h"
++
+ /* The number of extra bytes that must be allocated/usable, beyond
+    the declared "end" of each line buffer that may be passed to
+    match_regex.  This is imposed by its use of dfaexec.  */
+@@ -571,17 +573,22 @@
+   if (in_place_extension)
+     {
+       int input_fd;
+-      char *tmpdir, *p;
++      char *tmpdir;
+       security_context_t old_fscreatecon;
+       int reset_fscreatecon = 0;
++      size_t in_dir_len;
+       memset (&old_fscreatecon, 0, sizeof (old_fscreatecon));
+ 
+       /* get the base name */
+-      tmpdir = xstrdup (input->in_file_name);
+-      if ((p = strrchr (tmpdir, '/')))
+-        *p = 0;
++      in_dir_len = dir_len (input->in_file_name);
++      if (in_dir_len)
++        {
++          tmpdir = xmalloc (in_dir_len + 1);
++          memcpy (tmpdir, input->in_file_name, in_dir_len);
++          tmpdir[in_dir_len] = '\0';
++        }
+       else
+-        strcpy (tmpdir, ".");
++        tmpdir = xstrdup (".");
+ 
+       if (isatty (fileno (input->fp)))
+         panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
+diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
+--- sed-4.6/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
++++ sed-4.6-patched/sed/sed.c	2018-12-21 12:24:48.488945000 +0300
+@@ -66,9 +66,17 @@
+ /* How do we edit files in-place? (we don't if NULL) */
+ char *in_place_extension = NULL;
+ 
+-/* The mode to use to read/write files, either "r"/"w" or "rb"/"wb".  */
++/* The mode to use to read/write files, either "r(t)"/"w(t)" or "rb"/"wb".  */
++#ifdef HAVE_FOPEN_RT
++char const *read_mode = "rt";
++char const *write_mode = "wt";
++#else
+ char const *read_mode = "r";
+ char const *write_mode = "w";
++#endif
++
++/* Locale to set at startup.  */
++char const *def_locale = "";
+ 
+ #if O_BINARY
+ /* Additional flag for binary mode on platforms with O_BINARY/O_TEXT.  */
+@@ -116,7 +124,6 @@
+   G_file_to_unlink = NULL;
+ }
+ 
+-static void usage (int);
+ static void
+ contact (int errmsg)
+ {
+@@ -128,6 +135,9 @@
+      get reports for other people's bugs.  */
+   if (!errmsg)
+     fprintf (out, _("E-mail bug reports to: <%s>.\n"), PACKAGE_BUGREPORT);
++
++  if (!errmsg)
++    fprintf (out, _("Patched by: Michael M. Builov <mbuilov@gmail.com>.\n"));
+ }
+ 
+ _Noreturn static void
+@@ -159,6 +169,8 @@
+                  open files in binary mode (CR+LFs are not" \
+                  " processed specially)\n"));
+ #endif
++  fprintf (out, _("  -C, --ignore-locale\n\
++                 ignore system locale, operate in the default \"C\" locale\n"));
+   fprintf (out, _("  -l N, --line-length=N\n\
+                  specify the desired line-wrap length for the `l' command\n"));
+   fprintf (out, _("  --posix\n\
+@@ -193,7 +205,7 @@
+ int
+ main (int argc, char **argv)
+ {
+-#define SHORTOPTS "bsnrzuEe:f:l:i::V:"
++#define SHORTOPTS "bCsnrzuEe:f:l:i::V:"
+ 
+   enum { SANDBOX_OPTION = CHAR_MAX+1,
+          DEBUG_OPTION
+@@ -201,6 +213,7 @@
+ 
+   static const struct option longopts[] = {
+     {"binary", 0, NULL, 'b'},
++    {"ignore-locale", 0, NULL, 'C'},
+     {"regexp-extended", 0, NULL, 'r'},
+     {"debug", 0, NULL, DEBUG_OPTION},
+     {"expression", 1, NULL, 'e'},
+@@ -229,9 +242,27 @@
+ 
+   set_program_name (argv[0]);
+   initialize_main (&argc, &argv);
++
++  /* Suppress error reporting in getopt.  */
++  opterr = 0;
++
++  while ((opt = getopt_long (argc, argv, SHORTOPTS, longopts, NULL)) != EOF)
++    {
++      switch (opt)
++        {
++        case 'C':
++          def_locale = "C";
++          break;
++        }
++    }
++
++  /* Restore getopt behaviour.  */
++  opterr = 1;
++  optind = 1;
++
+ #if HAVE_SETLOCALE
+   /* Set locale according to user's wishes.  */
+-  setlocale (LC_ALL, "");
++  setlocale (LC_ALL, def_locale);
+ #endif
+   initialize_mbcs ();
+   init_localeinfo (&localeinfo);
+@@ -320,6 +351,10 @@
+ #endif
+           break;
+ 
++        case 'C':
++          /* already processed */
++          break;
++
+         case 'E':
+         case 'r':
+           extended_regexp_flags = REG_EXTENDED;
+@@ -374,6 +409,15 @@
+        if (set_binary_mode ( fileno (stdout), O_BINARY) == -1)
+          panic (_("failed to set binary mode on STDOUT"));
+     }
++  else
++    {
++       /* Under CYGWIN, standard input/output streams are in BINARY
++          mode by default, make sure they are in TEXT mode.  */
++       if (set_binary_mode ( fileno (stdin), O_TEXT) == -1)
++         panic (_("failed to set binary mode on STDIN"));
++       if (set_binary_mode ( fileno (stdout), O_TEXT) == -1)
++         panic (_("failed to set binary mode on STDOUT"));
++    }
+ #endif
+ 
+   if (debug)

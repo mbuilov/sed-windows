@@ -1,0 +1,18 @@
+How to build native win64 sed.exe with Visual Studio 2017 and WDK10
+
+From cygwin or other unix shell:
+
+1) get sed archive:     wget http://ftp.gnu.org/gnu/sed/sed-4.6.tar.xz
+2) unpack sed archive:  tar xf sed-4.6.tar.xz
+3) go to sed sources:   cd sed-4.6
+
+4) fix sed-4.6-build-VS17-x64.patch - change paths to locations of Visual Studio 2017 and WDK10
+
+sed -i '/Visual Studio/s@.:.*include@D:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\include@' sed-4.6-build-VS17-x64.patch
+sed -i '/Windows Kits/s@.:.*ucrt@C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.17763.0\\ucrt@' sed-4.6-build-VS17-x64.patch
+
+5) patch sed:           patch -Np1 -i sed-4.6-build-VS17-x64.patch
+6) run dos prompt:      cmd.exe /c "start cmd.exe"
+7) setup compiler:      "D:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+8) do compile:          make.bat
+9) check build result:  sed\sed.exe --version
