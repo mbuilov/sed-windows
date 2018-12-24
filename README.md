@@ -11,17 +11,17 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 - sources were fixed for correct processing of text files with Windows line endings if sed is built under CYGWIN
 
 ## Pre-built executables:
-- [`sed-4.6.exe`](/sed-4.6.exe)     - sed 4.6 built for windowsXP x86
-- [`sed-4.6-x64.exe`](/sed-4.6-x64.exe) - sed 4.6 built for windows7 x64
+- [`sed-4.7.exe`](/sed-4.7.exe)     - sed 4.7 built for windowsXP x86
+- [`sed-4.7-x64.exe`](/sed-4.7-x64.exe) - sed 4.7 built for windows7 x64
 
 ## Instructions how to create build patch
-- [`sed-4.6-build-patch-howto.txt`](/sed-4.6-build-patch-howto.txt)
+- [`sed-4.7-build-patch-howto.txt`](/sed-4.7-build-patch-howto.txt)
 
 ## Prepared build patches
 For x64/Windows7/VS17:
-- [`sed-4.6-build-VS17-x64.txt`](/sed-4.6-build-VS17-x64.txt) - instructions how to apply the patch to compile sed using native tools only
-- [`sed-4.6-build-VS17-x64.patch`](/sed-4.6-build-VS17-x64.patch)
+- [`sed-4.7-build-VS17-x64.txt`](/sed-4.7-build-VS17-x64.txt) - instructions how to apply the patch to compile sed using native tools only
+- [`sed-4.7-build-VS17-x64.patch`](/sed-4.7-build-VS17-x64.patch)
 
 For x86/WindowsXP/VS9
-- [`sed-4.6-build-VS9-x86.txt`](/sed-4.6-build-VS9-x86.txt) - instructions how to apply the patch to compile sed using native tools only
-- [`sed-4.6-build-VS9-x86.patch`](/sed-4.6-build-VS9-x86.patch)
+- [`sed-4.7-build-VS9-x86.txt`](/sed-4.7-build-VS9-x86.txt) - instructions how to apply the patch to compile sed using native tools only
+- [`sed-4.7-build-VS9-x86.patch`](/sed-4.7-build-VS9-x86.patch)

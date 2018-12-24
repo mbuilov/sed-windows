@@ -1,7 +1,7 @@
-diff -Naur ../orig/sed-4.6/config.h ./config.h
---- ../orig/sed-4.6/config.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./config.h	2018-12-21 17:59:36.749176100 +0300
-@@ -0,0 +1,1789 @@
+diff -Naur ../orig/sed-4.7/config.h ./config.h
+--- ../orig/sed-4.7/config.h	1970-01-01 03:00:00.000000000 +0300
++++ ./config.h	2018-12-24 10:27:59.726236600 +0300
+@@ -0,0 +1,1792 @@
 +/* config.h.  Generated from config_h.in by configure.  */
 +/* config_h.in.  Generated from configure.ac by autoheader.  */
 +
@@ -1128,6 +1128,9 @@ diff -Naur ../orig/sed-4.6/config.h ./config.h
 +/* Define to 1 if O_NOFOLLOW works. */
 +#define HAVE_WORKING_O_NOFOLLOW 0
 +
++/* Define if the uselocale function exists any may safely be called. */
++/* #undef HAVE_WORKING_USELOCALE */
++
 +/* Define to 1 if you have the <ws2tcpip.h> header file. */
 +#define HAVE_WS2TCPIP_H 1
 +
@@ -1231,7 +1234,7 @@ diff -Naur ../orig/sed-4.6/config.h ./config.h
 +/* #undef PACKAGE_PACKAGER_VERSION */
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "GNU sed 4.6"
++#define PACKAGE_STRING "GNU sed 4.7"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "sed"
@@ -1240,7 +1243,7 @@ diff -Naur ../orig/sed-4.6/config.h ./config.h
 +#define PACKAGE_URL "https://www.gnu.org/software/sed/"
 +
 +/* Define to the version of this package. */
-+#define PACKAGE_VERSION "4.6"
++#define PACKAGE_VERSION "4.7"
 +
 +/* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 +/* #undef PRI_MACROS_BROKEN */
@@ -1424,7 +1427,7 @@ diff -Naur ../orig/sed-4.6/config.h ./config.h
 +/* #undef USE_WINDOWS_THREADS */
 +
 +/* Version number of package */
-+#define VERSION "4.6"
++#define VERSION "4.7"
 +
 +/* Define to 1 if unsetenv returns void instead of int. */
 +/* #undef VOID_UNSETENV */
@@ -1791,9 +1794,9 @@ diff -Naur ../orig/sed-4.6/config.h ./config.h
 +
 +/* Define as a macro for copying va_list variables. */
 +/* #undef va_copy */
-diff -Naur ../orig/sed-4.6/lib/alloca.h ./lib/alloca.h
---- ../orig/sed-4.6/lib/alloca.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/alloca.h	2018-12-21 17:59:49.869194400 +0300
+diff -Naur ../orig/sed-4.7/lib/alloca.h ./lib/alloca.h
+--- ../orig/sed-4.7/lib/alloca.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/alloca.h	2018-12-24 10:28:20.879873700 +0300
 @@ -0,0 +1,66 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Memory allocation on the stack.
@@ -1861,9 +1864,9 @@ diff -Naur ../orig/sed-4.6/lib/alloca.h ./lib/alloca.h
 +#endif
 +
 +#endif /* _GL_ALLOCA_H */
-diff -Naur ../orig/sed-4.6/lib/ctype.h ./lib/ctype.h
---- ../orig/sed-4.6/lib/ctype.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/ctype.h	2018-12-21 18:00:19.089235300 +0300
+diff -Naur ../orig/sed-4.7/lib/ctype.h ./lib/ctype.h
+--- ../orig/sed-4.7/lib/ctype.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/ctype.h	2018-12-24 10:30:19.727681000 +0300
 @@ -0,0 +1,505 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <ctype.h>, for platforms on which it is incomplete.
@@ -2370,9 +2373,9 @@ diff -Naur ../orig/sed-4.6/lib/ctype.h ./lib/ctype.h
 +
 +#endif /* _GL_CTYPE_H */
 +#endif /* _GL_CTYPE_H */
-diff -Naur ../orig/sed-4.6/lib/errno.h ./lib/errno.h
---- ../orig/sed-4.6/lib/errno.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/errno.h	2018-12-21 18:00:19.089235300 +0300
+diff -Naur ../orig/sed-4.7/lib/errno.h ./lib/errno.h
+--- ../orig/sed-4.7/lib/errno.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/errno.h	2018-12-24 10:30:19.727681000 +0300
 @@ -0,0 +1,280 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A POSIX-like <errno.h>.
@@ -2654,9 +2657,9 @@ diff -Naur ../orig/sed-4.6/lib/errno.h ./lib/errno.h
 +
 +#endif /* _GL_ERRNO_H */
 +#endif /* _GL_ERRNO_H */
-diff -Naur ../orig/sed-4.6/lib/fcntl.h ./lib/fcntl.h
---- ../orig/sed-4.6/lib/fcntl.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/fcntl.h	2018-12-21 18:00:19.099235300 +0300
+diff -Naur ../orig/sed-4.7/lib/fcntl.h ./lib/fcntl.h
+--- ../orig/sed-4.7/lib/fcntl.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/fcntl.h	2018-12-24 10:30:19.743281000 +0300
 @@ -0,0 +1,840 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Like <fcntl.h>, but with non-working flags defined to 0.
@@ -3498,9 +3501,9 @@ diff -Naur ../orig/sed-4.6/lib/fcntl.h ./lib/fcntl.h
 +#endif /* _GL_FCNTL_H */
 +#endif /* _GL_FCNTL_H */
 +#endif
-diff -Naur ../orig/sed-4.6/lib/getopt.h ./lib/getopt.h
---- ../orig/sed-4.6/lib/getopt.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt.h	2018-12-21 17:59:50.449195200 +0300
+diff -Naur ../orig/sed-4.7/lib/getopt.h ./lib/getopt.h
+--- ../orig/sed-4.7/lib/getopt.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/getopt.h	2018-12-24 10:28:21.472674800 +0300
 @@ -0,0 +1,88 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Declarations for getopt.
@@ -3590,9 +3593,9 @@ diff -Naur ../orig/sed-4.6/lib/getopt.h ./lib/getopt.h
 +#include <getopt-pfx-ext.h>
 +
 +#endif /* _GL_GETOPT_H */
-diff -Naur ../orig/sed-4.6/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
---- ../orig/sed-4.6/lib/getopt-cdefs.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-cdefs.h	2018-12-21 17:59:50.529195400 +0300
+diff -Naur ../orig/sed-4.7/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
+--- ../orig/sed-4.7/lib/getopt-cdefs.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/getopt-cdefs.h	2018-12-24 10:28:21.550674900 +0300
 @@ -0,0 +1,68 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* getopt-on-non-glibc compatibility macros.
@@ -3662,9 +3665,9 @@ diff -Naur ../orig/sed-4.6/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
 +#endif
 +
 +#endif /* _GETOPT_CDEFS_H */
-diff -Naur ../orig/sed-4.6/lib/langinfo.h ./lib/langinfo.h
---- ../orig/sed-4.6/lib/langinfo.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/langinfo.h	2018-12-21 17:59:50.709195600 +0300
+diff -Naur ../orig/sed-4.7/lib/langinfo.h ./lib/langinfo.h
+--- ../orig/sed-4.7/lib/langinfo.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/langinfo.h	2018-12-24 10:28:21.722275200 +0300
 @@ -0,0 +1,670 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for and wrapper around <langinfo.h>.
@@ -4336,9 +4339,9 @@ diff -Naur ../orig/sed-4.6/lib/langinfo.h ./lib/langinfo.h
 +
 +#endif /* _GL_LANGINFO_H */
 +#endif /* _GL_LANGINFO_H */
-diff -Naur ../orig/sed-4.6/lib/limits.h ./lib/limits.h
---- ../orig/sed-4.6/lib/limits.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/limits.h	2018-12-21 18:00:19.109235400 +0300
+diff -Naur ../orig/sed-4.7/lib/limits.h ./lib/limits.h
+--- ../orig/sed-4.7/lib/limits.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/limits.h	2018-12-24 10:30:19.743281000 +0300
 @@ -0,0 +1,105 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <limits.h>.
@@ -4445,9 +4448,9 @@ diff -Naur ../orig/sed-4.6/lib/limits.h ./lib/limits.h
 +
 +#endif /* _GL_LIMITS_H */
 +#endif /* _GL_LIMITS_H */
-diff -Naur ../orig/sed-4.6/lib/locale.h ./lib/locale.h
---- ../orig/sed-4.6/lib/locale.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/locale.h	2018-12-21 18:00:19.109235400 +0300
+diff -Naur ../orig/sed-4.7/lib/locale.h ./lib/locale.h
+--- ../orig/sed-4.7/lib/locale.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/locale.h	2018-12-24 10:30:19.743281000 +0300
 @@ -0,0 +1,746 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A POSIX <locale.h>.
@@ -5195,9 +5198,9 @@ diff -Naur ../orig/sed-4.6/lib/locale.h ./lib/locale.h
 +#endif /* _GL_LOCALE_H */
 +#endif /* _GL_LOCALE_H */
 +#endif /* !(__need_locale_t || _GL_ALREADY_INCLUDING_LOCALE_H) */
-diff -Naur ../orig/sed-4.6/lib/selinux/context.h ./lib/selinux/context.h
---- ../orig/sed-4.6/lib/selinux/context.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/context.h	2018-12-21 17:59:51.309196400 +0300
+diff -Naur ../orig/sed-4.7/lib/selinux/context.h ./lib/selinux/context.h
+--- ../orig/sed-4.7/lib/selinux/context.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/selinux/context.h	2018-12-24 10:28:22.299476200 +0300
 @@ -0,0 +1,83 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +#ifndef SELINUX_CONTEXT_H
@@ -5282,9 +5285,9 @@ diff -Naur ../orig/sed-4.6/lib/selinux/context.h ./lib/selinux/context.h
 +_GL_INLINE_HEADER_END
 +
 +#endif
-diff -Naur ../orig/sed-4.6/lib/selinux/selinux.h ./lib/selinux/selinux.h
---- ../orig/sed-4.6/lib/selinux/selinux.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/selinux.h	2018-12-21 17:59:51.189196300 +0300
+diff -Naur ../orig/sed-4.7/lib/selinux/selinux.h ./lib/selinux/selinux.h
+--- ../orig/sed-4.7/lib/selinux/selinux.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/selinux/selinux.h	2018-12-24 10:28:22.174676000 +0300
 @@ -0,0 +1,156 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Replacement <selinux/selinux.h> for platforms that lack it.
@@ -5442,9 +5445,9 @@ diff -Naur ../orig/sed-4.6/lib/selinux/selinux.h ./lib/selinux/selinux.h
 +
 +# endif
 +#endif
-diff -Naur ../orig/sed-4.6/lib/stdalign.h ./lib/stdalign.h
---- ../orig/sed-4.6/lib/stdalign.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdalign.h	2018-12-21 17:59:51.409196600 +0300
+diff -Naur ../orig/sed-4.7/lib/stdalign.h ./lib/stdalign.h
+--- ../orig/sed-4.7/lib/stdalign.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/stdalign.h	2018-12-24 10:28:22.393076400 +0300
 @@ -0,0 +1,122 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C11 <stdalign.h>.
@@ -5568,9 +5571,9 @@ diff -Naur ../orig/sed-4.6/lib/stdalign.h ./lib/stdalign.h
 +#endif
 +
 +#endif /* _GL_STDALIGN_H */
-diff -Naur ../orig/sed-4.6/lib/stddef.h ./lib/stddef.h
---- ../orig/sed-4.6/lib/stddef.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stddef.h	2018-12-21 18:00:19.119235400 +0300
+diff -Naur ../orig/sed-4.7/lib/stddef.h ./lib/stddef.h
+--- ../orig/sed-4.7/lib/stddef.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/stddef.h	2018-12-24 10:30:19.758881000 +0300
 @@ -0,0 +1,115 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for POSIX 2008 <stddef.h>, for platforms that have issues.
@@ -5687,9 +5690,9 @@ diff -Naur ../orig/sed-4.6/lib/stddef.h ./lib/stddef.h
 +#  endif /* _GL_STDDEF_H */
 +# endif /* _GL_STDDEF_H */
 +#endif /* __need_XXX */
-diff -Naur ../orig/sed-4.6/lib/stdint.h ./lib/stdint.h
---- ../orig/sed-4.6/lib/stdint.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdint.h	2018-12-21 18:00:19.119235400 +0300
+diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
+--- ../orig/sed-4.7/lib/stdint.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/stdint.h	2018-12-24 10:30:19.758881000 +0300
 @@ -0,0 +1,727 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Copyright (C) 2001-2002, 2004-2018 Free Software Foundation, Inc.
@@ -6418,9 +6421,9 @@ diff -Naur ../orig/sed-4.6/lib/stdint.h ./lib/stdint.h
 +#endif /* _GL_STDINT_H */
 +#endif /* !(defined __ANDROID__ && ...) */
 +#endif /* !defined _GL_STDINT_H && !defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H */
-diff -Naur ../orig/sed-4.6/lib/stdio.h ./lib/stdio.h
---- ../orig/sed-4.6/lib/stdio.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdio.h	2018-12-21 18:00:19.129235400 +0300
+diff -Naur ../orig/sed-4.7/lib/stdio.h ./lib/stdio.h
+--- ../orig/sed-4.7/lib/stdio.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/stdio.h	2018-12-24 10:30:19.758881000 +0300
 @@ -0,0 +1,1851 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <stdio.h>.
@@ -8273,9 +8276,9 @@ diff -Naur ../orig/sed-4.6/lib/stdio.h ./lib/stdio.h
 +#endif /* _GL_STDIO_H */
 +#endif /* _GL_STDIO_H */
 +#endif
-diff -Naur ../orig/sed-4.6/lib/stdlib.h ./lib/stdlib.h
---- ../orig/sed-4.6/lib/stdlib.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdlib.h	2018-12-21 18:00:19.129235400 +0300
+diff -Naur ../orig/sed-4.7/lib/stdlib.h ./lib/stdlib.h
+--- ../orig/sed-4.7/lib/stdlib.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/stdlib.h	2018-12-24 10:30:19.774481000 +0300
 @@ -0,0 +1,1501 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <stdlib.h>.
@@ -9778,9 +9781,9 @@ diff -Naur ../orig/sed-4.6/lib/stdlib.h ./lib/stdlib.h
 +#endif /* _GL_STDLIB_H */
 +#endif /* _GL_STDLIB_H */
 +#endif
-diff -Naur ../orig/sed-4.6/lib/string.h ./lib/string.h
---- ../orig/sed-4.6/lib/string.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/string.h	2018-12-21 18:00:19.139235400 +0300
+diff -Naur ../orig/sed-4.7/lib/string.h ./lib/string.h
+--- ../orig/sed-4.7/lib/string.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/string.h	2018-12-24 10:30:19.774481000 +0300
 @@ -0,0 +1,1537 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <string.h>.
@@ -11319,9 +11322,9 @@ diff -Naur ../orig/sed-4.6/lib/string.h ./lib/string.h
 +#endif /* _GL_STRING_H */
 +#endif /* _GL_STRING_H */
 +#endif
-diff -Naur ../orig/sed-4.6/lib/sys/stat.h ./lib/sys/stat.h
---- ../orig/sed-4.6/lib/sys/stat.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/stat.h	2018-12-21 18:00:19.139235400 +0300
+diff -Naur ../orig/sed-4.7/lib/sys/stat.h ./lib/sys/stat.h
+--- ../orig/sed-4.7/lib/sys/stat.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/sys/stat.h	2018-12-24 10:30:19.774481000 +0300
 @@ -0,0 +1,1290 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/stat.h header file.
@@ -12613,9 +12616,9 @@ diff -Naur ../orig/sed-4.6/lib/sys/stat.h ./lib/sys/stat.h
 +#endif /* _GL_SYS_STAT_H */
 +#endif /* _GL_SYS_STAT_H */
 +#endif
-diff -Naur ../orig/sed-4.6/lib/sys/time.h ./lib/sys/time.h
---- ../orig/sed-4.6/lib/sys/time.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/time.h	2018-12-21 17:59:53.939200100 +0300
+diff -Naur ../orig/sed-4.7/lib/sys/time.h ./lib/sys/time.h
+--- ../orig/sed-4.7/lib/sys/time.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/sys/time.h	2018-12-24 10:28:24.982680900 +0300
 @@ -0,0 +1,694 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/time.h.
@@ -13311,9 +13314,9 @@ diff -Naur ../orig/sed-4.6/lib/sys/time.h ./lib/sys/time.h
 +#endif /* _GL_SYS_TIME_H */
 +#endif /* _CYGWIN_SYS_TIME_H */
 +#endif /* _GL_SYS_TIME_H */
-diff -Naur ../orig/sed-4.6/lib/sys/types.h ./lib/sys/types.h
---- ../orig/sed-4.6/lib/sys/types.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/types.h	2018-12-21 18:00:19.149235400 +0300
+diff -Naur ../orig/sed-4.7/lib/sys/types.h ./lib/sys/types.h
+--- ../orig/sed-4.7/lib/sys/types.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/sys/types.h	2018-12-24 10:30:19.790081100 +0300
 @@ -0,0 +1,107 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/types.h.
@@ -13422,9 +13425,9 @@ diff -Naur ../orig/sed-4.6/lib/sys/types.h ./lib/sys/types.h
 +#endif /* _GL_SYS_TYPES_H */
 +#endif /* _GL_SYS_TYPES_H */
 +#endif /* __need_XXX */
-diff -Naur ../orig/sed-4.6/lib/time.h ./lib/time.h
---- ../orig/sed-4.6/lib/time.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/time.h	2018-12-21 18:00:19.159235400 +0300
+diff -Naur ../orig/sed-4.7/lib/time.h ./lib/time.h
+--- ../orig/sed-4.7/lib/time.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/time.h	2018-12-24 10:30:19.790081100 +0300
 @@ -0,0 +1,824 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A more-standard <time.h>.
@@ -14250,9 +14253,9 @@ diff -Naur ../orig/sed-4.6/lib/time.h ./lib/time.h
 +# endif
 +
 +#endif
-diff -Naur ../orig/sed-4.6/lib/unistd.h ./lib/unistd.h
---- ../orig/sed-4.6/lib/unistd.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/unistd.h	2018-12-21 17:59:55.159201800 +0300
+diff -Naur ../orig/sed-4.7/lib/unistd.h ./lib/unistd.h
+--- ../orig/sed-4.7/lib/unistd.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/unistd.h	2018-12-24 10:28:26.199483100 +0300
 @@ -0,0 +1,2142 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for and wrapper around <unistd.h>.
@@ -16396,9 +16399,9 @@ diff -Naur ../orig/sed-4.6/lib/unistd.h ./lib/unistd.h
 +#endif /* _GL_UNISTD_H */
 +#endif /* _GL_INCLUDING_UNISTD_H */
 +#endif /* _GL_UNISTD_H */
-diff -Naur ../orig/sed-4.6/lib/wchar.h ./lib/wchar.h
---- ../orig/sed-4.6/lib/wchar.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/wchar.h	2018-12-21 18:00:19.159235400 +0300
+diff -Naur ../orig/sed-4.7/lib/wchar.h ./lib/wchar.h
+--- ../orig/sed-4.7/lib/wchar.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/wchar.h	2018-12-24 10:30:19.790081100 +0300
 @@ -0,0 +1,1546 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <wchar.h>, for platforms that have issues.
@@ -17946,9 +17949,9 @@ diff -Naur ../orig/sed-4.6/lib/wchar.h ./lib/wchar.h
 +#endif /* _GL_WCHAR_H */
 +#endif /* _GL_WCHAR_H */
 +#endif
-diff -Naur ../orig/sed-4.6/lib/wctype.h ./lib/wctype.h
---- ../orig/sed-4.6/lib/wctype.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/wctype.h	2018-12-21 18:00:19.169235400 +0300
+diff -Naur ../orig/sed-4.7/lib/wctype.h ./lib/wctype.h
+--- ../orig/sed-4.7/lib/wctype.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/wctype.h	2018-12-24 10:30:19.805681100 +0300
 @@ -0,0 +1,981 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <wctype.h>, for platforms that lack it.
@@ -18931,9 +18934,9 @@ diff -Naur ../orig/sed-4.6/lib/wctype.h ./lib/wctype.h
 +#endif /* _GL_WCTYPE_H */
 +#endif /* _GL_WCTYPE_H */
 +#endif
-diff -Naur ../orig/sed-4.6/make.bat ./make.bat
---- ../orig/sed-4.6/make.bat	1970-01-01 03:00:00.000000000 +0300
-+++ ./make.bat	2018-12-21 18:01:32.939338700 +0300
+diff -Naur ../orig/sed-4.7/make.bat ./make.bat
+--- ../orig/sed-4.7/make.bat	1970-01-01 03:00:00.000000000 +0300
++++ ./make.bat	2018-12-24 10:35:55.278267800 +0300
 @@ -0,0 +1,79 @@
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-compile.obj sed\compile.c
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-debug.obj sed\debug.c
@@ -19014,9 +19017,9 @@ diff -Naur ../orig/sed-4.6/make.bat ./make.bat
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Fosed\version.obj sed\version.c
 +lib /LTCG /nologo /OUT:sed\libver.a sed\version.obj 
 +link /nologo /LTCG /DEFAULTLIB:LIBCPMT.lib /OUT:sed\sed.exe sed\sed-compile.obj sed\sed-debug.obj sed\sed-execute.obj sed\sed-mbcs.obj sed\sed-regexp.obj sed\sed-sed.obj sed\sed-utils.obj sed\libver.a lib\libsed.a    
-diff -Naur ../orig/sed-4.6/sed/execute.c ./sed/execute.c
---- ../orig/sed-4.6/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
-+++ ./sed/execute.c	2018-12-21 17:57:59.148235600 +0300
+diff -Naur ../orig/sed-4.7/sed/execute.c ./sed/execute.c
+--- ../orig/sed-4.7/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
++++ ./sed/execute.c	2018-12-24 10:25:26.019967000 +0300
 @@ -37,6 +37,8 @@
  #include "progname.h"
  #include "xalloc.h"
@@ -19054,9 +19057,9 @@ diff -Naur ../orig/sed-4.6/sed/execute.c ./sed/execute.c
  
        if (isatty (fileno (input->fp)))
          panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
-diff -Naur ../orig/sed-4.6/sed/sed.c ./sed/sed.c
---- ../orig/sed-4.6/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
-+++ ./sed/sed.c	2018-12-21 17:57:59.158235600 +0300
+diff -Naur ../orig/sed-4.7/sed/sed.c ./sed/sed.c
+--- ../orig/sed-4.7/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
++++ ./sed/sed.c	2018-12-24 10:25:26.019967000 +0300
 @@ -66,9 +66,17 @@
  /* How do we edit files in-place? (we don't if NULL) */
  char *in_place_extension = NULL;
@@ -19176,14 +19179,14 @@ diff -Naur ../orig/sed-4.6/sed/sed.c ./sed/sed.c
  #endif
  
    if (debug)
-diff -Naur ../orig/sed-4.6/sed/version.c ./sed/version.c
---- ../orig/sed-4.6/sed/version.c	1970-01-01 03:00:00.000000000 +0300
-+++ ./sed/version.c	2018-12-21 17:59:56.049203100 +0300
+diff -Naur ../orig/sed-4.7/sed/version.c ./sed/version.c
+--- ../orig/sed-4.7/sed/version.c	1970-01-01 03:00:00.000000000 +0300
++++ ./sed/version.c	2018-12-24 10:28:27.088684600 +0300
 @@ -0,0 +1,2 @@
 +#include <config.h>
-+char const *Version = "4.6";
-diff -Naur ../orig/sed-4.6/sed/version.h ./sed/version.h
---- ../orig/sed-4.6/sed/version.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./sed/version.h	2018-12-21 17:59:56.129203200 +0300
++char const *Version = "4.7";
+diff -Naur ../orig/sed-4.7/sed/version.h ./sed/version.h
+--- ../orig/sed-4.7/sed/version.h	1970-01-01 03:00:00.000000000 +0300
++++ ./sed/version.h	2018-12-24 10:28:27.166684800 +0300
 @@ -0,0 +1 @@
 +extern char const *Version;
