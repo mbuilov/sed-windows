@@ -2,7 +2,7 @@ How to build native win32 sed.exe with Visual Studio 9.0
 
 From cygwin or other unix shell:
 
-1) get sed archive:     wget http://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz
+1) get sed archive:     wget https://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz
 2) unpack sed archive:  tar xf sed-4.7.tar.xz
 3) go to sed sources:   cd sed-4.7
 
