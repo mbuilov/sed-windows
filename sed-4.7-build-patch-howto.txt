@@ -94,12 +94,12 @@ From CYGWIN shell:
 
   (should print sed version, e.g.: (GNU sed) 4.7)
 
-compilation should be ok, native ./sed/sed.exe should be created.
+compilation should be ok, native (unoptimized) ./sed/sed.exe should be created.
 
 
 Now it is possible to create a patch file - for compiling optimized sed.exe using only Microsoft Visual Studio tools, without need for CYGWIN.
 
-1) create directory for unpached sed:
+1) create directory for unpatched sed:
   mkdir ../orig
 
 2) unpack sed:
