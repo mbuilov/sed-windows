@@ -1,7 +1,18 @@
 diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
 --- sed-4.6/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
-+++ sed-4.6-patched/sed/execute.c	2018-12-21 12:30:45.891911600 +0300
-@@ -37,6 +37,8 @@
++++ sed-4.6-patched/sed/execute.c	2019-11-20 12:14:03.604257200 +0300
+@@ -14,6 +14,10 @@
+     You should have received a copy of the GNU General Public License
+     along with this program; If not, see <https://www.gnu.org/licenses/>. */
+ 
++#if defined _WIN32 && ! defined __CYGWIN__
++#include <windows.h> /* for FindFirstFile/FindNextFile */
++#endif
++
+ #define INITIAL_BUFFER_SIZE	50
+ #define FREAD_BUFFER_SIZE	8192
+ 
+@@ -37,6 +41,8 @@
  #include "progname.h"
  #include "xalloc.h"
  
@@ -10,7 +21,7 @@ diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
  /* The number of extra bytes that must be allocated/usable, beyond
     the declared "end" of each line buffer that may be passed to
     match_regex.  This is imposed by its use of dfaexec.  */
-@@ -571,17 +573,22 @@
+@@ -571,17 +577,22 @@
    if (in_place_extension)
      {
        int input_fd;
@@ -38,6 +49,125 @@ diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
  
        if (isatty (fileno (input->fp)))
          panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
+@@ -1650,6 +1661,91 @@
+   static char *stdin_argv[2] = { dash, NULL };
+   struct input input;
+   int status;
++  char **file_names = argv;
++
++#if defined _WIN32 && ! defined __CYGWIN__
++
++  /* file name may contain wildcards - find files */
++  struct filename_list {
++    struct filename_list *next;
++    char name[1]; /* '\0'-terminated file path */
++  };
++
++  struct filename_list *files = NULL;
++
++  if (argv && *argv)
++    {
++      /* find files, count them and fill the list of file names */
++      struct filename_list **last = &files;
++
++      size_t n_files = 0;
++      char **f = argv;
++      for (; *f; f++)
++        {
++          WIN32_FIND_DATA FindFileData;
++          const HANDLE hFind = FindFirstFile (*f, &FindFileData);
++
++          if (INVALID_HANDLE_VALUE == hFind)
++            {
++              char *msg_buf;
++              const DWORD last_err = GetLastError ();
++              DWORD n_chars = FormatMessage (
++                FORMAT_MESSAGE_ALLOCATE_BUFFER |
++                FORMAT_MESSAGE_FROM_SYSTEM,
++                NULL, last_err, 0, (LPSTR)&msg_buf, 0, NULL);
++
++              /* trim "\r\n" at end of msg */
++              if (n_chars)
++                {
++                  if ('\n' == msg_buf[n_chars - 1])
++                    {
++                      msg_buf[--n_chars] = '\0';
++
++                      if (n_chars && '\r' == msg_buf[n_chars - 1])
++                        msg_buf[--n_chars] = '\0';
++                    }
++                }
++
++              if (n_chars)
++                panic (_("couldn't find file %s, system error: 0x%x (%s)"),
++                  *f, last_err, msg_buf);
++              else
++                panic (_("couldn't find file %s, system error: 0x%x"),
++                  *f, last_err);
++            }
++
++          do {
++            const size_t name_size = strlen (FindFileData.cFileName) + 1;
++
++            struct filename_list *const item = (struct filename_list*)
++              xmalloc (offsetof(struct filename_list, name) + name_size);
++
++            memcpy (item->name, FindFileData.cFileName, name_size);
++
++            *last = item;
++            last = &item->next;
++            n_files++;
++
++          } while (FindNextFile (hFind,  &FindFileData));
++
++          FindClose (hFind);
++        }
++
++      *last = NULL; /* terminate the list */
++
++      /* fill array of pointers, last pointer must be NULL */
++      file_names = (char**) xmalloc (sizeof(char*)*(n_files + 1));
++      {
++        size_t i = 0;
++        struct filename_list *file = files;
++        for (; file; file = file->next)
++          file_names[i++] = file->name;
++
++        file_names[i] = NULL;
++      }
++    }
++
++#endif /* _WIN32 && !__CYGWIN__ */
+ 
+   line_init (&line, NULL, INITIAL_BUFFER_SIZE);
+   line_init (&hold, NULL, 0);
+@@ -1657,7 +1753,7 @@
+ 
+   input.reset_at_next_file = true;
+   if (argv && *argv)
+-    input.file_list = argv;
++    input.file_list = file_names;
+   else if (in_place_extension)
+     panic (_("no input files"));
+   else
+@@ -1701,5 +1797,17 @@
+   if (input.bad_count)
+     status = EXIT_BAD_INPUT;
+ 
++#if defined _WIN32 && ! defined __CYGWIN__
++  if (files)
++    {
++      free (file_names);
++      do {
++        struct filename_list *const next = files->next;
++        free (files);
++        files = next;
++      } while (files);
++    }
++#endif
++
+   return status;
+ }
 diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
 --- sed-4.6/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
 +++ sed-4.6-patched/sed/sed.c	2018-12-21 12:24:48.488945000 +0300

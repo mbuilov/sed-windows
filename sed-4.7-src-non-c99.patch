@@ -1355,8 +1355,8 @@ diff -Naur ../orig/sed-4.7/sed/debug.c ./sed/debug.c
  }
 diff -Naur ../orig/sed-4.7/sed/execute.c ./sed/execute.c
 --- ../orig/sed-4.7/sed/execute.c	2018-12-24 17:15:55.878895400 +0300
-+++ ./sed/execute.c	2018-12-24 16:13:23.734348600 +0300
-@@ -1025,10 +1025,11 @@
++++ ./sed/execute.c	2019-11-20 13:21:32.072081400 +0300
+@@ -1029,10 +1029,11 @@
  
    if (debug)
      {
@@ -1369,7 +1369,7 @@ diff -Naur ../orig/sed-4.7/sed/execute.c ./sed/execute.c
          {
            if (regs.start[i] == -1)
              break;
-@@ -1208,6 +1209,7 @@
+@@ -1212,6 +1213,7 @@
                bool move_remain_buffer = false;
                const char *tr = trans[2*i+1];
                size_t trans_len = *tr == '\0' ? 1 : strlen (tr);
@@ -1377,7 +1377,7 @@ diff -Naur ../orig/sed-4.7/sed/execute.c ./sed/execute.c
  
                if (mbclen < trans_len)
                  {
-@@ -1226,7 +1228,7 @@
+@@ -1230,7 +1232,7 @@
                    /* We must truncate the line buffer.  */
                    move_remain_buffer = true;
                  }
