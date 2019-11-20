@@ -9,6 +9,7 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 - wrong directory of input file in in-place editing mode ('-i' switch) (sed: cannot rename ./sed8JEw8l: Improper link)
 - new switch '-C' or '--ignore-locale' - forces Sed to use the standard "C" locale instead of the system one; this switch is most usable in binary mode, to avoid possible interpretation of input data as multi-byte encoded strings (depending on the system locale)
 - sources were fixed for correct processing of text files with Windows line endings if sed is built under CYGWIN
+- now sed is capable for resolving wildcards in file arguments
 
 ## Pre-built executables:
 - [`sed-4.7.exe`](/sed-4.7.exe)     - sed 4.7 built for windowsXP x86
