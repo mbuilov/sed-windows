@@ -1,18 +1,59 @@
-diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
---- sed-4.6/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
-+++ sed-4.6-patched/sed/execute.c	2019-11-20 12:14:03.604257200 +0300
-@@ -14,6 +14,10 @@
-     You should have received a copy of the GNU General Public License
-     along with this program; If not, see <https://www.gnu.org/licenses/>. */
+diff -Naur sed-4.7/lib/localcharset.c sed-4.7-patched/lib/localcharset.c
+--- sed-4.7/lib/localcharset.c	2018-08-27 11:59:14.000000000 +0300
++++ sed-4.7-patched/lib/localcharset.c	2019-12-20 16:14:46.317003700 +0300
+@@ -774,7 +774,16 @@
+     current_locale = setlocale (LC_CTYPE, NULL);
  
-+#if defined _WIN32 && ! defined __CYGWIN__
-+#include <windows.h> /* for FindFirstFile/FindNextFile */
-+#endif
+   pdot = strrchr (current_locale, '.');
+-  if (pdot && 2 + strlen (pdot + 1) + 1 <= sizeof (buf))
 +
- #define INITIAL_BUFFER_SIZE	50
- #define FREAD_BUFFER_SIZE	8192
- 
-@@ -37,6 +41,8 @@
++  /* After a dot may follow a codepage number, or the "utf8" string.  */
++  if (pdot &&
++    ('u' == pdot[1] || 'U' == pdot[1]) &&
++    ('t' == pdot[2] || 'T' == pdot[2]) &&
++    ('f' == pdot[3] || 'F' == pdot[3]) &&
++    (('8' == pdot[4] && '\0' == pdot[5]) ||
++     ('-' == pdot[4] && '8' == pdot[5] && '\0' == pdot[6])))
++    strcpy (buf, "UTF-8");
++  else if (pdot && 2 + strlen (pdot + 1) + 1 <= sizeof (buf))
+     sprintf (buf, "CP%s", pdot + 1);
+   else
+     {
+diff -Naur sed-4.7/lib/nl_langinfo.c sed-4.7-patched/lib/nl_langinfo.c
+--- sed-4.7/lib/nl_langinfo.c	2018-12-13 09:11:38.000000000 +0300
++++ sed-4.7-patched/lib/nl_langinfo.c	2019-12-20 16:14:46.320003800 +0300
+@@ -71,12 +71,22 @@
+      GetACP, which returns the locale's codepage as a number (although
+      this doesn't change according to what the 'setlocale' call specified).
+      Either way, prepend "CP" to make it a valid codeset name.  */
+-  codesetlen = strlen (codeset);
+-  if (0 < codesetlen && codesetlen < sizeof buf - 2)
+-    memmove (buf + 2, codeset, codesetlen + 1);
++  /* After a dot may follow a codepage number, or the "utf8" string.  */
++  if (('u' == codeset[0] || 'U' == codeset[0]) &&
++    ('t' == codeset[1] || 'T' == codeset[1]) &&
++    ('f' == codeset[2] || 'F' == codeset[2]) &&
++    (('8' == codeset[3] && '\0' == codeset[4]) ||
++     ('-' == codeset[3] && '8' == codeset[4] && '\0' == codeset[5])))
++    codeset = strcpy (buf, "UTF-8");
+   else
+-    sprintf (buf + 2, "%u", GetACP ());
+-  codeset = memcpy (buf, "CP", 2);
++    {
++      codesetlen = strlen (codeset);
++      if (0 < codesetlen && codesetlen < sizeof buf - 2)
++        memmove (buf + 2, codeset, codesetlen + 1);
++      else
++        sprintf (buf + 2, "%u", GetACP ());
++      codeset = memcpy (buf, "CP", 2);
++    }
+ # endif
+   return codeset;
+ }
+diff -Naur sed-4.7/sed/execute.c sed-4.7-patched/sed/execute.c
+--- sed-4.7/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
++++ sed-4.7-patched/sed/execute.c	2019-12-20 16:14:46.322004000 +0300
+@@ -37,6 +37,8 @@
  #include "progname.h"
  #include "xalloc.h"
  
@@ -21,7 +62,7 @@ diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
  /* The number of extra bytes that must be allocated/usable, beyond
     the declared "end" of each line buffer that may be passed to
     match_regex.  This is imposed by its use of dfaexec.  */
-@@ -571,17 +577,22 @@
+@@ -571,17 +573,22 @@
    if (in_place_extension)
      {
        int input_fd;
@@ -49,128 +90,9 @@ diff -Naur sed-4.6/sed/execute.c sed-4.6-patched/sed/execute.c
  
        if (isatty (fileno (input->fp)))
          panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
-@@ -1650,6 +1661,91 @@
-   static char *stdin_argv[2] = { dash, NULL };
-   struct input input;
-   int status;
-+  char **file_names = argv;
-+
-+#if defined _WIN32 && ! defined __CYGWIN__
-+
-+  /* file name may contain wildcards - find files */
-+  struct filename_list {
-+    struct filename_list *next;
-+    char name[1]; /* '\0'-terminated file path */
-+  };
-+
-+  struct filename_list *files = NULL;
-+
-+  if (argv && *argv)
-+    {
-+      /* find files, count them and fill the list of file names */
-+      struct filename_list **last = &files;
-+
-+      size_t n_files = 0;
-+      char **f = argv;
-+      for (; *f; f++)
-+        {
-+          WIN32_FIND_DATA FindFileData;
-+          const HANDLE hFind = FindFirstFile (*f, &FindFileData);
-+
-+          if (INVALID_HANDLE_VALUE == hFind)
-+            {
-+              char *msg_buf;
-+              const DWORD last_err = GetLastError ();
-+              DWORD n_chars = FormatMessage (
-+                FORMAT_MESSAGE_ALLOCATE_BUFFER |
-+                FORMAT_MESSAGE_FROM_SYSTEM,
-+                NULL, last_err, 0, (LPSTR)&msg_buf, 0, NULL);
-+
-+              /* trim "\r\n" at end of msg */
-+              if (n_chars)
-+                {
-+                  if ('\n' == msg_buf[n_chars - 1])
-+                    {
-+                      msg_buf[--n_chars] = '\0';
-+
-+                      if (n_chars && '\r' == msg_buf[n_chars - 1])
-+                        msg_buf[--n_chars] = '\0';
-+                    }
-+                }
-+
-+              if (n_chars)
-+                panic (_("couldn't find file %s, system error: 0x%x (%s)"),
-+                  *f, last_err, msg_buf);
-+              else
-+                panic (_("couldn't find file %s, system error: 0x%x"),
-+                  *f, last_err);
-+            }
-+
-+          do {
-+            const size_t name_size = strlen (FindFileData.cFileName) + 1;
-+
-+            struct filename_list *const item = (struct filename_list*)
-+              xmalloc (offsetof(struct filename_list, name) + name_size);
-+
-+            memcpy (item->name, FindFileData.cFileName, name_size);
-+
-+            *last = item;
-+            last = &item->next;
-+            n_files++;
-+
-+          } while (FindNextFile (hFind,  &FindFileData));
-+
-+          FindClose (hFind);
-+        }
-+
-+      *last = NULL; /* terminate the list */
-+
-+      /* fill array of pointers, last pointer must be NULL */
-+      file_names = (char**) xmalloc (sizeof(char*)*(n_files + 1));
-+      {
-+        size_t i = 0;
-+        struct filename_list *file = files;
-+        for (; file; file = file->next)
-+          file_names[i++] = file->name;
-+
-+        file_names[i] = NULL;
-+      }
-+    }
-+
-+#endif /* _WIN32 && !__CYGWIN__ */
- 
-   line_init (&line, NULL, INITIAL_BUFFER_SIZE);
-   line_init (&hold, NULL, 0);
-@@ -1657,7 +1753,7 @@
- 
-   input.reset_at_next_file = true;
-   if (argv && *argv)
--    input.file_list = argv;
-+    input.file_list = file_names;
-   else if (in_place_extension)
-     panic (_("no input files"));
-   else
-@@ -1701,5 +1797,17 @@
-   if (input.bad_count)
-     status = EXIT_BAD_INPUT;
- 
-+#if defined _WIN32 && ! defined __CYGWIN__
-+  if (files)
-+    {
-+      free (file_names);
-+      do {
-+        struct filename_list *const next = files->next;
-+        free (files);
-+        files = next;
-+      } while (files);
-+    }
-+#endif
-+
-   return status;
- }
-diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
---- sed-4.6/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
-+++ sed-4.6-patched/sed/sed.c	2018-12-21 12:24:48.488945000 +0300
+diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
+--- sed-4.7/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
++++ sed-4.7-patched/sed/sed.c	2019-12-20 16:14:46.324004100 +0300
 @@ -66,9 +66,17 @@
  /* How do we edit files in-place? (we don't if NULL) */
  char *in_place_extension = NULL;
@@ -190,25 +112,108 @@ diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
  
  #if O_BINARY
  /* Additional flag for binary mode on platforms with O_BINARY/O_TEXT.  */
-@@ -116,7 +124,6 @@
+@@ -116,7 +124,89 @@
    G_file_to_unlink = NULL;
  }
  
 -static void usage (int);
++#if defined _WIN32 && !defined __CYGWIN__
++#define WINDOWS_NATIVE
++#endif
++
++#ifdef WINDOWS_NATIVE
++
++/* Set locale.  */
++static void
++set_locale_from_env(const char *def)
++{
++  const char *locale = getenv ("LC_ALL");
++  if (locale && locale[0])
++    {
++      if (!setlocale (LC_ALL, locale))
++        panic ("Bad locale: LC_ALL=%s", locale);
++      return;
++    }
++
++  /* LANG is the default for all LC_...  */
++  locale = getenv ("LANG");
++
++  /* if LANG is not defined - set the system default.
++     (If def is "", locale may be be set to
++     e.g. Russian_Russia.1251).  */
++  if (!locale || !locale[0])
++    locale = def;
++
++  if (!setlocale (LC_ALL, locale))
++    panic ("Bad locale: LANG=%s", locale);
++
++  /* specific LC_... take precedence over LANG.  */
++  locale = getenv ("LC_CTYPE");
++  if (locale && locale[0])
++    {
++      if (!setlocale (LC_CTYPE, locale))
++        panic ("Bad locale: LC_CTYPE=%s", locale);
++    }
++}
++
++/* Convert wide-char args to multibyte.  */
++static char **
++convert_wargv (int argc, wchar_t **wargv)
++{
++  /* Convert program arguments from wide-char to multibyte
++     according to the locale codepage.  */
++  /* Note: argv array must be NULL-terminated.  */
++  char **argv = (char**) xmalloc (sizeof(*argv)*(argc + 1));
++
++  wchar_t **wa = wargv;
++  for (; *wa; wa++)
++    {
++      const size_t need = wcstombs (NULL, *wa, 0);
++
++      if ((size_t) -1 == need)
++        panic (_("failed to convert argument %u (Unicode -> LC_CTYPE=%s): %s"),
++          (unsigned) (wa - wargv), setlocale (LC_CTYPE, NULL),
++          strerror (errno));
++
++      {
++        char *a = (char*) xmalloc (need + 1);
++        wcstombs (a, *wa, need + 1);
++        argv[wa - wargv] = a;
++      }
++    }
++
++  /* argv - is a NULL-terminated array of pointers */
++  argv[wa - wargv] = NULL;
++
++  return argv;
++}
++
++/* Free arguments array allocated by convert_wargv().  */
++static void
++free_argv (char **argv)
++{
++  char **a = argv;
++  for (; *a; a++)
++    free (*a);
++  free (argv);
++}
++
++#endif /* WINDOWS_NATIVE */
++
  static void
  contact (int errmsg)
  {
-@@ -128,6 +135,9 @@
+@@ -128,6 +218,9 @@
       get reports for other people's bugs.  */
    if (!errmsg)
      fprintf (out, _("E-mail bug reports to: <%s>.\n"), PACKAGE_BUGREPORT);
 +
 +  if (!errmsg)
-+    fprintf (out, _("Patched by: Michael M. Builov <mbuilov@gmail.com>.\n"));
++    fprintf (out, _("Patched (v2) by: Michael M. Builov <mbuilov@gmail.com>.\n"));
  }
  
  _Noreturn static void
-@@ -159,6 +169,8 @@
+@@ -159,6 +252,8 @@
                   open files in binary mode (CR+LFs are not" \
                   " processed specially)\n"));
  #endif
@@ -217,16 +222,22 @@ diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
    fprintf (out, _("  -l N, --line-length=N\n\
                   specify the desired line-wrap length for the `l' command\n"));
    fprintf (out, _("  --posix\n\
-@@ -193,7 +205,7 @@
+@@ -191,9 +286,13 @@
+ }
+ 
  int
++#ifndef WINDOWS_NATIVE
  main (int argc, char **argv)
++#else
++wmain (int argc, wchar_t **wargv)
++#endif
  {
 -#define SHORTOPTS "bsnrzuEe:f:l:i::V:"
 +#define SHORTOPTS "bCsnrzuEe:f:l:i::V:"
  
    enum { SANDBOX_OPTION = CHAR_MAX+1,
           DEBUG_OPTION
-@@ -201,6 +213,7 @@
+@@ -201,6 +300,7 @@
  
    static const struct option longopts[] = {
      {"binary", 0, NULL, 'b'},
@@ -234,8 +245,26 @@ diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
      {"regexp-extended", 0, NULL, 'r'},
      {"debug", 0, NULL, DEBUG_OPTION},
      {"expression", 1, NULL, 'e'},
-@@ -229,9 +242,27 @@
+@@ -227,11 +327,58 @@
+   int return_code;
+   const char *cols = getenv ("COLS");
  
++#ifdef WINDOWS_NATIVE
++  char **old_argv = NULL;
++  char **argv;
++
++  /* Temporary set program name.
++     This is needed for error messages - in case of bad locale.  */
++  set_program_name ("sed");
++
++  /* Set locale according to user's wishes.
++     (Current locale is "C").  */
++  set_locale_from_env (def_locale);
++
++  /* Convert program arguments to multibyte strings.  */
++  argv = convert_wargv (argc, wargv);
++#endif /* WINDOWS_NATIVE */
++
    set_program_name (argv[0]);
    initialize_main (&argc, &argv);
 +
@@ -257,13 +286,26 @@ diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
 +  optind = 1;
 +
  #if HAVE_SETLOCALE
++#ifndef WINDOWS_NATIVE
    /* Set locale according to user's wishes.  */
 -  setlocale (LC_ALL, "");
 +  setlocale (LC_ALL, def_locale);
++#else /* WINDOWS_NATIVE */
++  if (def_locale[0])
++    {
++      /* User wants to use "C"-locale.  */
++      setlocale (LC_ALL, def_locale);
++
++      /* Cannot free argv array now:
++         argv[0] was passed to set_program_name().  */
++      old_argv = argv;
++      argv = convert_wargv (argc, wargv);
++    }
++#endif /* WINDOWS_NATIVE */
  #endif
    initialize_mbcs ();
    init_localeinfo (&localeinfo);
-@@ -320,6 +351,10 @@
+@@ -320,6 +467,10 @@
  #endif
            break;
  
@@ -274,7 +316,7 @@ diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
          case 'E':
          case 'r':
            extended_regexp_flags = REG_EXTENDED;
-@@ -374,6 +409,15 @@
+@@ -374,6 +525,15 @@
         if (set_binary_mode ( fileno (stdout), O_BINARY) == -1)
           panic (_("failed to set binary mode on STDOUT"));
      }
@@ -290,3 +332,653 @@ diff -Naur sed-4.6/sed/sed.c sed-4.6-patched/sed/sed.c
  #endif
  
    if (debug)
+@@ -384,5 +544,11 @@
+   finish_program (the_program);
+   ck_fclose (NULL);
+ 
++#ifdef WINDOWS_NATIVE
++  if (old_argv)
++    free_argv (old_argv);
++  free_argv (argv);
++#endif
++
+   return return_code;
+ }
+diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
+--- sed-4.7/sed/utils.c	2018-12-13 09:06:47.000000000 +0300
++++ sed-4.7-patched/sed/utils.c	2019-12-20 16:16:25.195659200 +0300
+@@ -14,6 +14,12 @@
+     You should have received a copy of the GNU General Public License
+     along with this program; If not, see <https://www.gnu.org/licenses/>. */
+ 
++#if defined _WIN32 && !defined __CYGWIN__
++#define WIN32_LEAN_AND_MEAN
++#include <windows.h>
++#define WINDOWS_NATIVE
++#endif
++
+ #include <config.h>
+ 
+ #include <stdio.h>
+@@ -198,16 +204,557 @@
+   return fp;
+ }
+ 
++#ifdef WINDOWS_NATIVE
++
++/* Determine locale's codepage for the WideCharToMultiByte.  */
++static unsigned int
++get_locale_code_page (void)
++{
++  UINT codepage = CP_ACP; /* ANSI codepage by default */
++  const char *current_locale = setlocale (LC_CTYPE, NULL);
++  const char *pdot = strrchr (current_locale, '.');
++
++  /* After a dot may follow a codepage number, or the "utf8" string.  */
++  if (pdot)
++    {
++      if (('u' == pdot[1] || 'U' == pdot[1]) &&
++        ('t' == pdot[2] || 'T' == pdot[2]) &&
++        ('f' == pdot[3] || 'F' == pdot[3]) &&
++        (('8' == pdot[4] && '\0' == pdot[5]) ||
++         ('-' == pdot[4] && '8' == pdot[5] && '\0' == pdot[6])))
++        codepage = CP_UTF8; /* 65001 */
++      else
++        {
++          /* Try to parse codepage number.  */
++          unsigned cp;
++          if (1 == sscanf (pdot + 1, "%u", &cp))
++            codepage = cp;
++        }
++    }
++
++  return codepage;
++}
++
++/* Convert wide-character string to multibyte.
++   Returns NULL on error, else - malloc'ated '\0'-terminated
++   string, which caller should free via free().
++   Note: on error - check GetLastError().  */
++static char *
++convert_wc_to_mb (const wchar_t *wc)
++{
++  unsigned int codepage = get_locale_code_page ();
++  const int sz = WideCharToMultiByte (
++    codepage, 0, wc, -1, NULL, 0, NULL, NULL);
++
++  if (!sz)
++    return NULL; /* Error.  Caller should check GetLastError().  */
++
++  {
++    char *a = (char*) xmalloc (sz);
++    WideCharToMultiByte (codepage, 0, wc, -1, a, sz, NULL, NULL);
++    return a;
++  }
++}
++
++/* Called on panic.  */
++static const char *
++get_last_err_msg (unsigned int last_err)
++{
++  /* First try to get message in locale encoding.  */
++  wchar_t *wmsg;
++  DWORD n_chars = FormatMessageW (
++    FORMAT_MESSAGE_ALLOCATE_BUFFER |
++    FORMAT_MESSAGE_FROM_SYSTEM |
++    FORMAT_MESSAGE_IGNORE_INSERTS,
++    NULL, last_err, 0, (LPWSTR) &wmsg, 0, NULL);
++
++  /* trim "\r\n" at end of msg */
++  if (n_chars && L'\n' == wmsg[n_chars - 1])
++    {
++      wmsg[--n_chars] = L'\0';
++      if (n_chars && L'\r' == wmsg[n_chars - 1])
++        wmsg[--n_chars] = L'\0';
++    }
++
++  if (!n_chars)
++    return "";
++
++  {
++    char *msg = convert_wc_to_mb (wmsg);
++    if (msg)
++      {
++        /* Check if failed to translate message to locale code page.  */
++        const char *c = msg;
++        while ('?' == *c || ' ' == *c)
++          c++;
++        if ('.' == *c && !c[1])
++          c++; /* Something like "?????." */
++        if (!*c)
++          {
++            free (msg);
++            msg = NULL;
++          }
++      }
++
++    if (!msg)
++      {
++        /* Just get error message in English.  */
++        n_chars = FormatMessage (
++          FORMAT_MESSAGE_ALLOCATE_BUFFER |
++          FORMAT_MESSAGE_FROM_SYSTEM |
++          FORMAT_MESSAGE_IGNORE_INSERTS,
++          NULL, last_err,
++          MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
++          (LPSTR) &msg, 0, NULL);
++
++        /* trim "\r\n" at end of msg */
++        if (n_chars && '\n' == msg[n_chars - 1])
++          {
++            msg[--n_chars] = '\0';
++            if (n_chars && '\r' == msg[n_chars - 1])
++              msg[--n_chars] = '\0';
++          }
++
++        if (!n_chars)
++          return "";
++      }
++
++    return msg;
++  }
++}
++
++/* Check if file descriptor fd designates a console.
++   If this is true, then due to bugs in MS UCRT,
++   standard stream i/o functions read(2)/write(2)
++   on the fd may fail, e.g. if the console may print
++   one symbol per multibyte character (for example,
++   if LC_CTYPE=Russian_Russia.1251 and the console
++   code page is 65001).  */
++/* Return INVALID_HANDLE_VALUE if fd do not belongs
++   to a console.  */
++static HANDLE
++get_console_handle (int fd)
++{
++  HANDLE ch;
++  DWORD mode;
++
++  if (!_isatty (fd))
++    return INVALID_HANDLE_VALUE;
++
++  ch = (HANDLE) _get_osfhandle (fd);
++  if (ch != INVALID_HANDLE_VALUE &&
++    GetConsoleMode (ch, &mode))
++    return ch;
++
++  /* Not a console handle.  */
++  return INVALID_HANDLE_VALUE;
++}
++
++/* As a workaround to MS UCRT bugs, call WriteConsoleW
++   directly.  */
++/* Note: fwrite() internally calls WriteFile, which
++   in turn seems like calls WriteConsole expecting
++   that it will return number of bytes written. But
++   WriteConsole returns number of _chars_ written.
++   As result, writing stops after printing only one
++   multibyte character.  */
++/* Returns non-zero on error:
++   - caller should check errno, then GetLastError().  */
++static int
++write_to_console (const void *ptr, size_t size, HANDLE ch)
++{
++  /* Write only full mulitbyte chars, so may need to cache
++     a part of unwritten multibyte char.  */
++  static char remaining_wbuf[MB_LEN_MAX];
++  static unsigned remaining_wbuf_filled = 0;
++
++#ifndef WINDOWS_CONSOLE_WBUF_SIZE
++#define WINDOWS_CONSOLE_WBUF_SIZE 512 /* Must be > 1.  */
++#endif
++  wchar_t tmp[WINDOWS_CONSOLE_WBUF_SIZE];
++  wchar_t *at = tmp;
++  const char *c = (const char*) ptr;
++  const char *const e = c + size;
++  int n;
++
++  if (remaining_wbuf_filled)
++    {
++      unsigned to_copy = sizeof(remaining_wbuf) - remaining_wbuf_filled;
++      if (to_copy > size)
++        to_copy = (unsigned) size;
++      memcpy (&remaining_wbuf[remaining_wbuf_filled], c, to_copy);
++      remaining_wbuf_filled += to_copy;
++
++      n = mbtowc (at, remaining_wbuf, remaining_wbuf_filled);
++      if (n < 0)
++        {
++          if (remaining_wbuf_filled < sizeof(remaining_wbuf))
++            return 0; /* need more bytes of multibyte char for one wide-character */
++
++          /* Cannot convert multibyte to wide-char in current locale.  */
++          errno = EILSEQ;
++          return -1;
++        }
++
++      c += to_copy - (remaining_wbuf_filled - n);
++      remaining_wbuf_filled = 0;
++      at++;
++    }
++
++  for (; c < e; at = tmp)
++    {
++      /* Convert to wide-characters.  */
++      do
++        {
++          const size_t to_convert = (size_t) (e - c);
++          n = mbtowc (at, c, to_convert);
++          if (n < 0)
++            {
++              if (to_convert < sizeof(remaining_wbuf))
++                {
++                  remaining_wbuf_filled = (unsigned) to_convert;
++                  memcpy (remaining_wbuf, c, remaining_wbuf_filled);
++                  c = e;
++                  break; /* need more multibyte chars for one wide-character */
++                }
++
++              /* Cannot convert multibyte to wide-char in current locale.  */
++              errno = EILSEQ;
++              return -1;
++            }
++
++          if (n)
++            c += n;
++          else
++            {
++              *at = L'\0';
++              c++;
++            }
++
++          if (&tmp[sizeof(tmp)/sizeof(tmp[0])] == ++at)
++            break; /* buffer is full */
++        }
++      while (c < e);
++
++      if (at == tmp)
++        break; /* nothing to print */
++
++      /* Write to the console.  */
++      {
++        DWORD NumberOfCharsWritten;
++        if (!WriteConsoleW (ch, tmp, (DWORD) (at - tmp), &NumberOfCharsWritten, NULL))
++          {
++            errno = 0; /* Caller should check GetLastError().  */
++            return -1;
++          }
++      }
++    }
++
++  return 0;
++}
++
++/* Buffer for characters read from the console.
++   Note: ReadConsole() cannot handle big buffers (about 64 Kib).  */
++#ifndef WINDOWS_CONSOLE_RBUF_SIZE
++#ifdef _WIN64
++#define WINDOWS_CONSOLE_RBUF_SIZE 30000 /* Must be non-zero.  */
++#else
++#define WINDOWS_CONSOLE_RBUF_SIZE 15000 /* Must be non-zero.  */
++#endif
++#endif
++static wchar_t console_rbuf[WINDOWS_CONSOLE_RBUF_SIZE];
++static unsigned console_rbuf_offset = 0;
++static unsigned console_rbuf_filled = 0;
++
++/* May read only a part of a multibyte character,
++   so may need to cache remaining part of the character.  */
++static char remaining_rbuf[MB_LEN_MAX];
++static unsigned remaining_rbuf_offset = 0;
++static unsigned remaining_rbuf_filled = 0;
++
++/* Stop console input on Ctrl-Z or Ctrl-D.
++   See https://stackoverflow.com/questions/43836040/win-api-readconsole.  */
++#ifndef WINDOWS_CONSOLE_READ_STOP_CONTROL_MASK
++#define WINDOWS_CONSOLE_READ_STOP_CONTROL_MASK (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)
++#endif
++#ifndef WINDOWS_CONSOLE_READ_STOP_CHAR1
++#define WINDOWS_CONSOLE_READ_STOP_CHAR1 'z'
++#endif
++#ifndef WINDOWS_CONSOLE_READ_STOP_CHAR2
++#define WINDOWS_CONSOLE_READ_STOP_CHAR2 'd'
++#endif
++#define WINDOWS_CONSOLE_READ_STOP_VALUE1 (WINDOWS_CONSOLE_READ_STOP_CHAR1 - 'a' + 1)
++#define WINDOWS_CONSOLE_READ_STOP_VALUE2 (WINDOWS_CONSOLE_READ_STOP_CHAR2 - 'a' + 1)
++
++static CONSOLE_READCONSOLE_CONTROL console_ctrl = {
++  sizeof(CONSOLE_READCONSOLE_CONTROL), 0,
++  (1u << WINDOWS_CONSOLE_READ_STOP_VALUE1) |
++  (1u << WINDOWS_CONSOLE_READ_STOP_VALUE2), 0
++};
++
++#define is_win_console_stop_input \
++  ((console_rbuf[console_rbuf_offset] == WINDOWS_CONSOLE_READ_STOP_VALUE1 ||  \
++    console_rbuf[console_rbuf_offset] == WINDOWS_CONSOLE_READ_STOP_VALUE2) &&  \
++  (console_ctrl.dwControlKeyState & WINDOWS_CONSOLE_READ_STOP_CONTROL_MASK))
++
++/* Read wide-characters from the console.
++   Returns non-zero on error:
++   - caller should check GetLastError().  */
++static int
++read_from_console_w (HANDLE ch)
++{
++  DWORD NumberOfCharsRead;
++  if (!ReadConsoleW (ch, console_rbuf,
++    sizeof(console_rbuf)/sizeof(console_rbuf[0]), &NumberOfCharsRead, &console_ctrl))
++    {
++      errno = 0; /* Caller should check GetLastError().  */
++      return -1;
++    }
++
++  /* Console is a text stream, so convert CRLF->LF.  */
++  if (NumberOfCharsRead >= 2 &&
++    console_rbuf[NumberOfCharsRead - 2] == L'\r' &&
++    console_rbuf[NumberOfCharsRead - 1] == L'\n')
++    console_rbuf[--NumberOfCharsRead - 1] = L'\n';
++
++  console_rbuf_filled = NumberOfCharsRead;
++  return 0;
++}
++
++/* As a workaround to MS UCRT bugs, call ReadConsoleW
++   directly.  */
++/* Note: fread() internally calls ReadFile, which
++   in turn seems like calls ReadConsole expecting
++   that it will return number of bytes read. But
++   ReadConsole returns number of _chars_ read.
++   As result, reading stops if read just one byte
++   of a multibyte character.  */
++/* Returns number of bytes read, < size on eof/error:
++   - caller should check errno, then GetLastError().  */
++static size_t
++read_from_console (void *ptr, size_t size, HANDLE ch)
++{
++  char *d = (char*) ptr;
++  const char *const e = d + size;
++
++  if (remaining_rbuf_filled)
++    {
++      unsigned to_copy = remaining_rbuf_filled;
++      if (to_copy > size)
++        to_copy = (unsigned) size;
++      d = to_copy + (char*) memcpy (d,
++        &remaining_rbuf[remaining_rbuf_offset], to_copy);
++      remaining_rbuf_filled -= to_copy;
++      if (remaining_rbuf_filled || d == e)
++        {
++          remaining_rbuf_offset += to_copy;
++          return size;
++        }
++    }
++
++  for (;; console_rbuf_offset = 0)
++    {
++      /* Convert wide-characters.  */
++      while (console_rbuf_filled)
++        {
++          int n;
++
++          if (is_win_console_stop_input)
++            goto stop_input;
++
++          n = wctomb (remaining_rbuf, console_rbuf[console_rbuf_offset]);
++          if (n < 0)
++            {
++              /* Cannot convert wide-char to multibyte in current locale.  */
++              errno = EILSEQ;
++              return (size_t) (d - (char*) ptr); /* < size */
++            }
++
++          console_rbuf_filled--;
++          console_rbuf_offset++;
++
++          {
++            unsigned to_copy = n;
++            if (to_copy > (size_t) (e - d))
++              to_copy = (unsigned) (e - d);
++            d = to_copy + (char*) memcpy (d, remaining_rbuf, to_copy);
++            if (d == e)
++              {
++                remaining_rbuf_filled = (unsigned) n - to_copy;
++                remaining_rbuf_offset = to_copy;
++                return (size_t) (d - (char*) ptr); /* == size */
++              }
++          }
++        }
++
++      /* Read from the console.  */
++      if (read_from_console_w (ch))
++        return (size_t) (d - (char*) ptr); /* < size */
++    }
++
++stop_input:
++  /* EOF: no error - both errno and last error are zero.  */
++  errno = 0;
++  return (size_t) (d - (char*) ptr); /* < size */
++}
++
++/* As a workaround to MS UCRT bugs, call ReadConsoleW
++   directly.  */
++/* Returns number of bytes read, including delimiter, but
++   not including terminating '\0', returns -1 on eof or error:
++   - caller should check errno, then GetLastError().  */
++static ssize_t
++read_from_console_delim (char **text, size_t *buflen, char buffer_delimiter, HANDLE ch)
++{
++  size_t filled = 0;
++
++  /* Previous ck_fread() should read whole multibyte characters,
++     (possibly by multiple calls).  */
++  if (remaining_rbuf_filled)
++    panic (_("encountered partially read multibyte character"));
++
++  for (;; console_rbuf_offset = 0)
++    {
++      /* Convert wide-characters.  */
++      while (console_rbuf_filled)
++        {
++          char tmp[MB_LEN_MAX];
++          int n;
++
++          if (is_win_console_stop_input)
++            goto stop_input;
++
++          n = wctomb (tmp, console_rbuf[console_rbuf_offset]);
++          if (n < 0)
++            {
++              /* Cannot convert wide-char to multibyte in current locale.  */
++              errno = EILSEQ;
++              return -1;
++            }
++
++          console_rbuf_filled--;
++          console_rbuf_offset++;
++
++          /* One byte is needed for the terminating '\0'.  */
++          if ((unsigned) n + 1 > *buflen - filled)
++            {
++              /* Don't have a space, need to realloc.  */
++#ifndef READ_FROM_CONSOLE_DELIM_REALLOC_SIZE
++#define READ_FROM_CONSOLE_DELIM_REALLOC_SIZE 256 /* Must be > MB_LEN_MAX */
++#endif
++              (void)sizeof(int[1-2*(READ_FROM_CONSOLE_DELIM_REALLOC_SIZE <= MB_LEN_MAX)]);
++              {
++                size_t need = *buflen + READ_FROM_CONSOLE_DELIM_REALLOC_SIZE;
++                void *new_buf = xrealloc (*text, need);
++                *text = (char*) new_buf;
++                *buflen = need;
++              }
++            }
++
++          memcpy (*text + filled, tmp, (unsigned) n);
++          filled += (unsigned) n;
++
++          if ((*text)[filled - 1] == buffer_delimiter)
++            {
++              (*text)[filled] = '\0';
++              return (ssize_t) filled;
++            }
++        }
++
++      /* Read from the console.  */
++      if (read_from_console_w (ch))
++        return -1;
++    }
++
++stop_input:
++  if (filled)
++    {
++      (*text)[filled] = '\0';
++      return (ssize_t) filled;
++    }
++
++  /* EOF: no error - both errno and last error are zero.  */
++  errno = 0;
++  return -1;
++}
++
++/* Writing to console failed - panic.
++   First checks errno, then GetLastError().  */
++static void
++write_console_panic (void)
++{
++  if (EILSEQ == errno)
++    panic (_("failed to write to console: cannot to convert character"
++      " (LC_CTYPE=%s -> Unicode): %s"), setlocale (LC_CTYPE, NULL),
++      strerror (errno));
++
++  if (errno)
++    panic (_("failed to write to console: %s"), strerror (errno));
++
++  {
++    const DWORD last_err = GetLastError ();
++    const char *msg = get_last_err_msg (last_err);
++    panic (_("failed to write to console, system error: 0x%x (%s)"),
++      last_err, msg);
++  }
++}
++
++/* Check if reading from console failed.
++   First checks errno, then GetLastError().
++   Panics on error.  */
++static void
++check_read_console_error (void)
++{
++  if (EILSEQ == errno)
++    panic (_("failed to read from console: cannot to convert character"
++      " (Unicode -> LC_CTYPE=%s): %s"), setlocale (LC_CTYPE, NULL),
++      strerror (errno));
++
++  if (errno)
++    panic (_("failed to read from console: %s"), strerror (errno));
++
++  {
++    DWORD last_err = GetLastError ();
++    if (last_err)
++      {
++        const char *msg = get_last_err_msg (last_err);
++        panic (_("failed to read from console, system error: 0x%x (%s)"),
++          last_err, msg);
++      }
++  }
++
++  /* No error.  */
++}
++
++#endif /* WINDOWS_NATIVE */
++
+ /* Panic on failing fwrite */
+ void
+ ck_fwrite (const void *ptr, size_t size, size_t nmemb, FILE *stream)
+ {
+   clearerr (stream);
+-  if (size && fwrite (ptr, size, nmemb, stream) != nmemb)
+-    panic (ngettext ("couldn't write %llu item to %s: %s",
+-                   "couldn't write %llu items to %s: %s", nmemb),
+-          (unsigned long long) nmemb, utils_fp_name (stream),
+-          strerror (errno));
++  if (!size || !nmemb)
++    return;
++
++#ifdef WINDOWS_NATIVE
++  {
++    const HANDLE ch = get_console_handle (fileno (stream));
++    if (ch != INVALID_HANDLE_VALUE)
++      {
++        if (write_to_console (ptr, size*nmemb, ch))
++          write_console_panic ();
++        return;
++      }
++  }
++#endif /* WINDOWS_NATIVE */
++
++  if (fwrite (ptr, size, nmemb, stream) == nmemb)
++    return;
++
++  panic (ngettext ("couldn't write %llu item to %s: %s",
++                 "couldn't write %llu items to %s: %s", nmemb),
++        (unsigned long long) nmemb, utils_fp_name (stream),
++        strerror (errno));
+ }
+ 
+ /* Panic on failing fread */
+@@ -215,7 +762,31 @@
+ ck_fread (void *ptr, size_t size, size_t nmemb, FILE *stream)
+ {
+   clearerr (stream);
+-  if (size && (nmemb=fread (ptr, size, nmemb, stream)) <= 0 && ferror (stream))
++  if (!size)
++    return nmemb;
++
++#ifdef WINDOWS_NATIVE
++  {
++    const HANDLE ch = get_console_handle (fileno (stream));
++    if (ch != INVALID_HANDLE_VALUE)
++      {
++        /* Item sizes other than 1 (byte) are not supported.  */
++        if (size != 1)
++          panic (_("ck_fread assert: item size != 1"));
++
++        {
++          const size_t nread = read_from_console (ptr, nmemb, ch);
++
++          if (nread < nmemb)
++            check_read_console_error ();
++
++          return nread;
++        }
++      }
++  }
++#endif /* WINDOWS_NATIVE */
++
++  if ((nmemb=fread (ptr, size, nmemb, stream)) <= 0 && ferror (stream))
+     panic (_("read error on %s: %s"), utils_fp_name (stream), strerror (errno));
+ 
+   return nmemb;
+@@ -224,12 +795,24 @@
+ size_t
+ ck_getdelim (char **text, size_t *buflen, char buffer_delimiter, FILE *stream)
+ {
+-  ssize_t result;
++  ssize_t result = -1; /* Make compiler happy.  */
+   bool error;
+ 
+   error = ferror (stream);
+   if (!error)
+     {
++#ifdef WINDOWS_NATIVE
++      const HANDLE ch = get_console_handle (fileno (stream));
++      if (ch != INVALID_HANDLE_VALUE)
++        {
++          result = read_from_console_delim (text, buflen, buffer_delimiter, ch);
++
++          if (result < 0)
++            check_read_console_error ();
++
++          return result; /* -1 if no line was read (and there is EOF).  */
++        }
++#endif /* WINDOWS_NATIVE */
+       result = getdelim (text, buflen, buffer_delimiter, stream);
+       error = ferror (stream);
+     }

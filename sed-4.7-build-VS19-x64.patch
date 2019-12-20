@@ -1,6 +1,6 @@
 diff -Naur ../orig/sed-4.7/config.h ./config.h
 --- ../orig/sed-4.7/config.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./config.h	2019-12-20 16:19:12.668238100 +0300
++++ ./config.h	2019-12-20 16:33:24.918984000 +0300
 @@ -0,0 +1,1792 @@
 +/* config.h.  Generated from config_h.in by configure.  */
 +/* config_h.in.  Generated from configure.ac by autoheader.  */
@@ -9,19 +9,19 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +/* #undef AC_APPLE_UNIVERSAL_BUILD */
 +
 +/* Define to the number of bits in type 'ptrdiff_t'. */
-+#define BITSIZEOF_PTRDIFF_T 32
++/* #undef BITSIZEOF_PTRDIFF_T */
 +
 +/* Define to the number of bits in type 'sig_atomic_t'. */
-+#define BITSIZEOF_SIG_ATOMIC_T 32
++/* #undef BITSIZEOF_SIG_ATOMIC_T */
 +
 +/* Define to the number of bits in type 'size_t'. */
-+#define BITSIZEOF_SIZE_T 32
++/* #undef BITSIZEOF_SIZE_T */
 +
 +/* Define to the number of bits in type 'wchar_t'. */
-+#define BITSIZEOF_WCHAR_T 16
++/* #undef BITSIZEOF_WCHAR_T */
 +
 +/* Define to the number of bits in type 'wint_t'. */
-+#define BITSIZEOF_WINT_T 16
++/* #undef BITSIZEOF_WINT_T */
 +
 +/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
 +   systems. This function is required for `alloca.c' support on those systems.
@@ -64,7 +64,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +   (struct s)' as it overestimates the size. Use 'offsetof (struct s, d)'
 +   instead. Don't use 'offsetof (struct s, d[0])', as this doesn't work with
 +   MSVC and with C++ compilers. */
-+#define FLEXIBLE_ARRAY_MEMBER 1
++#define FLEXIBLE_ARRAY_MEMBER /**/
 +
 +/* Enable compile-time and run-time bounds-checking, and some warnings,
 +      without upsetting glibc 2.15+. */
@@ -138,7 +138,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +
 +/* Define to 1 if printf and friends should be labeled with attribute
 +   "__gnu_printf__" instead of "__printf__" */
-+#define GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU 1
++/* #undef GNULIB_PRINTF_ATTRIBUTE_FLAVOR_GNU */
 +
 +/* Define to a C preprocessor expression that evaluates to 1 or 0, depending
 +   whether the gnulib module scanf shall be considered present. */
@@ -572,7 +572,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +
 +/* Define to 1 if you have the declaration of `isblank', and to 0 if you
 +   don't. */
-+#define HAVE_DECL_ISBLANK 0
++#define HAVE_DECL_ISBLANK 1
 +
 +/* Define to 1 if you have the declaration of `mbrlen', and to 0 if you don't.
 +   */
@@ -752,7 +752,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +/* #undef HAVE_INET_PTON */
 +
 +/* Define to 1 if you have the <inttypes.h> header file. */
-+/* #undef HAVE_INTTYPES_H */
++#define HAVE_INTTYPES_H 1
 +
 +/* Define to 1 if you have the `ioctl' function. */
 +/* #undef HAVE_IOCTL */
@@ -770,7 +770,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +#define HAVE_ISATTY 1
 +
 +/* Define to 1 if you have the `isblank' function. */
-+/* #undef HAVE_ISBLANK */
++#define HAVE_ISBLANK 1
 +
 +/* Define to 1 if you have the `iswcntrl' function. */
 +#define HAVE_ISWCNTRL 1
@@ -948,7 +948,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +/* #undef HAVE_SIGINTERRUPT */
 +
 +/* Define to 1 if 'sig_atomic_t' is a signed integer type. */
-+#define HAVE_SIGNED_SIG_ATOMIC_T 1
++/* #undef HAVE_SIGNED_SIG_ATOMIC_T */
 +
 +/* Define to 1 if 'wchar_t' is a signed integer type. */
 +/* #undef HAVE_SIGNED_WCHAR_T */
@@ -972,7 +972,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +/* #undef HAVE_STATACL */
 +
 +/* Define to 1 if you have the <stdint.h> header file. */
-+/* #undef HAVE_STDINT_H */
++#define HAVE_STDINT_H 1
 +
 +/* Define to 1 if you have the <stdio_ext.h> header file. */
 +/* #undef HAVE_STDIO_EXT_H */
@@ -1138,7 +1138,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +/* #undef HAVE_XLOCALE_H */
 +
 +/* Define to 1 if the system has the type `_Bool'. */
-+/* #undef HAVE__BOOL */
++#define HAVE__BOOL 1
 +
 +/* Define to 1 if you have the `_fseeki64' function. */
 +#define HAVE__FSEEKI64 1
@@ -1257,7 +1257,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'ptrdiff_t'. */
-+#define PTRDIFF_T_SUFFIX 
++/* #undef PTRDIFF_T_SUFFIX */
 +
 +/* Define to 1 if readlink fails to recognize a trailing slash. */
 +/* #undef READLINK_TRAILING_SLASH_BUG */
@@ -1293,11 +1293,11 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'sig_atomic_t'. */
-+#define SIG_ATOMIC_T_SUFFIX 
++/* #undef SIG_ATOMIC_T_SUFFIX */
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'size_t'. */
-+#define SIZE_T_SUFFIX u
++/* #undef SIZE_T_SUFFIX */
 +
 +/* If using the C implementation of alloca, define if you know the
 +   direction of stack growth for your system; otherwise it will be
@@ -1434,14 +1434,14 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'wchar_t'. */
-+#define WCHAR_T_SUFFIX 
++/* #undef WCHAR_T_SUFFIX */
 +
 +/* Define if WSAStartup is needed. */
 +/* #undef WINDOWS_SOCKETS */
 +
 +/* Define to l, ll, u, ul, ull, etc., as suitable for constants of type
 +   'wint_t'. */
-+#define WINT_T_SUFFIX 
++/* #undef WINT_T_SUFFIX */
 +
 +/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
 +   significant byte first (like Motorola and SPARC, unlike Intel). */
@@ -1646,7 +1646,7 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +/* Define to `__inline__' or `__inline' if that's what the C compiler
 +   calls it, or to nothing if 'inline' is not supported under any name.  */
 +#ifndef __cplusplus
-+#define inline __inline
++/* #undef inline */
 +#endif
 +
 +/* Work around a bug in Apple GCC 4.0.1 build 5465: In C99 mode, it supports
@@ -1793,10 +1793,10 @@ diff -Naur ../orig/sed-4.7/config.h ./config.h
 +
 +
 +/* Define as a macro for copying va_list variables. */
-+#define va_copy gl_va_copy
++/* #undef va_copy */
 diff -Naur ../orig/sed-4.7/lib/alloca.h ./lib/alloca.h
 --- ../orig/sed-4.7/lib/alloca.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/alloca.h	2019-12-20 16:19:48.231272200 +0300
++++ ./lib/alloca.h	2019-12-20 16:33:53.676628900 +0300
 @@ -0,0 +1,66 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Memory allocation on the stack.
@@ -1866,7 +1866,7 @@ diff -Naur ../orig/sed-4.7/lib/alloca.h ./lib/alloca.h
 +#endif /* _GL_ALLOCA_H */
 diff -Naur ../orig/sed-4.7/lib/ctype.h ./lib/ctype.h
 --- ../orig/sed-4.7/lib/ctype.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/ctype.h	2019-12-20 16:20:08.407426200 +0300
++++ ./lib/ctype.h	2019-12-20 16:34:13.437759200 +0300
 @@ -0,0 +1,505 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <ctype.h>, for platforms on which it is incomplete.
@@ -1902,7 +1902,7 @@ diff -Naur ../orig/sed-4.7/lib/ctype.h ./lib/ctype.h
 +
 +/* Include the original <ctype.h>.  */
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\ctype.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\ctype.h"
 +
 +#ifndef _GL_CTYPE_H
 +#define _GL_CTYPE_H
@@ -2360,7 +2360,7 @@ diff -Naur ../orig/sed-4.7/lib/ctype.h ./lib/ctype.h
 +
 +/* Return non-zero if c is a blank, i.e. a space or tab character.  */
 +#if 1
-+# if !0
++# if !1
 +_GL_EXTERN_C int isblank (int c);
 +# endif
 +#elif defined GNULIB_POSIXCHECK
@@ -2373,1265 +2373,9 @@ diff -Naur ../orig/sed-4.7/lib/ctype.h ./lib/ctype.h
 +
 +#endif /* _GL_CTYPE_H */
 +#endif /* _GL_CTYPE_H */
-diff -Naur ../orig/sed-4.7/lib/dfa.c ./lib/dfa.c
---- ../orig/sed-4.7/lib/dfa.c	2018-12-21 07:53:47.000000000 +0300
-+++ ./lib/dfa.c	2019-12-20 16:17:30.712406600 +0300
-@@ -745,14 +745,16 @@
- static void
- fillset (charclass *s)
- {
--  for (int i = 0; i < CHARCLASS_WORDS; i++)
-+  int i;
-+  for (i = 0; i < CHARCLASS_WORDS; i++)
-     s->w[i] = CHARCLASS_WORD_MASK;
- }
- 
- static void
- notset (charclass *s)
- {
--  for (int i = 0; i < CHARCLASS_WORDS; ++i)
-+  int i;
-+  for (i = 0; i < CHARCLASS_WORDS; ++i)
-     s->w[i] = CHARCLASS_WORD_MASK & ~s->w[i];
- }
- 
-@@ -760,7 +762,8 @@
- equal (charclass const *s1, charclass const *s2)
- {
-   charclass_word w = 0;
--  for (int i = 0; i < CHARCLASS_WORDS; i++)
-+  int i;
-+  for (i = 0; i < CHARCLASS_WORDS; i++)
-     w |= s1->w[i] ^ s2->w[i];
-   return w == 0;
- }
-@@ -769,7 +772,8 @@
- emptyset (charclass const *s)
- {
-   charclass_word w = 0;
--  for (int i = 0; i < CHARCLASS_WORDS; i++)
-+  int i;
-+  for (i = 0; i < CHARCLASS_WORDS; i++)
-     w |= s->w[i];
-   return w == 0;
- }
-@@ -806,13 +810,13 @@
-      Adjust the growth according to three constraints: NITEMS_INCR_MIN,
-      NITEMS_MAX, and what the C language can represent safely.  */
- 
--  ptrdiff_t n, nbytes;
-+  ptrdiff_t n, nbytes, adjusted_nbytes;
-   if (INT_ADD_WRAPV (n0, n0 >> 1, &n))
-     n = PTRDIFF_MAX;
-   if (0 <= nitems_max && nitems_max < n)
-     n = nitems_max;
- 
--  ptrdiff_t adjusted_nbytes
-+  adjusted_nbytes
-     = ((INT_MULTIPLY_WRAPV (n, item_size, &nbytes) || SIZE_MAX < nbytes)
-        ? MIN (PTRDIFF_MAX, SIZE_MAX)
-        : nbytes < DEFAULT_MXFAST ? DEFAULT_MXFAST : 0);
-@@ -906,7 +910,8 @@
- setbit_case_fold_c (int b, charclass *c)
- {
-   int ub = toupper (b);
--  for (int i = 0; i < NOTCHAR; i++)
-+  int i;
-+  for (i = 0; i < NOTCHAR; i++)
-     if (toupper (i) == ub)
-       setbit (i, c);
- }
-@@ -954,8 +959,9 @@
- {
-   size_t nbytes = mbs_to_wchar (&dfa->lex.wctok, dfa->lex.ptr, dfa->lex.left,
-                                 dfa);
-+  int c;
-   dfa->lex.cur_mb_len = nbytes;
--  int c = nbytes == 1 ? to_uchar (dfa->lex.ptr[0]) : EOF;
-+  c = nbytes == 1 ? to_uchar (dfa->lex.ptr[0]) : EOF;
-   dfa->lex.ptr += nbytes;
-   dfa->lex.left -= nbytes;
-   return c;
-@@ -1003,7 +1009,8 @@
- static const struct dfa_ctype *_GL_ATTRIBUTE_PURE
- find_pred (const char *str)
- {
--  for (unsigned int i = 0; prednames[i].name; ++i)
-+  unsigned int i;
-+  for (i = 0; prednames[i].name; ++i)
-     if (streq (str, prednames[i].name))
-       return &prednames[i];
-   return NULL;
-@@ -1025,19 +1032,21 @@
-      Bit 3 = includes ranges, char/equiv classes or collation elements.  */
-   int colon_warning_state;
- 
--  dfa->lex.brack.nchars = 0;
-+  int c, c1;
-+  wint_t wc, wc1;
-+  bool invert;
-   charclass ccl;
-+
-+  dfa->lex.brack.nchars = 0;
-   zeroset (&ccl);
--  int c = bracket_fetch_wc (dfa);
--  bool invert = c == '^';
-+  c = bracket_fetch_wc (dfa);
-+  invert = c == '^';
-   if (invert)
-     {
-       c = bracket_fetch_wc (dfa);
-       known_bracket_exp = dfa->simple_locale;
-     }
--  wint_t wc = dfa->lex.wctok;
--  int c1;
--  wint_t wc1;
-+  wc = dfa->lex.wctok;
-   colon_warning_state = (c == ':');
-   do
-     {
-@@ -1093,9 +1102,12 @@
-                   if (dfa->localeinfo.multibyte && !pred->single_byte_only)
-                     known_bracket_exp = false;
-                   else
--                    for (int c2 = 0; c2 < NOTCHAR; ++c2)
--                      if (pred->func (c2))
--                        setbit (c2, &ccl);
-+                    {
-+                      int c2;
-+                      for (c2 = 0; c2 < NOTCHAR; ++c2)
-+                        if (pred->func (c2))
-+                          setbit (c2, &ccl);
-+                    }
-                 }
-               else
-                 known_bracket_exp = false;
-@@ -1166,7 +1178,8 @@
-                   if (dfa->simple_locale
-                       || (isasciidigit (c) & isasciidigit (c2)))
-                     {
--                      for (int ci = c; ci <= c2; ci++)
-+                      int ci;
-+                      for (ci = c; ci <= c2; ci++)
-                         if (dfa->syntax.case_fold && isalpha (ci))
-                           setbit_case_fold_c (ci, &ccl);
-                         else
-@@ -1199,8 +1212,9 @@
-           unsigned int n = (dfa->syntax.case_fold
-                             ? case_folded_counterparts (wc, folded + 1) + 1
-                             : 1);
-+          unsigned int i;
-           folded[0] = wc;
--          for (unsigned int i = 0; i < n; i++)
-+          for (i = 0; i < n; i++)
-             if (!setbit_wc (folded[i], &ccl))
-               {
-                 dfa->lex.brack.chars
-@@ -1269,11 +1283,13 @@
-      main switch inside the backslash case.  On the minus side,
-      it means that just about every case begins with
-      "if (backslash) ...".  */
--  for (int i = 0; i < 2; ++i)
-+  int i;
-+  for (i = 0; i < 2; ++i)
-     {
-+      int c;
-       if (! dfa->lex.left)
-         return dfa->lex.lasttok = END;
--      int c = fetch_wc (dfa);
-+      c = fetch_wc (dfa);
- 
-       switch (c)
-         {
-@@ -1496,9 +1512,12 @@
-               if (dfa->syntax.syntax_bits & RE_DOT_NOT_NULL)
-                 clrbit ('\0', &ccl);
-               if (dfa->localeinfo.multibyte)
--                for (int c2 = 0; c2 < NOTCHAR; c2++)
--                  if (dfa->localeinfo.sbctowc[c2] == WEOF)
--                    clrbit (c2, &ccl);
-+                {
-+                  int c2;
-+                  for (c2 = 0; c2 < NOTCHAR; c2++)
-+                    if (dfa->localeinfo.sbctowc[c2] == WEOF)
-+                      clrbit (c2, &ccl);
-+                }
-               dfa->canychar = charclass_index (dfa, &ccl);
-             }
-           dfa->lex.laststart = false;
-@@ -1513,8 +1532,9 @@
-           if (!dfa->localeinfo.multibyte)
-             {
-               charclass ccl;
-+              int c2;
-               zeroset (&ccl);
--              for (int c2 = 0; c2 < NOTCHAR; ++c2)
-+              for (c2 = 0; c2 < NOTCHAR; ++c2)
-                 if (isspace (c2))
-                   setbit (c2, &ccl);
-               if (c == 'S')
-@@ -1547,8 +1567,9 @@
-           if (!dfa->localeinfo.multibyte)
-             {
-               charclass ccl;
-+              int c2;
-               zeroset (&ccl);
--              for (int c2 = 0; c2 < NOTCHAR; ++c2)
-+              for (c2 = 0; c2 < NOTCHAR; ++c2)
-                 if (dfa->syntax.sbit[c2] == CTX_LETTER)
-                   setbit (c2, &ccl);
-               if (c == 'W')
-@@ -1659,7 +1680,8 @@
- 
-       /* Extract wide characters into alternations for better performance.
-          This does not require UTF-8.  */
--      for (ptrdiff_t i = 0; i < dfa->lex.brack.nchars; i++)
-+      ptrdiff_t i;
-+      for (i = 0; i < dfa->lex.brack.nchars; i++)
-         {
-           addtok_wc (dfa, dfa->lex.brack.chars[i]);
-           if (need_or)
-@@ -1695,6 +1717,7 @@
-   unsigned char buf[MB_LEN_MAX];
-   mbstate_t s = { 0 };
-   size_t stored_bytes = wcrtomb ((char *) buf, wc, &s);
-+  int i;
- 
-   if (stored_bytes != (size_t) -1)
-     dfa->lex.cur_mb_len = stored_bytes;
-@@ -1707,7 +1730,7 @@
-     }
- 
-   addtok_mb (dfa, buf[0], dfa->lex.cur_mb_len == 1 ? 3 : 1);
--  for (int i = 1; i < dfa->lex.cur_mb_len; i++)
-+  for (i = 1; i < dfa->lex.cur_mb_len; i++)
-     {
-       addtok_mb (dfa, buf[i], i == dfa->lex.cur_mb_len - 1 ? 2 : 0);
-       addtok (dfa, CAT);
-@@ -1734,10 +1757,11 @@
-     CHARCLASS_INIT (0, 0, 0, 0, 0, 0, 0, 0xff0000)
-   };
-   const unsigned int n = sizeof (utf8_classes) / sizeof (utf8_classes[0]);
-+  unsigned int i;
- 
-   /* Define the five character classes that are needed below.  */
-   if (dfa->utf8_anychar_classes[0] == 0)
--    for (unsigned int i = 0; i < n; i++)
-+    for (i = 0; i < n; i++)
-       {
-         charclass c = utf8_classes[i];
-         if (i == 1)
-@@ -1760,7 +1784,6 @@
-      which I'll write more concisely "B|CA|DAA|EAAA".  Factor the [0x00-0x7f]
-      and you get "B|(C|(D|EA)A)A".  And since the token buffer is in reverse
-      Polish notation, you get "B C D E A CAT OR A CAT OR A CAT OR".  */
--  unsigned int i;
-   for (i = 1; i < n; i++)
-     addtok (dfa, dfa->utf8_anychar_classes[i]);
-   while (--i > 1)
-@@ -1845,7 +1868,8 @@
-               wchar_t folded[CASE_FOLDED_BUFSIZE];
-               unsigned int n = case_folded_counterparts (dfa->lex.wctok,
-                                                          folded);
--              for (unsigned int i = 0; i < n; i++)
-+              unsigned int i;
-+              for (i = 0; i < n; i++)
-                 {
-                   addtok_wc (dfa, folded[i]);
-                   addtok (dfa, OR);
-@@ -1892,12 +1916,13 @@
- static void
- copytoks (struct dfa *dfa, size_t tindex, size_t ntokens)
- {
-+  size_t i;
-   if (dfa->localeinfo.multibyte)
--    for (size_t i = 0; i < ntokens; ++i)
-+    for (i = 0; i < ntokens; ++i)
-       addtok_mb (dfa, dfa->tokens[tindex + i],
-                  dfa->multibyte_prop[tindex + i]);
-   else
--    for (size_t i = 0; i < ntokens; ++i)
-+    for (i = 0; i < ntokens; ++i)
-       addtok_mb (dfa, dfa->tokens[tindex + i], 3);
- }
- 
-@@ -1911,11 +1936,11 @@
-       {
-         size_t ntokens = nsubtoks (dfa, dfa->tindex);
-         size_t tindex = dfa->tindex - ntokens;
-+        int i;
-         if (dfa->lex.maxrep < 0)
-           addtok (dfa, PLUS);
-         if (dfa->lex.minrep == 0)
-           addtok (dfa, QMARK);
--        int i;
-         for (i = 1; i < dfa->lex.minrep; i++)
-           {
-             copytoks (dfa, tindex, ntokens);
-@@ -2034,6 +2059,7 @@
- {
-   ptrdiff_t count = s->nelem;
-   ptrdiff_t lo = 0, hi = count;
-+  ptrdiff_t i;
-   while (lo < hi)
-     {
-       ptrdiff_t mid = (lo + hi) >> 1;
-@@ -2049,7 +2075,7 @@
-     }
- 
-   s->elems = maybe_realloc (s->elems, count, &s->alloc, -1, sizeof *s->elems);
--  for (ptrdiff_t i = count; i > lo; i--)
-+  for (i = count; i > lo; i--)
-     s->elems[i] = s->elems[i - 1];
-   s->elems[lo] = p;
-   ++s->nelem;
-@@ -2114,7 +2140,8 @@
- {
-   if (src->nelem < 4)
-     {
--      for (ptrdiff_t i = 0; i < src->nelem; ++i)
-+      ptrdiff_t i;
-+      for (i = 0; i < src->nelem; ++i)
-         insert (src->elems[i], dst);
-     }
-    else
-@@ -2173,7 +2200,7 @@
- {
-   size_t hash = 0;
-   int constraint = 0;
--  state_num i;
-+  state_num i, j;
-   token first_end = 0;
- 
-   for (i = 0; i < s->nelem; ++i)
-@@ -2185,7 +2212,6 @@
-       if (hash != d->states[i].hash || s->nelem != d->states[i].elems.nelem
-           || context != d->states[i].context)
-         continue;
--      state_num j;
-       for (j = 0; j < s->nelem; ++j)
-         if (s->elems[j].constraint != d->states[i].elems.elems[j].constraint
-             || s->elems[j].index != d->states[i].elems.elems[j].index)
-@@ -2196,7 +2222,7 @@
- 
- #ifdef DEBUG
-   fprintf (stderr, "new state %zd\n nextpos:", i);
--  for (state_num j = 0; j < s->nelem; j++)
-+  for (j = 0; j < s->nelem; j++)
-     {
-       fprintf (stderr, " %zu:", s->elems[j].index);
-       prtok (d->tokens[s->elems[j].index]);
-@@ -2216,7 +2242,7 @@
-   fprintf (stderr, "\n");
- #endif
- 
--  for (state_num j = 0; j < s->nelem; j++)
-+  for (j = 0; j < s->nelem; j++)
-     {
-       int c = d->constraints[s->elems[j].index];
- 
-@@ -2259,13 +2285,15 @@
- epsclosure (struct dfa const *d)
- {
-   position_set tmp;
-+  size_t i;
-   alloc_position_set (&tmp, d->nleaves);
--  for (size_t i = 0; i < d->tindex; ++i)
-+  for (i = 0; i < d->tindex; ++i)
-     if (d->follows[i].nelem > 0 && d->tokens[i] >= NOTCHAR
-         && d->tokens[i] != BACKREF && d->tokens[i] != ANYCHAR
-         && d->tokens[i] != MBCSET && d->tokens[i] < CSET)
-       {
-         unsigned int constraint;
-+        size_t j;
-         switch (d->tokens[i])
-           {
-           case BEGLINE:
-@@ -2293,7 +2321,7 @@
- 
-         delete (i, &d->follows[i]);
- 
--        for (size_t j = 0; j < d->tindex; j++)
-+        for (j = 0; j < d->tindex; j++)
-           if (i != j && d->follows[j].nelem > 0)
-             replace (&d->follows[j], i, &d->follows[i], constraint, &tmp);
-       }
-@@ -2307,8 +2335,9 @@
- charclass_context (struct dfa const *dfa, charclass const *c)
- {
-   int context = 0;
-+  unsigned int j;
- 
--  for (unsigned int j = 0; j < CHARCLASS_WORDS; ++j)
-+  for (j = 0; j < CHARCLASS_WORDS; ++j)
-     {
-       if (c->w[j] & dfa->syntax.newline.w[j])
-         context |= CTX_NEWLINE;
-@@ -2332,7 +2361,8 @@
- {
-   int separate_contexts = 0;
- 
--  for (size_t j = 0; j < s->nelem; j++)
-+  size_t j;
-+  for (j = 0; j < s->nelem; j++)
-     separate_contexts |= d->separates[s->elems[j].index];
- 
-   return separate_contexts;
-@@ -2364,10 +2394,11 @@
- {
-   position_set *follows = d->follows;
-   ptrdiff_t nelem = 0;
-+  ptrdiff_t i;
- 
-   d->constraints[tindex] = 0;
- 
--  for (ptrdiff_t i = 0; i < follows[tindex].nelem; i++)
-+  for (i = 0; i < follows[tindex].nelem; i++)
-     {
-       size_t sindex = follows[tindex].elems[i].index;
- 
-@@ -2442,6 +2473,7 @@
-   position_set *follows;
-   int *constraints;
-   char *multibyte_prop;
-+  ptrdiff_t i;
- 
-   nleaves = 0;
- 
-@@ -2449,7 +2481,7 @@
- 
-   map[0] = nleaves++;
- 
--  for (ptrdiff_t i = 1; i < d->tindex; i++)
-+  for (i = 1; i < d->tindex; i++)
-     map[i] = -1;
- 
-   tokens = xnmalloc (d->nleaves, sizeof *tokens);
-@@ -2461,8 +2493,9 @@
-   else
-     multibyte_prop = NULL;
- 
--  for (ptrdiff_t i = 0; i < d->tindex; i++)
-+  for (i = 0; i < d->tindex; i++)
-     {
-+      ptrdiff_t j;
-       if (map[i] == -1)
-         {
-           free (d->follows[i].elems);
-@@ -2478,7 +2511,7 @@
-       if (multibyte_prop != NULL)
-         multibyte_prop[map[i]] = d->multibyte_prop[i];
- 
--      for (ptrdiff_t j = 0; j < d->follows[i].nelem; j++)
-+      for (j = 0; j < d->follows[i].nelem; j++)
-         {
-           if (map[d->follows[i].elems[j].index] == -1)
-             map[d->follows[i].elems[j].index] = nleaves++;
-@@ -2490,7 +2523,7 @@
-              sizeof *d->follows[i].elems, compare);
-     }
- 
--  for (ptrdiff_t i = 0; i < nleaves; i++)
-+  for (i = 0; i < nleaves; i++)
-     {
-       d->tokens[i] = tokens[i];
-       d->follows[i] = follows[i];
-@@ -2519,20 +2552,24 @@
-   flags = xmalloc (d->tindex * sizeof *flags);
-   memset (flags, 0, d->tindex * sizeof *flags);
- 
--  for (size_t i = 0; i < d->tindex; i++)
--    {
--      for (ptrdiff_t j = 0; j < d->follows[i].nelem; j++)
--        {
--          if (d->follows[i].elems[j].index == i)
--            flags[d->follows[i].elems[j].index] |= OPT_REPEAT;
--          else if (d->follows[i].elems[j].index < i)
--            flags[d->follows[i].elems[j].index] |= OPT_LPAREN;
--          else if (flags[d->follows[i].elems[j].index] &= OPT_WALKED)
--            flags[d->follows[i].elems[j].index] |= OPT_RPAREN;
--          else
--            flags[d->follows[i].elems[j].index] |= OPT_WALKED;
--        }
--    }
-+  {
-+    size_t i;
-+    for (i = 0; i < d->tindex; i++)
-+      {
-+        ptrdiff_t j;
-+        for (j = 0; j < d->follows[i].nelem; j++)
-+          {
-+            if (d->follows[i].elems[j].index == i)
-+              flags[d->follows[i].elems[j].index] |= OPT_REPEAT;
-+            else if (d->follows[i].elems[j].index < i)
-+              flags[d->follows[i].elems[j].index] |= OPT_LPAREN;
-+            else if (flags[d->follows[i].elems[j].index] &= OPT_WALKED)
-+              flags[d->follows[i].elems[j].index] |= OPT_RPAREN;
-+            else
-+              flags[d->follows[i].elems[j].index] |= OPT_WALKED;
-+          }
-+      }
-+  }
- 
-   flags[0] |= OPT_QUEUED;
- 
-@@ -2541,9 +2578,12 @@
- 
-   d->constraints = xnmalloc (d->tindex, sizeof *d->constraints);
- 
--  for (ptrdiff_t i = 0; i < d->tindex; i++)
--    if (flags[i] & OPT_QUEUED)
--      merge_nfa_state (d, i, flags, merged);
-+  {
-+    ptrdiff_t i;
-+    for (i = 0; i < d->tindex; i++)
-+      if (flags[i] & OPT_QUEUED)
-+        merge_nfa_state (d, i, flags, merged);
-+  }
- 
-   reorder_tokens (d);
- 
-@@ -2613,6 +2653,7 @@
-   position *lastpos = firstpos + d->nleaves;
-   position pos;
-   position_set tmp;
-+  size_t i, j;
- 
-   /* Stack for element counts and nullable flags.  */
-   struct
-@@ -2631,7 +2672,7 @@
- 
- #ifdef DEBUG
-   fprintf (stderr, "dfaanalyze:\n");
--  for (size_t i = 0; i < d->tindex; ++i)
-+  for (i = 0; i < d->tindex; ++i)
-     {
-       fprintf (stderr, " %zu:", i);
-       prtok (d->tokens[i]);
-@@ -2643,7 +2684,7 @@
-   alloc_position_set (&merged, d->nleaves);
-   d->follows = xcalloc (d->tindex, sizeof *d->follows);
- 
--  for (size_t i = 0; i < d->tindex; ++i)
-+  for (i = 0; i < d->tindex; ++i)
-     {
-       switch (d->tokens[i])
-         {
-@@ -2661,10 +2702,11 @@
-           /* Every element in the firstpos of the argument is in the follow
-              of every element in the lastpos.  */
-           {
-+            position *p;
-             tmp.elems = firstpos - stk[-1].nfirstpos;
-             tmp.nelem = stk[-1].nfirstpos;
--            position *p = lastpos - stk[-1].nlastpos;
--            for (size_t j = 0; j < stk[-1].nlastpos; j++)
-+            p = lastpos - stk[-1].nlastpos;
-+            for (j = 0; j < stk[-1].nlastpos; j++)
-               {
-                 merge (&tmp, &d->follows[p[j].index], &merged);
-                 copy (&merged, &d->follows[p[j].index]);
-@@ -2681,10 +2723,11 @@
-           /* Every element in the firstpos of the second argument is in the
-              follow of every element in the lastpos of the first argument.  */
-           {
-+            position *p;
-             tmp.nelem = stk[-1].nfirstpos;
-             tmp.elems = firstpos - stk[-1].nfirstpos;
--            position *p = lastpos - stk[-1].nlastpos - stk[-2].nlastpos;
--            for (size_t j = 0; j < stk[-2].nlastpos; j++)
-+            p = lastpos - stk[-1].nlastpos - stk[-2].nlastpos;
-+            for (j = 0; j < stk[-2].nlastpos; j++)
-               {
-                 merge (&tmp, &d->follows[p[j].index], &merged);
-                 copy (&merged, &d->follows[p[j].index]);
-@@ -2705,7 +2748,7 @@
-           else
-             {
-               position *p = lastpos - stk[-1].nlastpos - stk[-2].nlastpos;
--              for (size_t j = 0; j < stk[-1].nlastpos; j++)
-+              for (j = 0; j < stk[-1].nlastpos; j++)
-                 p[j] = p[j + stk[-2].nlastpos];
-               lastpos -= stk[-2].nlastpos;
-               stk[-2].nlastpos = stk[-1].nlastpos;
-@@ -2754,13 +2797,13 @@
-       fprintf (stderr,
-                stk[-1].nullable ? " nullable: yes\n" : " nullable: no\n");
-       fprintf (stderr, " firstpos:");
--      for (size_t j = 0; j < stk[-1].nfirstpos; j++)
-+      for (j = 0; j < stk[-1].nfirstpos; j++)
-         {
-           fprintf (stderr, " %zu:", firstpos[j - stk[-1].nfirstpos].index);
-           prtok (d->tokens[firstpos[j - stk[-1].nfirstpos].index]);
-         }
-       fprintf (stderr, "\n lastpos:");
--      for (size_t j = 0; j < stk[-1].nlastpos; j++)
-+      for (j = 0; j < stk[-1].nlastpos; j++)
-         {
-           fprintf (stderr, " %zu:", lastpos[j - stk[-1].nlastpos].index);
-           prtok (d->tokens[lastpos[j - stk[-1].nlastpos].index]);
-@@ -2776,7 +2819,7 @@
-   dfaoptimize (d);
- 
- #ifdef DEBUG
--  for (size_t i = 0; i < d->tindex; ++i)
-+  for (i = 0; i < d->tindex; ++i)
-     if (d->tokens[i] == BEG || d->tokens[i] < NOTCHAR
-         || d->tokens[i] == BACKREF || d->tokens[i] == ANYCHAR
-         || d->tokens[i] == MBCSET || d->tokens[i] >= CSET)
-@@ -2784,7 +2827,7 @@
-         fprintf (stderr, "follows(%zu:", i);
-         prtok (d->tokens[i]);
-         fprintf (stderr, "):");
--        for (size_t j = 0; j < d->follows[i].nelem; j++)
-+        for (j = 0; j < d->follows[i].nelem; j++)
-           {
-             fprintf (stderr, " %zu:", d->follows[i].elems[j].index);
-             prtok (d->tokens[d->follows[i].elems[j].index]);
-@@ -2802,34 +2845,39 @@
- 
-   d->separates = xnmalloc (d->tindex, sizeof *d->separates);
- 
--  for (ptrdiff_t i = 0; i < d->tindex; i++)
--    {
--      d->separates[i] = 0;
-+  {
-+    ptrdiff_t i, j;
-+    for (i = 0; i < d->tindex; i++)
-+      {
-+        d->separates[i] = 0;
- 
--      if (prev_newline_dependent (d->constraints[i]))
--        d->separates[i] |= CTX_NEWLINE;
--      if (prev_letter_dependent (d->constraints[i]))
--        d->separates[i] |= CTX_LETTER;
-+        if (prev_newline_dependent (d->constraints[i]))
-+          d->separates[i] |= CTX_NEWLINE;
-+        if (prev_letter_dependent (d->constraints[i]))
-+          d->separates[i] |= CTX_LETTER;
- 
--      for (ptrdiff_t j = 0; j < d->follows[i].nelem; j++)
--        {
--          if (prev_newline_dependent (d->follows[i].elems[j].constraint))
--            d->separates[i] |= CTX_NEWLINE;
--          if (prev_letter_dependent (d->follows[i].elems[j].constraint))
--            d->separates[i] |= CTX_LETTER;
--        }
--    }
-+        for (j = 0; j < d->follows[i].nelem; j++)
-+          {
-+            if (prev_newline_dependent (d->follows[i].elems[j].constraint))
-+              d->separates[i] |= CTX_NEWLINE;
-+            if (prev_letter_dependent (d->follows[i].elems[j].constraint))
-+              d->separates[i] |= CTX_LETTER;
-+          }
-+      }
-+  }
- 
--  /* Context wanted by some position.  */
--  int separate_contexts = state_separate_contexts (d, &tmp);
-+  {
-+    /* Context wanted by some position.  */
-+    int separate_contexts = state_separate_contexts (d, &tmp);
- 
--  /* Build the initial state.  */
--  if (separate_contexts & CTX_NEWLINE)
--    state_index (d, &tmp, CTX_NEWLINE);
--  d->initstate_notbol = d->min_trcount
--    = state_index (d, &tmp, separate_contexts ^ CTX_ANY);
--  if (separate_contexts & CTX_LETTER)
--    d->min_trcount = state_index (d, &tmp, CTX_LETTER);
-+    /* Build the initial state.  */
-+    if (separate_contexts & CTX_NEWLINE)
-+      state_index (d, &tmp, CTX_NEWLINE);
-+    d->initstate_notbol = d->min_trcount
-+      = state_index (d, &tmp, separate_contexts ^ CTX_ANY);
-+    if (separate_contexts & CTX_LETTER)
-+      d->min_trcount = state_index (d, &tmp, CTX_LETTER);
-+  }
-   d->min_trcount++;
-   d->trcount = 0;
- 
-@@ -2848,11 +2896,12 @@
-     {
-       state_num **realtrans = d->trans ? d->trans - 2 : NULL;
-       ptrdiff_t newalloc1 = realtrans ? d->tralloc + 2 : 0;
-+      ptrdiff_t newalloc;
-       realtrans = xpalloc (realtrans, &newalloc1, d->sindex - oldalloc,
-                            -1, sizeof *realtrans);
-       realtrans[0] = realtrans[1] = NULL;
-       d->trans = realtrans + 2;
--      ptrdiff_t newalloc = d->tralloc = newalloc1 - 2;
-+      newalloc = d->tralloc = newalloc1 - 2;
-       d->fails = xnrealloc (d->fails, newalloc, sizeof *d->fails);
-       d->success = xnrealloc (d->success, newalloc, sizeof *d->success);
-       d->newlines = xnrealloc (d->newlines, newalloc, sizeof *d->newlines);
-@@ -2925,6 +2974,8 @@
-   /* A pointer to the new transition table, and the table itself.  */
-   state_num **ptrans = (accepting (s, d) ? d->fails : d->trans) + s;
-   state_num *trans = *ptrans;
-+  size_t i,j,k;
-+  charclass label;
- 
-   if (!trans)
-     {
-@@ -2934,7 +2985,8 @@
-          rebuilt, whereas rarely-used ones are cleared away.  */
-       if (MAX_TRCOUNT <= d->trcount)
-         {
--          for (state_num i = d->min_trcount; i < d->tralloc; i++)
-+          state_num i;
-+          for (i = d->min_trcount; i < d->tralloc; i++)
-             {
-               free (d->trans[i]);
-               free (d->fails[i]);
-@@ -2946,10 +2998,13 @@
-       d->trcount++;
-       *ptrans = trans = xmalloc (NOTCHAR * sizeof *trans);
- 
--      /* Fill transition table with a default value which means that the
--         transited state has not been calculated yet.  */
--      for (int i = 0; i < NOTCHAR; i++)
--        trans[i] = -2;
-+      {
-+        /* Fill transition table with a default value which means that the
-+           transited state has not been calculated yet.  */
-+        int i;
-+        for (i = 0; i < NOTCHAR; i++)
-+          trans[i] = -2;
-+      }
-     }
- 
-   /* Set up the success bits for this state.  */
-@@ -2965,8 +3020,8 @@
- 
-   /* Find the union of the follows of the positions of the group.
-      This is a hideously inefficient loop.  Fix it someday.  */
--  for (size_t j = 0; j < d->states[s].elems.nelem; ++j)
--    for (size_t k = 0;
-+  for (j = 0; j < d->states[s].elems.nelem; ++j)
-+    for (k = 0;
-          k < d->follows[d->states[s].elems.elems[j].index].nelem; ++k)
-       insert (d->follows[d->states[s].elems.elems[j].index].elems[k],
-               &follows);
-@@ -2975,10 +3030,9 @@
-   alloc_position_set (&group, d->nleaves);
- 
-   /* The group's label.  */
--  charclass label;
-   fillset (&label);
- 
--  for (size_t i = 0; i < follows.nelem; ++i)
-+  for (i = 0; i < follows.nelem; ++i)
-     {
-       charclass matches;            /* Set of matching characters.  */
-       position pos = follows.elems[i];
-@@ -3025,15 +3079,15 @@
-         {
-           if (!succeeds_in_context (pos.constraint,
-                                     d->states[s].context, CTX_NEWLINE))
--            for (size_t j = 0; j < CHARCLASS_WORDS; ++j)
-+            for (j = 0; j < CHARCLASS_WORDS; ++j)
-               matches.w[j] &= ~d->syntax.newline.w[j];
-           if (!succeeds_in_context (pos.constraint,
-                                     d->states[s].context, CTX_LETTER))
--            for (size_t j = 0; j < CHARCLASS_WORDS; ++j)
-+            for (j = 0; j < CHARCLASS_WORDS; ++j)
-               matches.w[j] &= ~d->syntax.letters.w[j];
-           if (!succeeds_in_context (pos.constraint,
-                                     d->states[s].context, CTX_NONE))
--            for (size_t j = 0; j < CHARCLASS_WORDS; ++j)
-+            for (j = 0; j < CHARCLASS_WORDS; ++j)
-               matches.w[j] &= d->syntax.letters.w[j] | d->syntax.newline.w[j];
- 
-           /* If there are no characters left, there's no point in going on.  */
-@@ -3051,7 +3105,7 @@
-       fprintf (stderr, " nextpos %zu:", pos.index);
-       prtok (d->tokens[pos.index]);
-       fprintf (stderr, " of");
--      for (size_t j = 0; j < NOTCHAR; j++)
-+      for (j = 0; j < NOTCHAR; j++)
-         if (tstbit (j, &matches))
-           fprintf (stderr, " 0x%02zx", j);
-       fprintf (stderr, "\n");
-@@ -3059,13 +3113,13 @@
- 
-       if (matched)
-         {
--          for (size_t k = 0; k < CHARCLASS_WORDS; ++k)
-+          for (k = 0; k < CHARCLASS_WORDS; ++k)
-             label.w[k] &= matches.w[k];
-           append (pos, &group);
-         }
-       else
-         {
--          for (size_t k = 0; k < CHARCLASS_WORDS; ++k)
-+          for (k = 0; k < CHARCLASS_WORDS; ++k)
-             label.w[k] &= ~matches.w[k];
-         }
-     }
-@@ -3074,6 +3128,8 @@
- 
-   if (group.nelem > 0)
-     {
-+      int possible_contexts;
-+      int separate_contexts;
-       /* If we are building a searching matcher, throw in the positions
-          of state 0 as well, if possible.  */
-       if (d->searchflag)
-@@ -3099,7 +3155,7 @@
-           if (!mergeit)
-             {
-               mergeit = true;
--              for (size_t j = 0; mergeit && j < group.nelem; j++)
-+              for (j = 0; mergeit && j < group.nelem; j++)
-                 mergeit &= d->multibyte_prop[group.elems[j].index];
-             }
-           if (mergeit)
-@@ -3112,8 +3168,8 @@
-       /* Find out if the new state will want any context information,
-          by calculating possible contexts that the group can match,
-          and separate contexts that the new state wants to know.  */
--      int possible_contexts = charclass_context (d, &label);
--      int separate_contexts = state_separate_contexts (d, &group);
-+      possible_contexts = charclass_context (d, &label);
-+      separate_contexts = state_separate_contexts (d, &group);
- 
-       /* Find the state(s) corresponding to the union of the follows.  */
-       if (possible_contexts & ~separate_contexts)
-@@ -3150,7 +3206,7 @@
-     }
- 
-   /* Set the transitions for each character in the label.  */
--  for (size_t i = 0; i < NOTCHAR; i++)
-+  for (i = 0; i < NOTCHAR; i++)
-     if (tstbit (i, &label))
-       switch (d->syntax.sbit[i])
-         {
-@@ -3167,7 +3223,7 @@
- 
- #ifdef DEBUG
-   fprintf (stderr, "trans table %td", s);
--  for (size_t i = 0; i < NOTCHAR; ++i)
-+  for (i = 0; i < NOTCHAR; ++i)
-     {
-       if (!(i & 0xf))
-         fprintf (stderr, "\n");
-@@ -3234,14 +3290,16 @@
-   wint_t wc;
- 
-   int mbclen = mbs_to_wchar (&wc, (char const *) *pp, end - *pp, d);
-+  state_num s1, s2;
-+  int mbci;
-+  int separate_contexts;
- 
-   /* This state has some operators which can match a multibyte character.  */
-   d->mb_follows.nelem = 0;
- 
-   /* Calculate the state which can be reached from the state 's' by
-      consuming 'mbclen' single bytes from the buffer.  */
--  state_num s1 = s;
--  int mbci;
-+  s1 = s;
-   for (mbci = 0; mbci < mbclen && (mbci == 0 || d->min_trcount <= s); mbci++)
-     s = transit_state_singlebyte (d, s, pp);
-   *pp += mbclen - mbci;
-@@ -3259,14 +3317,14 @@
-     {
-       if (MAX_TRCOUNT <= d->mb_trcount)
-         {
--          state_num s3;
-+          state_num i, s3;
-           for (s3 = -1; s3 < d->tralloc; s3++)
-             {
-               free (d->mb_trans[s3]);
-               d->mb_trans[s3] = NULL;
-             }
- 
--          for (state_num i = 0; i < d->sindex; i++)
-+          for (i = 0; i < d->sindex; i++)
-             d->states[i].mb_trindex = -1;
-           d->mb_trcount = 0;
-         }
-@@ -3277,8 +3335,9 @@
-     {
-       enum { TRANSPTR_SIZE = sizeof *d->mb_trans[s] };
-       enum { TRANSALLOC_SIZE = MAX_TRCOUNT * TRANSPTR_SIZE };
-+      int i;
-       d->mb_trans[s] = xmalloc (TRANSALLOC_SIZE);
--      for (int i = 0; i < MAX_TRCOUNT; i++)
-+      for (i = 0; i < MAX_TRCOUNT; i++)
-         d->mb_trans[s][i] = -1;
-     }
-   else if (d->mb_trans[s][d->states[s1].mb_trindex] >= 0)
-@@ -3289,8 +3348,8 @@
-   else
-     merge (&d->states[s1].mbps, &d->states[s].elems, &d->mb_follows);
- 
--  int separate_contexts = state_separate_contexts (d, &d->mb_follows);
--  state_num s2 = state_index (d, &d->mb_follows, separate_contexts ^ CTX_ANY);
-+  separate_contexts = state_separate_contexts (d, &d->mb_follows);
-+  s2 = state_index (d, &d->mb_follows, separate_contexts ^ CTX_ANY);
-   realloc_trans_if_necessary (d);
- 
-   d->mb_trans[s][d->states[s1].mb_trindex] = s2;
-@@ -3352,9 +3411,17 @@
- dfaexec_main (struct dfa *d, char const *begin, char *end, bool allow_nl,
-               size_t *count, bool multibyte)
- {
-+  state_num s, s1;
-+  unsigned char const *p;
-+  unsigned char const *mbp;
-+  state_num **trans;
-+  unsigned char eol;
-+  unsigned char saved_end;
-+  size_t nlcount;
-+
-   if (MAX_TRCOUNT <= d->sindex)
-     {
--      for (state_num s = d->min_trcount; s < d->sindex; s++)
-+      for (s = d->min_trcount; s < d->sindex; s++)
-         {
-           free (d->states[s].elems.elems);
-           free (d->states[s].mbps.elems);
-@@ -3363,7 +3430,8 @@
- 
-       if (d->trans)
-         {
--          for (state_num s = 0; s < d->tralloc; s++)
-+          state_num s;
-+          for (s = 0; s < d->tralloc; s++)
-             {
-               free (d->trans[s]);
-               free (d->fails[s]);
-@@ -3374,12 +3442,13 @@
- 
-       if (d->localeinfo.multibyte && d->mb_trans)
-         {
--          for (state_num s = -1; s < d->tralloc; s++)
-+          state_num s;
-+          for (s = -1; s < d->tralloc; s++)
-             {
-               free (d->mb_trans[s]);
-               d->mb_trans[s] = NULL;
-             }
--          for (state_num s = 0; s < d->min_trcount; s++)
-+          for (s = 0; s < d->min_trcount; s++)
-             d->states[s].mb_trindex = -1;
-           d->mb_trcount = 0;
-         }
-@@ -3389,16 +3458,17 @@
-     realloc_trans_if_necessary (d);
- 
-   /* Current state.  */
--  state_num s = 0, s1 = 0;
-+  s = 0;
-+  s1 = 0;
- 
-   /* Current input character.  */
--  unsigned char const *p = (unsigned char const *) begin;
--  unsigned char const *mbp = p;
-+  p = (unsigned char const *) begin;
-+  mbp = p;
- 
-   /* Copy of d->trans so it can be optimized into a register.  */
--  state_num **trans = d->trans;
--  unsigned char eol = d->syntax.eolbyte;  /* Likewise for eolbyte.  */
--  unsigned char saved_end = *(unsigned char *) end;
-+  trans = d->trans;
-+  eol = d->syntax.eolbyte;  /* Likewise for eolbyte.  */
-+  saved_end = *(unsigned char *) end;
-   *end = eol;
- 
-   if (multibyte)
-@@ -3408,7 +3478,7 @@
-         alloc_position_set (&d->mb_follows, d->nleaves);
-     }
- 
--  size_t nlcount = 0;
-+  nlcount = 0;
-   for (;;)
-     {
-       state_num *t;
-@@ -3598,7 +3668,8 @@
- static bool _GL_ATTRIBUTE_PURE
- dfa_supported (struct dfa const *d)
- {
--  for (size_t i = 0; i < d->tindex; i++)
-+  size_t i;
-+  for (i = 0; i < d->tindex; i++)
-     {
-       switch (d->tokens[i])
-         {
-@@ -3622,11 +3693,13 @@
- static void
- maybe_disable_superset_dfa (struct dfa *d)
- {
-+  bool have_backref;
-+  size_t i;
-   if (!d->localeinfo.using_utf8)
-     return;
- 
--  bool have_backref = false;
--  for (size_t i = 0; i < d->tindex; ++i)
-+  have_backref = false;
-+  for (i = 0; i < d->tindex; ++i)
-     {
-       switch (d->tokens[i])
-         {
-@@ -3662,6 +3735,9 @@
- dfassbuild (struct dfa *d)
- {
-   struct dfa *sup = dfaalloc ();
-+  bool have_achar = false;
-+  bool have_nchar = false;
-+  size_t i, j;
- 
-   *sup = *d;
-   sup->localeinfo.multibyte = false;
-@@ -3689,10 +3765,7 @@
-   sup->tokens = xnmalloc (d->tindex, 2 * sizeof *sup->tokens);
-   sup->talloc = d->tindex * 2;
- 
--  bool have_achar = false;
--  bool have_nchar = false;
--  size_t j;
--  for (size_t i = j = 0; i < d->tindex; i++)
-+  for (i = j = 0; i < d->tindex; i++)
-     {
-       switch (d->tokens[i])
-         {
-@@ -3769,6 +3842,7 @@
- void
- dfafree (struct dfa *d)
- {
-+  size_t i;
-   free (d->charclasses);
-   free (d->tokens);
- 
-@@ -3778,7 +3852,7 @@
-   free (d->constraints);
-   free (d->separates);
- 
--  for (size_t i = 0; i < d->sindex; ++i)
-+  for (i = 0; i < d->sindex; ++i)
-     {
-       free (d->states[i].elems.elems);
-       free (d->states[i].mbps.elems);
-@@ -3787,14 +3861,14 @@
- 
-   if (d->follows)
-     {
--      for (size_t i = 0; i < d->tindex; ++i)
-+      for (i = 0; i < d->tindex; ++i)
-         free (d->follows[i].elems);
-       free (d->follows);
-     }
- 
-   if (d->trans)
-     {
--      for (size_t i = 0; i < d->tralloc; ++i)
-+      for (i = 0; i < d->tralloc; ++i)
-         {
-           free (d->trans[i]);
-           free (d->fails[i]);
-@@ -3899,10 +3973,12 @@
- icatalloc (char *old, char const *new)
- {
-   size_t newsize = strlen (new);
-+  size_t oldsize;
-+  char *result;
-   if (newsize == 0)
-     return old;
--  size_t oldsize = strlen (old);
--  char *result = xrealloc (old, oldsize + newsize + 1);
-+  oldsize = strlen (old);
-+  result = xrealloc (old, oldsize + newsize + 1);
-   memcpy (result + oldsize, new, newsize + 1);
-   return result;
- }
-@@ -3917,10 +3993,10 @@
- static char **
- enlist (char **cpp, char *new, size_t len)
- {
-+  size_t i, j;
-   new = memcpy (xmalloc (len + 1), new, len);
-   new[len] = '\0';
-   /* Is there already something in the list that's new (or longer)?  */
--  size_t i;
-   for (i = 0; cpp[i] != NULL; ++i)
-     if (strstr (cpp[i], new) != NULL)
-       {
-@@ -3928,7 +4004,7 @@
-         return cpp;
-       }
-   /* Eliminate any obsoleted strings.  */
--  for (size_t j = 0; cpp[j] != NULL; )
-+  for (j = 0; cpp[j] != NULL; )
-     if (strstr (new, cpp[j]) == NULL)
-       ++j;
-     else
-@@ -3952,8 +4028,9 @@
- comsubs (char *left, char const *right)
- {
-   char **cpp = xzalloc (sizeof *cpp);
-+  char *lcp;
- 
--  for (char *lcp = left; *lcp != '\0'; lcp++)
-+  for (lcp = left; *lcp != '\0'; lcp++)
-     {
-       size_t len = 0;
-       char *rcp = strchr (right, *lcp);
-@@ -3986,10 +4063,11 @@
- inboth (char **left, char **right)
- {
-   char **both = xzalloc (sizeof *both);
-+  size_t lnum, rnum;
- 
--  for (size_t lnum = 0; left[lnum] != NULL; ++lnum)
-+  for (lnum = 0; left[lnum] != NULL; ++lnum)
-     {
--      for (size_t rnum = 0; right[rnum] != NULL; ++rnum)
-+      for (rnum = 0; right[rnum] != NULL; ++rnum)
-         {
-           char **temp = comsubs (left[lnum], right[rnum]);
-           both = addlists (both, temp);
-@@ -4059,8 +4137,10 @@
-   bool need_begline = false;
-   bool need_endline = false;
-   bool case_fold_unibyte = d->syntax.case_fold && MB_CUR_MAX == 1;
-+  size_t ri;
-+  struct dfamust *dm;
- 
--  for (size_t ri = 1; ri + 1 < d->tindex; ri++)
-+  for (ri = 1; ri + 1 < d->tindex; ri++)
-     {
-       token t = d->tokens[ri];
-       switch (t)
-@@ -4100,7 +4180,7 @@
-             char **new;
-             must *rmp = mp;
-             must *lmp = mp = mp->prev;
--            size_t j, ln, rn, n;
-+            size_t i, j, ln, rn, n;
- 
-             /* Guaranteed to be.  Unlikely, but ...  */
-             if (streq (lmp->is, rmp->is))
-@@ -4115,7 +4195,7 @@
-                 lmp->endline = false;
-               }
-             /* Left side--easy */
--            size_t i = 0;
-+            i = 0;
-             while (lmp->left[i] != '\0' && lmp->left[i] == rmp->left[i])
-               ++i;
-             lmp->left[i] = '\0';
-@@ -4144,8 +4224,10 @@
-           break;
- 
-         case END:
-+        {
-+          size_t i;
-           assert (!mp->prev);
--          for (size_t i = 0; mp->in[i] != NULL; ++i)
-+          for (i = 0; mp->in[i] != NULL; ++i)
-             if (strlen (mp->in[i]) > strlen (result))
-               result = mp->in[i];
-           if (streq (result, mp->is))
-@@ -4157,6 +4239,7 @@
-               endline = mp->endline;
-             }
-           goto done;
-+        }
- 
-         case CAT:
-           {
-@@ -4235,37 +4318,40 @@
-                 }
-             }
- 
--          size_t rj = ri + 2;
--          if (d->tokens[ri + 1] == CAT)
--            {
--              for (; rj < d->tindex - 1; rj += 2)
--                {
--                  if ((rj != ri && (d->tokens[rj] <= 0
--                                    || NOTCHAR <= d->tokens[rj]))
--                      || d->tokens[rj + 1] != CAT)
--                    break;
--                }
--            }
--          mp = allocmust (mp, ((rj - ri) >> 1) + 1);
--          mp->is[0] = mp->left[0] = mp->right[0]
--            = case_fold_unibyte ? toupper (t) : t;
-+          {
-+            size_t i;
-+            size_t rj = ri + 2;
-+            if (d->tokens[ri + 1] == CAT)
-+              {
-+                for (; rj < d->tindex - 1; rj += 2)
-+                  {
-+                    if ((rj != ri && (d->tokens[rj] <= 0
-+                                      || NOTCHAR <= d->tokens[rj]))
-+                        || d->tokens[rj + 1] != CAT)
-+                      break;
-+                  }
-+              }
-+            mp = allocmust (mp, ((rj - ri) >> 1) + 1);
-+            mp->is[0] = mp->left[0] = mp->right[0]
-+              = case_fold_unibyte ? toupper (t) : t;
-+
-+            for (i = 1; ri + 2 < rj; i++)
-+              {
-+                ri += 2;
-+                t = d->tokens[ri];
-+                mp->is[i] = mp->left[i] = mp->right[i]
-+                  = case_fold_unibyte ? toupper (t) : t;
-+              }
-+            mp->is[i] = mp->left[i] = mp->right[i] = '\0';
-+            mp->in = enlist (mp->in, mp->is, i);
-+          }
- 
--          size_t i;
--          for (i = 1; ri + 2 < rj; i++)
--            {
--              ri += 2;
--              t = d->tokens[ri];
--              mp->is[i] = mp->left[i] = mp->right[i]
--                = case_fold_unibyte ? toupper (t) : t;
--            }
--          mp->is[i] = mp->left[i] = mp->right[i] = '\0';
--          mp->in = enlist (mp->in, mp->is, i);
-           break;
-         }
-     }
-  done:;
- 
--  struct dfamust *dm = NULL;
-+  dm = NULL;
-   if (*result)
-     {
-       dm = xmalloc (sizeof *dm);
-@@ -4303,6 +4389,7 @@
- dfasyntax (struct dfa *dfa, struct localeinfo const *linfo,
-            reg_syntax_t bits, int dfaopts)
- {
-+  int i;
-   memset (dfa, 0, offsetof (struct dfa, dfaexec));
-   dfa->dfaexec = linfo->multibyte ? dfaexec_mb : dfaexec_sb;
-   dfa->simple_locale = using_simple_locale (linfo->multibyte);
-@@ -4318,7 +4405,7 @@
-   dfa->syntax.eolbyte = dfaopts & DFA_EOL_NUL ? '\0' : '\n';
-   dfa->syntax.syntax_bits = bits;
- 
--  for (int i = CHAR_MIN; i <= CHAR_MAX; ++i)
-+  for (i = CHAR_MIN; i <= CHAR_MAX; ++i)
-     {
-       unsigned char uc = i;
- 
 diff -Naur ../orig/sed-4.7/lib/errno.h ./lib/errno.h
 --- ../orig/sed-4.7/lib/errno.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/errno.h	2019-12-20 16:20:08.411426400 +0300
++++ ./lib/errno.h	2019-12-20 16:34:13.442759400 +0300
 @@ -0,0 +1,280 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A POSIX-like <errno.h>.
@@ -3659,7 +2403,7 @@ diff -Naur ../orig/sed-4.7/lib/errno.h ./lib/errno.h
 +
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\errno.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\errno.h"
 +
 +#ifndef _GL_ERRNO_H
 +#define _GL_ERRNO_H
@@ -3915,7 +2659,7 @@ diff -Naur ../orig/sed-4.7/lib/errno.h ./lib/errno.h
 +#endif /* _GL_ERRNO_H */
 diff -Naur ../orig/sed-4.7/lib/fcntl.h ./lib/fcntl.h
 --- ../orig/sed-4.7/lib/fcntl.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/fcntl.h	2019-12-20 16:20:08.417426800 +0300
++++ ./lib/fcntl.h	2019-12-20 16:34:13.446759700 +0300
 @@ -0,0 +1,840 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Like <fcntl.h>, but with non-working flags defined to 0.
@@ -3977,7 +2721,7 @@ diff -Naur ../orig/sed-4.7/lib/fcntl.h ./lib/fcntl.h
 +# include <sys/stat.h>
 +#endif
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\fcntl.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\fcntl.h"
 +
 +#ifndef _GL_FCNTL_H
 +#define _GL_FCNTL_H
@@ -4757,81 +3501,9 @@ diff -Naur ../orig/sed-4.7/lib/fcntl.h ./lib/fcntl.h
 +#endif /* _GL_FCNTL_H */
 +#endif /* _GL_FCNTL_H */
 +#endif
-diff -Naur ../orig/sed-4.7/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
---- ../orig/sed-4.7/lib/getopt-cdefs.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-cdefs.h	2019-12-20 16:19:48.652296300 +0300
-@@ -0,0 +1,68 @@
-+/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
-+/* getopt-on-non-glibc compatibility macros.
-+   Copyright (C) 1989-2018 Free Software Foundation, Inc.
-+   This file is part of gnulib.
-+   Unlike most of the getopt implementation, it is NOT shared
-+   with the GNU C Library.
-+
-+   This file is free software; you can redistribute it and/or modify it
-+   under the terms of the GNU General Public License as
-+   published by the Free Software Foundation; either version 3 of
-+   the License, or (at your option) any later version.
-+
-+   This file is distributed in the hope that it will be useful, but
-+   WITHOUT ANY WARRANTY; without even the implied warranty of
-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+   General Public License for more details.
-+
-+   You should have received a copy of the GNU General Public
-+   License along with gnulib; if not, see
-+   <https://www.gnu.org/licenses/>.  */
-+
-+#ifndef _GETOPT_CDEFS_H
-+#define _GETOPT_CDEFS_H 1
-+
-+/* This header should not be used directly; include getopt.h or
-+   unistd.h instead.  It does not have a protective #error, because
-+   the guard macro for getopt.h in gnulib is not fixed.  */
-+
-+/* getopt-core.h and getopt-ext.h are shared with GNU libc, and expect
-+   a number of the internal macros supplied to GNU libc's headers by
-+   sys/cdefs.h.  Provide fallback definitions for all of them.  */
-+#if 0
-+# include <sys/cdefs.h>
-+#endif
-+
-+#ifndef __BEGIN_DECLS
-+# ifdef __cplusplus
-+#  define __BEGIN_DECLS extern "C" {
-+# else
-+#  define __BEGIN_DECLS /* nothing */
-+# endif
-+#endif
-+#ifndef __END_DECLS
-+# ifdef __cplusplus
-+#  define __END_DECLS }
-+# else
-+#  define __END_DECLS /* nothing */
-+# endif
-+#endif
-+
-+#ifndef __GNUC_PREREQ
-+# if defined __GNUC__ && defined __GNUC_VERSION__
-+# define __GNUC_PREREQ(maj, min) \
-+        ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
-+# else
-+#  define __GNUC_PREREQ(maj, min) 0
-+# endif
-+#endif
-+
-+#ifndef __THROW
-+# if defined __cplusplus && __GNUC_PREREQ (2,8)
-+#  define __THROW       throw ()
-+# else
-+#  define __THROW
-+# endif
-+#endif
-+
-+#endif /* _GETOPT_CDEFS_H */
 diff -Naur ../orig/sed-4.7/lib/getopt.h ./lib/getopt.h
 --- ../orig/sed-4.7/lib/getopt.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt.h	2019-12-20 16:19:48.577292000 +0300
++++ ./lib/getopt.h	2019-12-20 16:33:54.039649700 +0300
 @@ -0,0 +1,88 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Declarations for getopt.
@@ -4921,40 +3593,81 @@ diff -Naur ../orig/sed-4.7/lib/getopt.h ./lib/getopt.h
 +#include <getopt-pfx-ext.h>
 +
 +#endif /* _GL_GETOPT_H */
-diff -Naur ../orig/sed-4.7/lib/gettimeofday.c ./lib/gettimeofday.c
---- ../orig/sed-4.7/lib/gettimeofday.c	2018-12-10 06:27:24.000000000 +0300
-+++ ./lib/gettimeofday.c	2019-12-20 16:17:30.714406700 +0300
-@@ -83,6 +83,9 @@
-      More discussion on this topic:
-      <http://www.windowstimestamp.com/description>.  */
-   FILETIME current_time;
-+  ULONGLONG since_1601;
-+  ULONGLONG since_1970;
-+  ULONGLONG microseconds_since_1970;
- 
-   if (!initialized)
-     initialize ();
-@@ -93,14 +96,14 @@
- 
-   /* Convert from FILETIME to 'struct timeval'.  */
-   /* FILETIME: <https://msdn.microsoft.com/en-us/library/ms724284.aspx> */
--  ULONGLONG since_1601 =
-+  since_1601 =
-     ((ULONGLONG) current_time.dwHighDateTime << 32)
-     | (ULONGLONG) current_time.dwLowDateTime;
-   /* Between 1601-01-01 and 1970-01-01 there were 280 normal years and 89 leap
-      years, in total 134774 days.  */
--  ULONGLONG since_1970 =
-+  since_1970 =
-     since_1601 - (ULONGLONG) 134774 * (ULONGLONG) 86400 * (ULONGLONG) 10000000;
--  ULONGLONG microseconds_since_1970 = since_1970 / (ULONGLONG) 10;
-+  microseconds_since_1970 = since_1970 / (ULONGLONG) 10;
-   tv->tv_sec = microseconds_since_1970 / (ULONGLONG) 1000000;
-   tv->tv_usec = microseconds_since_1970 % (ULONGLONG) 1000000;
- 
+diff -Naur ../orig/sed-4.7/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
+--- ../orig/sed-4.7/lib/getopt-cdefs.h	1970-01-01 03:00:00.000000000 +0300
++++ ./lib/getopt-cdefs.h	2019-12-20 16:33:54.114653900 +0300
+@@ -0,0 +1,68 @@
++/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
++/* getopt-on-non-glibc compatibility macros.
++   Copyright (C) 1989-2018 Free Software Foundation, Inc.
++   This file is part of gnulib.
++   Unlike most of the getopt implementation, it is NOT shared
++   with the GNU C Library.
++
++   This file is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as
++   published by the Free Software Foundation; either version 3 of
++   the License, or (at your option) any later version.
++
++   This file is distributed in the hope that it will be useful, but
++   WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   General Public License for more details.
++
++   You should have received a copy of the GNU General Public
++   License along with gnulib; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#ifndef _GETOPT_CDEFS_H
++#define _GETOPT_CDEFS_H 1
++
++/* This header should not be used directly; include getopt.h or
++   unistd.h instead.  It does not have a protective #error, because
++   the guard macro for getopt.h in gnulib is not fixed.  */
++
++/* getopt-core.h and getopt-ext.h are shared with GNU libc, and expect
++   a number of the internal macros supplied to GNU libc's headers by
++   sys/cdefs.h.  Provide fallback definitions for all of them.  */
++#if 0
++# include <sys/cdefs.h>
++#endif
++
++#ifndef __BEGIN_DECLS
++# ifdef __cplusplus
++#  define __BEGIN_DECLS extern "C" {
++# else
++#  define __BEGIN_DECLS /* nothing */
++# endif
++#endif
++#ifndef __END_DECLS
++# ifdef __cplusplus
++#  define __END_DECLS }
++# else
++#  define __END_DECLS /* nothing */
++# endif
++#endif
++
++#ifndef __GNUC_PREREQ
++# if defined __GNUC__ && defined __GNUC_VERSION__
++# define __GNUC_PREREQ(maj, min) \
++        ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
++# else
++#  define __GNUC_PREREQ(maj, min) 0
++# endif
++#endif
++
++#ifndef __THROW
++# if defined __cplusplus && __GNUC_PREREQ (2,8)
++#  define __THROW       throw ()
++# else
++#  define __THROW
++# endif
++#endif
++
++#endif /* _GETOPT_CDEFS_H */
 diff -Naur ../orig/sed-4.7/lib/langinfo.h ./lib/langinfo.h
 --- ../orig/sed-4.7/lib/langinfo.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/langinfo.h	2019-12-20 16:19:48.746301600 +0300
++++ ./lib/langinfo.h	2019-12-20 16:33:54.225660300 +0300
 @@ -0,0 +1,670 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for and wrapper around <langinfo.h>.
@@ -5628,7 +4341,7 @@ diff -Naur ../orig/sed-4.7/lib/langinfo.h ./lib/langinfo.h
 +#endif /* _GL_LANGINFO_H */
 diff -Naur ../orig/sed-4.7/lib/limits.h ./lib/limits.h
 --- ../orig/sed-4.7/lib/limits.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/limits.h	2019-12-20 16:20:08.421427000 +0300
++++ ./lib/limits.h	2019-12-20 16:34:13.450759900 +0300
 @@ -0,0 +1,105 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <limits.h>.
@@ -5656,7 +4369,7 @@ diff -Naur ../orig/sed-4.7/lib/limits.h ./lib/limits.h
 +
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\limits.h"
++#include "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.23.28105\include\limits.h"
 +
 +#ifndef _GL_LIMITS_H
 +#define _GL_LIMITS_H
@@ -5737,7 +4450,7 @@ diff -Naur ../orig/sed-4.7/lib/limits.h ./lib/limits.h
 +#endif /* _GL_LIMITS_H */
 diff -Naur ../orig/sed-4.7/lib/localcharset.c ./lib/localcharset.c
 --- ../orig/sed-4.7/lib/localcharset.c	2018-08-27 11:59:14.000000000 +0300
-+++ ./lib/localcharset.c	2019-12-20 16:17:16.616600300 +0300
++++ ./lib/localcharset.c	2019-12-20 16:31:42.620132900 +0300
 @@ -774,7 +774,16 @@
      current_locale = setlocale (LC_CTYPE, NULL);
  
@@ -5758,7 +4471,7 @@ diff -Naur ../orig/sed-4.7/lib/localcharset.c ./lib/localcharset.c
      {
 diff -Naur ../orig/sed-4.7/lib/locale.h ./lib/locale.h
 --- ../orig/sed-4.7/lib/locale.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/locale.h	2019-12-20 16:20:08.424427200 +0300
++++ ./lib/locale.h	2019-12-20 16:34:13.454760100 +0300
 @@ -0,0 +1,746 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A POSIX <locale.h>.
@@ -5800,7 +4513,7 @@ diff -Naur ../orig/sed-4.7/lib/locale.h ./lib/locale.h
 +#define _GL_ALREADY_INCLUDING_LOCALE_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\locale.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\locale.h"
 +
 +#undef _GL_ALREADY_INCLUDING_LOCALE_H
 +
@@ -6508,7 +5221,7 @@ diff -Naur ../orig/sed-4.7/lib/locale.h ./lib/locale.h
 +#endif /* !(__need_locale_t || _GL_ALREADY_INCLUDING_LOCALE_H) */
 diff -Naur ../orig/sed-4.7/lib/nl_langinfo.c ./lib/nl_langinfo.c
 --- ../orig/sed-4.7/lib/nl_langinfo.c	2018-12-13 09:11:38.000000000 +0300
-+++ ./lib/nl_langinfo.c	2019-12-20 16:17:16.618600400 +0300
++++ ./lib/nl_langinfo.c	2019-12-20 16:31:42.624133100 +0300
 @@ -71,12 +71,22 @@
       GetACP, which returns the locale's codepage as a number (although
       this doesn't change according to what the 'setlocale' call specified).
@@ -6537,29 +5250,9 @@ diff -Naur ../orig/sed-4.7/lib/nl_langinfo.c ./lib/nl_langinfo.c
  # endif
    return codeset;
  }
-diff -Naur ../orig/sed-4.7/lib/regexec.c ./lib/regexec.c
---- ../orig/sed-4.7/lib/regexec.c	2018-12-16 22:34:00.000000000 +0300
-+++ ./lib/regexec.c	2019-12-20 16:17:30.717406800 +0300
-@@ -3296,6 +3296,7 @@
-   re_node_set follows, *dests_node;
-   bitset_t *dests_ch;
-   bitset_t acceptable;
-+  size_t ndests_max;
- 
-   struct dests_alloc
-   {
-@@ -3346,7 +3347,7 @@
-     goto out_free;
- 
-   /* Avoid arithmetic overflow in size calculation.  */
--  size_t ndests_max
-+  ndests_max
-     = ((SIZE_MAX - (sizeof (re_node_set) + sizeof (bitset_t)) * SBC_MAX)
-        / (3 * sizeof (re_dfastate_t *)));
-   if (__glibc_unlikely (ndests_max < ndests))
 diff -Naur ../orig/sed-4.7/lib/selinux/context.h ./lib/selinux/context.h
 --- ../orig/sed-4.7/lib/selinux/context.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/context.h	2019-12-20 16:19:49.138324100 +0300
++++ ./lib/selinux/context.h	2019-12-20 16:33:54.649684500 +0300
 @@ -0,0 +1,83 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +#ifndef SELINUX_CONTEXT_H
@@ -6646,7 +5339,7 @@ diff -Naur ../orig/sed-4.7/lib/selinux/context.h ./lib/selinux/context.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/selinux/selinux.h ./lib/selinux/selinux.h
 --- ../orig/sed-4.7/lib/selinux/selinux.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/selinux.h	2019-12-20 16:19:49.039318400 +0300
++++ ./lib/selinux/selinux.h	2019-12-20 16:33:54.545678600 +0300
 @@ -0,0 +1,156 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Replacement <selinux/selinux.h> for platforms that lack it.
@@ -6806,7 +5499,7 @@ diff -Naur ../orig/sed-4.7/lib/selinux/selinux.h ./lib/selinux/selinux.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/stdalign.h ./lib/stdalign.h
 --- ../orig/sed-4.7/lib/stdalign.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdalign.h	2019-12-20 16:19:49.225329000 +0300
++++ ./lib/stdalign.h	2019-12-20 16:33:54.736689500 +0300
 @@ -0,0 +1,122 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C11 <stdalign.h>.
@@ -6930,146 +5623,9 @@ diff -Naur ../orig/sed-4.7/lib/stdalign.h ./lib/stdalign.h
 +#endif
 +
 +#endif /* _GL_STDALIGN_H */
-diff -Naur ../orig/sed-4.7/lib/stdbool.h ./lib/stdbool.h
---- ../orig/sed-4.7/lib/stdbool.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdbool.h	2019-12-20 16:19:49.305333600 +0300
-@@ -0,0 +1,133 @@
-+/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
-+/* Copyright (C) 2001-2003, 2006-2018 Free Software Foundation, Inc.
-+   Written by Bruno Haible <haible@clisp.cons.org>, 2001.
-+
-+   This program is free software; you can redistribute it and/or modify
-+   it under the terms of the GNU General Public License as published by
-+   the Free Software Foundation; either version 3, or (at your option)
-+   any later version.
-+
-+   This program is distributed in the hope that it will be useful,
-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+   GNU General Public License for more details.
-+
-+   You should have received a copy of the GNU General Public License
-+   along with this program; if not, see <https://www.gnu.org/licenses/>.  */
-+
-+#ifndef _GL_STDBOOL_H
-+#define _GL_STDBOOL_H
-+
-+/* ISO C 99 <stdbool.h> for platforms that lack it.  */
-+
-+/* Usage suggestions:
-+
-+   Programs that use <stdbool.h> should be aware of some limitations
-+   and standards compliance issues.
-+
-+   Standards compliance:
-+
-+       - <stdbool.h> must be #included before 'bool', 'false', 'true'
-+         can be used.
-+
-+       - You cannot assume that sizeof (bool) == 1.
-+
-+       - Programs should not undefine the macros bool, true, and false,
-+         as C99 lists that as an "obsolescent feature".
-+
-+   Limitations of this substitute, when used in a C89 environment:
-+
-+       - <stdbool.h> must be #included before the '_Bool' type can be used.
-+
-+       - You cannot assume that _Bool is a typedef; it might be a macro.
-+
-+       - Bit-fields of type 'bool' are not supported.  Portable code
-+         should use 'unsigned int foo : 1;' rather than 'bool foo : 1;'.
-+
-+       - In C99, casts and automatic conversions to '_Bool' or 'bool' are
-+         performed in such a way that every nonzero value gets converted
-+         to 'true', and zero gets converted to 'false'.  This doesn't work
-+         with this substitute.  With this substitute, only the values 0 and 1
-+         give the expected result when converted to _Bool' or 'bool'.
-+
-+       - C99 allows the use of (_Bool)0.0 in constant expressions, but
-+         this substitute cannot always provide this property.
-+
-+   Also, it is suggested that programs use 'bool' rather than '_Bool';
-+   this isn't required, but 'bool' is more common.  */
-+
-+
-+/* 7.16. Boolean type and values */
-+
-+/* BeOS <sys/socket.h> already #defines false 0, true 1.  We use the same
-+   definitions below, but temporarily we have to #undef them.  */
-+#if defined __BEOS__ && !defined __HAIKU__
-+# include <OS.h> /* defines bool but not _Bool */
-+# undef false
-+# undef true
-+#endif
-+
-+#ifdef __cplusplus
-+# define _Bool bool
-+# define bool bool
-+#else
-+# if defined __BEOS__ && !defined __HAIKU__
-+  /* A compiler known to have 'bool'.  */
-+  /* If the compiler already has both 'bool' and '_Bool', we can assume they
-+     are the same types.  */
-+#  if !0
-+typedef bool _Bool;
-+#  endif
-+# else
-+#  if !defined __GNUC__
-+   /* If 0:
-+        Some HP-UX cc and AIX IBM C compiler versions have compiler bugs when
-+        the built-in _Bool type is used.  See
-+          https://gcc.gnu.org/ml/gcc-patches/2003-12/msg02303.html
-+          https://lists.gnu.org/r/bug-coreutils/2005-11/msg00161.html
-+          https://lists.gnu.org/r/bug-coreutils/2005-10/msg00086.html
-+        Similar bugs are likely with other compilers as well; this file
-+        wouldn't be used if <stdbool.h> was working.
-+        So we override the _Bool type.
-+      If !0:
-+        Need to define _Bool ourselves. As 'signed char' or as an enum type?
-+        Use of a typedef, with SunPRO C, leads to a stupid
-+          "warning: _Bool is a keyword in ISO C99".
-+        Use of an enum type, with IRIX cc, leads to a stupid
-+          "warning(1185): enumerated type mixed with another type".
-+        Even the existence of an enum type, without a typedef,
-+          "Invalid enumerator. (badenum)" with HP-UX cc on Tru64.
-+        The only benefit of the enum, debuggability, is not important
-+        with these compilers.  So use 'signed char' and no enum.  */
-+#   define _Bool signed char
-+#  else
-+   /* With this compiler, trust the _Bool type if the compiler has it.  */
-+#   if !0
-+   /* For the sake of symbolic names in gdb, define true and false as
-+      enum constants, not only as macros.
-+      It is tempting to write
-+         typedef enum { false = 0, true = 1 } _Bool;
-+      so that gdb prints values of type 'bool' symbolically.  But then
-+      values of type '_Bool' might promote to 'int' or 'unsigned int'
-+      (see ISO C 99 6.7.2.2.(4)); however, '_Bool' must promote to 'int'
-+      (see ISO C 99 6.3.1.1.(2)).  So add a negative value to the
-+      enum; this ensures that '_Bool' promotes to 'int'.  */
-+typedef enum { _Bool_must_promote_to_int = -1, false = 0, true = 1 } _Bool;
-+#   endif
-+#  endif
-+# endif
-+# define bool _Bool
-+#endif
-+
-+/* The other macros must be usable in preprocessor directives.  */
-+#ifdef __cplusplus
-+# define false false
-+# define true true
-+#else
-+# define false 0
-+# define true 1
-+#endif
-+
-+#define __bool_true_false_are_defined 1
-+
-+#endif /* _GL_STDBOOL_H */
 diff -Naur ../orig/sed-4.7/lib/stddef.h ./lib/stddef.h
 --- ../orig/sed-4.7/lib/stddef.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stddef.h	2019-12-20 16:20:08.427427300 +0300
++++ ./lib/stddef.h	2019-12-20 16:34:13.459760400 +0300
 @@ -0,0 +1,115 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for POSIX 2008 <stddef.h>, for platforms that have issues.
@@ -7125,7 +5681,7 @@ diff -Naur ../orig/sed-4.7/lib/stddef.h ./lib/stddef.h
 +
 +/* The include_next requires a split double-inclusion guard.  */
 +
-+#  include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\stddef.h"
++#  include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stddef.h"
 +
 +/* On NetBSD 5.0, the definition of NULL lacks proper parentheses.  */
 +#  if (0 \
@@ -7188,7 +5744,7 @@ diff -Naur ../orig/sed-4.7/lib/stddef.h ./lib/stddef.h
 +#endif /* __need_XXX */
 diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 --- ../orig/sed-4.7/lib/stdint.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdint.h	2019-12-20 16:20:08.430427500 +0300
++++ ./lib/stdint.h	2019-12-20 16:34:13.462760600 +0300
 @@ -0,0 +1,727 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Copyright (C) 2001-2002, 2004-2018 Free Software Foundation, Inc.
@@ -7243,7 +5799,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +   for the "fast" types and macros, which we recommend against using
 +   in public interfaces due to compiler differences.  */
 +
-+#if 0
++#if 1
 +# if defined __sgi && ! defined __c99
 +   /* Bypass IRIX's <stdint.h> if in C89 mode, since it merely annoys users
 +      with "This header file is to be used only for c99 mode compilations"
@@ -7266,7 +5822,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +     in <inttypes.h> would reinclude us, skipping our contents because
 +     _GL_STDINT_H is defined.
 +     The include_next requires a split double-inclusion guard.  */
-+# include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\stdint.h"
++# include "D:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.23.28105\include\stdint.h"
 +#endif
 +
 +#if ! defined _GL_STDINT_H && ! defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H
@@ -7285,7 +5841,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +# define WINT_MAX 0xffffffffU
 +#endif
 +
-+#if ! 0
++#if ! 1
 +
 +/* <sys/types.h> defines some of the stdint.h types as well, on glibc,
 +   IRIX 6.5, and OpenBSD 3.8 (via <machine/types.h>).
@@ -7297,7 +5853,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +#  include <sys/types.h>
 +# endif
 +
-+# if 0
++# if 1
 +  /* In OpenBSD 3.8, <inttypes.h> includes <machine/types.h>, which defines
 +     int{8,16,32,64}_t, uint{8,16,32,64}_t and __BIT_TYPES_DEFINED__.
 +     <inttypes.h> also defines intptr_t and uintptr_t.  */
@@ -7718,23 +6274,23 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +#  endif
 +# else
 +#  define PTRDIFF_MIN  \
-+    _STDINT_SIGNED_MIN (32, 0)
++    _STDINT_SIGNED_MIN (, 0)
 +#  define PTRDIFF_MAX  \
-+    _STDINT_MAX (1, 32, 0)
++    _STDINT_MAX (1, , 0)
 +# endif
 +
 +/* sig_atomic_t limits */
 +# undef SIG_ATOMIC_MIN
 +# undef SIG_ATOMIC_MAX
-+# if 1
++# if 
 +#  define SIG_ATOMIC_MIN  \
-+    _STDINT_SIGNED_MIN (32, 0)
++    _STDINT_SIGNED_MIN (, 0)
 +# else
 +#  define SIG_ATOMIC_MIN  \
-+    _STDINT_UNSIGNED_MIN (32, 0)
++    _STDINT_UNSIGNED_MIN (, 0)
 +# endif
 +# define SIG_ATOMIC_MAX  \
-+   _STDINT_MAX (1, 32, \
++   _STDINT_MAX (, , \
 +                0)
 +
 +
@@ -7747,7 +6303,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +#   define SIZE_MAX  _STDINT_MAX (0, 32, 0ul)
 +#  endif
 +# else
-+#  define SIZE_MAX  _STDINT_MAX (0, 32, 0u)
++#  define SIZE_MAX  _STDINT_MAX (0, , 0)
 +# endif
 +
 +/* wchar_t limits */
@@ -7768,28 +6324,28 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +# endif
 +# undef WCHAR_MIN
 +# undef WCHAR_MAX
-+# if 0
++# if 
 +#  define WCHAR_MIN  \
-+    _STDINT_SIGNED_MIN (16, 0)
++    _STDINT_SIGNED_MIN (, 0)
 +# else
 +#  define WCHAR_MIN  \
-+    _STDINT_UNSIGNED_MIN (16, 0)
++    _STDINT_UNSIGNED_MIN (, 0)
 +# endif
 +# define WCHAR_MAX  \
-+   _STDINT_MAX (0, 16, 0)
++   _STDINT_MAX (, , 0)
 +
 +/* wint_t limits */
 +# undef WINT_MIN
 +# undef WINT_MAX
-+# if 0
++# if 
 +#  define WINT_MIN  \
-+    _STDINT_SIGNED_MIN (32, 0)
++    _STDINT_SIGNED_MIN (, 0)
 +# else
 +#  define WINT_MIN  \
-+    _STDINT_UNSIGNED_MIN (32, 0)
++    _STDINT_UNSIGNED_MIN (, 0)
 +# endif
 +# define WINT_MAX  \
-+   _STDINT_MAX (0, 32, 0)
++   _STDINT_MAX (, , 0)
 +
 +/* 7.18.4. Macros for integer constants */
 +
@@ -7853,7 +6409,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +#  endif
 +# endif
 +
-+#endif /* !0 */
++#endif /* !1 */
 +
 +/* Macros specified by ISO/IEC TS 18661-1:2014.  */
 +
@@ -7919,7 +6475,7 @@ diff -Naur ../orig/sed-4.7/lib/stdint.h ./lib/stdint.h
 +#endif /* !defined _GL_STDINT_H && !defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H */
 diff -Naur ../orig/sed-4.7/lib/stdio.h ./lib/stdio.h
 --- ../orig/sed-4.7/lib/stdio.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdio.h	2019-12-20 16:20:08.433427700 +0300
++++ ./lib/stdio.h	2019-12-20 16:34:13.465760800 +0300
 @@ -0,0 +1,1851 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <stdio.h>.
@@ -7963,7 +6519,7 @@ diff -Naur ../orig/sed-4.7/lib/stdio.h ./lib/stdio.h
 +#define _GL_ALREADY_INCLUDING_STDIO_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\stdio.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h"
 +
 +#undef _GL_ALREADY_INCLUDING_STDIO_H
 +
@@ -9774,7 +8330,7 @@ diff -Naur ../orig/sed-4.7/lib/stdio.h ./lib/stdio.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/stdlib.h ./lib/stdlib.h
 --- ../orig/sed-4.7/lib/stdlib.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdlib.h	2019-12-20 16:20:08.436427900 +0300
++++ ./lib/stdlib.h	2019-12-20 16:34:13.468760900 +0300
 @@ -0,0 +1,1501 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <stdlib.h>.
@@ -9803,7 +8359,7 @@ diff -Naur ../orig/sed-4.7/lib/stdlib.h ./lib/stdlib.h
 +/* Special invocation conventions inside some gnulib header files,
 +   and inside some glibc header files, respectively.  */
 +
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\stdlib.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h"
 +
 +#else
 +/* Normal invocation convention.  */
@@ -9811,7 +8367,7 @@ diff -Naur ../orig/sed-4.7/lib/stdlib.h ./lib/stdlib.h
 +#ifndef _GL_STDLIB_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\stdlib.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h"
 +
 +#ifndef _GL_STDLIB_H
 +#define _GL_STDLIB_H
@@ -11279,7 +9835,7 @@ diff -Naur ../orig/sed-4.7/lib/stdlib.h ./lib/stdlib.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/string.h ./lib/string.h
 --- ../orig/sed-4.7/lib/string.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/string.h	2019-12-20 16:20:08.438428000 +0300
++++ ./lib/string.h	2019-12-20 16:34:13.471761100 +0300
 @@ -0,0 +1,1537 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <string.h>.
@@ -11321,7 +9877,7 @@ diff -Naur ../orig/sed-4.7/lib/string.h ./lib/string.h
 +#define _GL_ALREADY_INCLUDING_STRING_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\string.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\string.h"
 +
 +#undef _GL_ALREADY_INCLUDING_STRING_H
 +
@@ -12820,7 +11376,7 @@ diff -Naur ../orig/sed-4.7/lib/string.h ./lib/string.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/sys/stat.h ./lib/sys/stat.h
 --- ../orig/sed-4.7/lib/sys/stat.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/stat.h	2019-12-20 16:20:08.441428100 +0300
++++ ./lib/sys/stat.h	2019-12-20 16:34:13.473761200 +0300
 @@ -0,0 +1,1290 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/stat.h header file.
@@ -12853,7 +11409,7 @@ diff -Naur ../orig/sed-4.7/lib/sys/stat.h ./lib/sys/stat.h
 +#if defined __need_system_sys_stat_h
 +/* Special invocation convention.  */
 +
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\sys\stat.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\sys\stat.h"
 +
 +#else
 +/* Normal invocation convention.  */
@@ -12868,7 +11424,7 @@ diff -Naur ../orig/sed-4.7/lib/sys/stat.h ./lib/sys/stat.h
 +#include <time.h>
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\sys\stat.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\sys\stat.h"
 +
 +#ifndef _GL_SYS_STAT_H
 +#define _GL_SYS_STAT_H
@@ -14114,7 +12670,7 @@ diff -Naur ../orig/sed-4.7/lib/sys/stat.h ./lib/sys/stat.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/sys/time.h ./lib/sys/time.h
 --- ../orig/sed-4.7/lib/sys/time.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/time.h	2019-12-20 16:19:51.087435500 +0300
++++ ./lib/sys/time.h	2019-12-20 16:33:56.490789900 +0300
 @@ -0,0 +1,694 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/time.h.
@@ -14812,7 +13368,7 @@ diff -Naur ../orig/sed-4.7/lib/sys/time.h ./lib/sys/time.h
 +#endif /* _GL_SYS_TIME_H */
 diff -Naur ../orig/sed-4.7/lib/sys/types.h ./lib/sys/types.h
 --- ../orig/sed-4.7/lib/sys/types.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/types.h	2019-12-20 16:20:08.443428300 +0300
++++ ./lib/sys/types.h	2019-12-20 16:34:13.476761400 +0300
 @@ -0,0 +1,107 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/types.h.
@@ -14852,7 +13408,7 @@ diff -Naur ../orig/sed-4.7/lib/sys/types.h ./lib/sys/types.h
 +
 +/* The include_next requires a split double-inclusion guard.  */
 +# define _GL_INCLUDING_SYS_TYPES_H
-+#include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\sys\types.h"
++#include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\sys\types.h"
 +# undef _GL_INCLUDING_SYS_TYPES_H
 +
 +#ifndef _GL_SYS_TYPES_H
@@ -14923,7 +13479,7 @@ diff -Naur ../orig/sed-4.7/lib/sys/types.h ./lib/sys/types.h
 +#endif /* __need_XXX */
 diff -Naur ../orig/sed-4.7/lib/time.h ./lib/time.h
 --- ../orig/sed-4.7/lib/time.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/time.h	2019-12-20 16:20:08.446428400 +0300
++++ ./lib/time.h	2019-12-20 16:34:13.479761600 +0300
 @@ -0,0 +1,824 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A more-standard <time.h>.
@@ -14959,13 +13515,13 @@ diff -Naur ../orig/sed-4.7/lib/time.h ./lib/time.h
 +      && !defined __MINGW32__)                         \
 +     || defined _GL_TIME_H)
 +
-+# include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\time.h"
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\time.h"
 +
 +#else
 +
 +# define _GL_TIME_H
 +
-+# include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\time.h"
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\time.h"
 +
 +/* NetBSD 5.0 mis-defines NULL.  */
 +# include <stddef.h>
@@ -15453,7 +14009,7 @@ diff -Naur ../orig/sed-4.7/lib/time.h ./lib/time.h
 +   Or they define it with the wrong member names or define it in <sys/time.h>
 +   (e.g., FreeBSD circa 1997).  Stock Mingw prior to 3.0 does not define it,
 +   but the pthreads-win32 library defines it in <pthread.h>.  */
-+# if ! 0
++# if ! 1
 +#  if 0
 +#   include <sys/time.h>
 +#  elif 0
@@ -15751,7 +14307,7 @@ diff -Naur ../orig/sed-4.7/lib/time.h ./lib/time.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/unistd.h ./lib/unistd.h
 --- ../orig/sed-4.7/lib/unistd.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/unistd.h	2019-12-20 16:19:51.895481800 +0300
++++ ./lib/unistd.h	2019-12-20 16:33:57.289835600 +0300
 @@ -0,0 +1,2142 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for and wrapper around <unistd.h>.
@@ -17897,7 +16453,7 @@ diff -Naur ../orig/sed-4.7/lib/unistd.h ./lib/unistd.h
 +#endif /* _GL_UNISTD_H */
 diff -Naur ../orig/sed-4.7/lib/wchar.h ./lib/wchar.h
 --- ../orig/sed-4.7/lib/wchar.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/wchar.h	2019-12-20 16:20:08.449428600 +0300
++++ ./lib/wchar.h	2019-12-20 16:34:13.481761700 +0300
 @@ -0,0 +1,1546 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <wchar.h>, for platforms that have issues.
@@ -17985,7 +16541,7 @@ diff -Naur ../orig/sed-4.7/lib/wchar.h ./lib/wchar.h
 +   Some builds of uClibc lack it.  */
 +/* The include_next requires a split double-inclusion guard.  */
 +#if 1
-+# include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\wchar.h"
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\wchar.h"
 +#endif
 +
 +#undef _GL_ALREADY_INCLUDING_WCHAR_H
@@ -19447,7 +18003,7 @@ diff -Naur ../orig/sed-4.7/lib/wchar.h ./lib/wchar.h
 +#endif
 diff -Naur ../orig/sed-4.7/lib/wctype.h ./lib/wctype.h
 --- ../orig/sed-4.7/lib/wctype.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/wctype.h	2019-12-20 16:20:08.452428800 +0300
++++ ./lib/wctype.h	2019-12-20 16:34:13.484761900 +0300
 @@ -0,0 +1,981 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <wctype.h>, for platforms that lack it.
@@ -19521,7 +18077,7 @@ diff -Naur ../orig/sed-4.7/lib/wctype.h ./lib/wctype.h
 +   BeOS 5 has the functions but no <wctype.h>.  */
 +/* The include_next requires a split double-inclusion guard.  */
 +#if 1
-+# include "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\include\wctype.h"
++# include "C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\wctype.h"
 +#endif
 +
 +#ifndef _GL_WCTYPE_H
@@ -20432,8 +18988,8 @@ diff -Naur ../orig/sed-4.7/lib/wctype.h ./lib/wctype.h
 +#endif
 diff -Naur ../orig/sed-4.7/make.bat ./make.bat
 --- ../orig/sed-4.7/make.bat	1970-01-01 03:00:00.000000000 +0300
-+++ ./make.bat	2019-12-20 16:22:41.373175300 +0300
-@@ -0,0 +1,80 @@
++++ ./make.bat	2019-12-20 16:35:29.058084400 +0300
+@@ -0,0 +1,79 @@
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /DGNULIB_WCHAR_SINGLE /Fosed\sed-compile.obj sed\compile.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /DGNULIB_WCHAR_SINGLE /Fosed\sed-debug.obj sed\debug.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /DGNULIB_WCHAR_SINGLE /Fosed\sed-execute.obj sed\execute.c || exit /b
@@ -20487,7 +19043,6 @@ diff -Naur ../orig/sed-4.7/make.bat ./make.bat
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\getopt.obj lib\getopt.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\getopt1.obj lib\getopt1.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\gettimeofday.obj lib\gettimeofday.c || exit /b
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\isblank.obj lib\isblank.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\localeconv.obj lib\localeconv.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\localtime-buffer.obj lib\localtime-buffer.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\malloc.obj lib\malloc.c || exit /b
@@ -20510,61 +19065,13 @@ diff -Naur ../orig/sed-4.7/make.bat ./make.bat
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\strverscmp.obj lib\strverscmp.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\wcrtomb.obj lib\wcrtomb.c || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Folib\wctob.obj lib\wctob.c || exit /b
-+lib /LTCG /nologo /OUT:lib\libsed.a lib\copy-acl.obj lib\set-acl.obj lib\acl-errno-valid.obj lib\acl-internal.obj lib\get-permissions.obj lib\set-permissions.obj lib\binary-io.obj lib\c-ctype.obj lib\c-strcasecmp.obj lib\c-strncasecmp.obj lib\close-stream.obj lib\closeout.obj lib\dfa.obj lib\localeinfo.obj lib\dirname-lgpl.obj lib\basename-lgpl.obj lib\stripslash.obj lib\exitfail.obj lib\getprogname.obj lib\hard-locale.obj lib\localcharset.obj lib\glthread\lock.obj lib\malloca.obj lib\progname.obj lib\qcopy-acl.obj lib\qset-acl.obj lib\quotearg.obj lib\se-context.obj lib\se-selinux.obj lib\stat-time.obj lib\tempname.obj lib\glthread\threadlib.obj lib\unistd.obj lib\version-etc.obj lib\version-etc-fsf.obj lib\wctype-h.obj lib\xmalloc.obj lib\xalloc-die.obj lib\canonicalize-lgpl.obj lib\error.obj lib\fpending.obj lib\fwriting.obj lib\getdelim.obj lib\getopt.obj lib\getopt1.obj lib\gettimeofday.obj lib\isblank.obj lib\localeconv.obj lib\localtime-buffer.obj lib\malloc.obj lib\mbrlen.obj lib\mbrtowc.obj lib\mbsinit.obj lib\memrchr.obj lib\mkdir.obj lib\mkostemp.obj lib\msvc-inval.obj lib\msvc-nothrow.obj lib\nl_langinfo.obj lib\obstack.obj lib\readlink.obj lib\regex.obj lib\rename.obj lib\rmdir.obj lib\strerror.obj lib\strerror-override.obj lib\strverscmp.obj lib\wcrtomb.obj lib\wctob.obj  || exit /b
++lib /LTCG /nologo /OUT:lib\libsed.a lib\copy-acl.obj lib\set-acl.obj lib\acl-errno-valid.obj lib\acl-internal.obj lib\get-permissions.obj lib\set-permissions.obj lib\binary-io.obj lib\c-ctype.obj lib\c-strcasecmp.obj lib\c-strncasecmp.obj lib\close-stream.obj lib\closeout.obj lib\dfa.obj lib\localeinfo.obj lib\dirname-lgpl.obj lib\basename-lgpl.obj lib\stripslash.obj lib\exitfail.obj lib\getprogname.obj lib\hard-locale.obj lib\localcharset.obj lib\glthread\lock.obj lib\malloca.obj lib\progname.obj lib\qcopy-acl.obj lib\qset-acl.obj lib\quotearg.obj lib\se-context.obj lib\se-selinux.obj lib\stat-time.obj lib\tempname.obj lib\glthread\threadlib.obj lib\unistd.obj lib\version-etc.obj lib\version-etc-fsf.obj lib\wctype-h.obj lib\xmalloc.obj lib\xalloc-die.obj lib\canonicalize-lgpl.obj lib\error.obj lib\fpending.obj lib\fwriting.obj lib\getdelim.obj lib\getopt.obj lib\getopt1.obj lib\gettimeofday.obj lib\localeconv.obj lib\localtime-buffer.obj lib\malloc.obj lib\mbrlen.obj lib\mbrtowc.obj lib\mbsinit.obj lib\memrchr.obj lib\mkdir.obj lib\mkostemp.obj lib\msvc-inval.obj lib\msvc-nothrow.obj lib\nl_langinfo.obj lib\obstack.obj lib\readlink.obj lib\regex.obj lib\rename.obj lib\rmdir.obj lib\strerror.obj lib\strerror-override.obj lib\strverscmp.obj lib\wcrtomb.obj lib\wctob.obj  || exit /b
 +cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE /Fosed\version.obj sed\version.c || exit /b
 +lib /LTCG /nologo /OUT:sed\libver.a sed\version.obj  || exit /b
 +link /nologo /LTCG /DEFAULTLIB:LIBCPMT.lib /OUT:sed\sed.exe wsetargv.obj sed\sed-compile.obj sed\sed-debug.obj sed\sed-execute.obj sed\sed-mbcs.obj sed\sed-regexp.obj sed\sed-sed.obj sed\sed-utils.obj sed\libver.a lib\libsed.a     || exit /b
-diff -Naur ../orig/sed-4.7/sed/debug.c ./sed/debug.c
---- ../orig/sed-4.7/sed/debug.c	2018-10-28 01:43:11.000000000 +0300
-+++ ./sed/debug.c	2019-12-20 16:17:30.719407000 +0300
-@@ -154,11 +154,12 @@
- debug_print_subst_replacement (const struct replacement *r)
- {
-   enum replacement_types last_repl_type = REPL_ASIS;
-+  const struct replacement *p;
- 
-   if (!r)
-     return;
- 
--  const struct replacement *p = r;
-+  p = r;
-   while (p)
-     {
-       if (p->repl_type != last_repl_type)
-@@ -409,13 +410,14 @@
- debug_print_command (const struct vector *program, const struct sed_cmd *sc)
- {
-   bool addr_bang;
-+  int j;
-   if (!program)
-     return;
- 
-   if (sc->cmd == '}')
-     --block_level;
- 
--  for (int j = 0; j < block_level; ++j)
-+  for (j = 0; j < block_level; ++j)
-     fputs ("  ", stdout);
- 
-   debug_print_addr (sc->a1);
-@@ -445,12 +447,13 @@
- void
- debug_print_program (const struct vector *program)
- {
-+  size_t i;
-   if (!program)
-     return;
- 
-   block_level = 1;
-   puts ("SED PROGRAM:");
--  for (size_t i = 0; i < program->v_length; ++i)
-+  for (i = 0; i < program->v_length; ++i)
-     debug_print_command (program, &program->v[i]);
-   block_level = 0;
- }
 diff -Naur ../orig/sed-4.7/sed/execute.c ./sed/execute.c
 --- ../orig/sed-4.7/sed/execute.c	2018-12-10 06:26:36.000000000 +0300
-+++ ./sed/execute.c	2019-12-20 16:17:30.721407100 +0300
++++ ./sed/execute.c	2019-12-20 16:31:42.628133300 +0300
 @@ -37,6 +37,8 @@
  #include "progname.h"
  #include "xalloc.h"
@@ -20602,59 +19109,9 @@ diff -Naur ../orig/sed-4.7/sed/execute.c ./sed/execute.c
  
        if (isatty (fileno (input->fp)))
          panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
-@@ -1018,10 +1025,11 @@
- 
-   if (debug)
-     {
-+      int i;
-       if (regs.num_regs>0 && regs.start[0] != -1)
-         puts ("MATCHED REGEX REGISTERS");
- 
--      for (int i = 0; i < regs.num_regs; ++i)
-+      for (i = 0; i < regs.num_regs; ++i)
-         {
-           if (regs.start[i] == -1)
-             break;
-@@ -1201,6 +1209,7 @@
-               bool move_remain_buffer = false;
-               const char *tr = trans[2*i+1];
-               size_t trans_len = *tr == '\0' ? 1 : strlen (tr);
-+              size_t prev_idx;
- 
-               if (mbclen < trans_len)
-                 {
-@@ -1219,7 +1228,7 @@
-                   /* We must truncate the line buffer.  */
-                   move_remain_buffer = true;
-                 }
--              size_t prev_idx = idx;
-+              prev_idx = idx;
-               if (move_remain_buffer)
-                 {
-                   /* Move the remaining with \0.  */
-diff -Naur ../orig/sed-4.7/sed/regexp.c ./sed/regexp.c
---- ../orig/sed-4.7/sed/regexp.c	2018-08-27 11:58:26.000000000 +0300
-+++ ./sed/regexp.c	2019-12-20 16:17:30.724407200 +0300
-@@ -61,6 +61,7 @@
-   int syntax = ((extended_regexp_flags & REG_EXTENDED)
-                  ? RE_SYNTAX_POSIX_EXTENDED
-                  : RE_SYNTAX_POSIX_BASIC);
-+  int dfaopts;
- 
-   syntax &= ~RE_DOT_NOT_NULL;
-   syntax |= RE_NO_POSIX_BACKTRACKING;
-@@ -127,7 +128,7 @@
-       bad_prog (buf);
-     }
- 
--  int dfaopts = buffer_delimiter == '\n' ? 0 : DFA_EOL_NUL;
-+  dfaopts = buffer_delimiter == '\n' ? 0 : DFA_EOL_NUL;
-   new_regex->dfa = dfaalloc ();
-   dfasyntax (new_regex->dfa, &localeinfo, syntax, dfaopts);
-   dfacomp (new_regex->re, new_regex->sz, new_regex->dfa, 1);
 diff -Naur ../orig/sed-4.7/sed/sed.c ./sed/sed.c
 --- ../orig/sed-4.7/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
-+++ ./sed/sed.c	2019-12-20 16:17:16.622600700 +0300
++++ ./sed/sed.c	2019-12-20 16:31:42.633133600 +0300
 @@ -66,9 +66,17 @@
  /* How do we edit files in-place? (we don't if NULL) */
  char *in_place_extension = NULL;
@@ -20908,7 +19365,7 @@ diff -Naur ../orig/sed-4.7/sed/sed.c ./sed/sed.c
  }
 diff -Naur ../orig/sed-4.7/sed/utils.c ./sed/utils.c
 --- ../orig/sed-4.7/sed/utils.c	2018-12-13 09:06:47.000000000 +0300
-+++ ./sed/utils.c	2019-12-20 16:17:30.726407400 +0300
++++ ./sed/utils.c	2019-12-20 16:31:42.640134000 +0300
 @@ -14,6 +14,12 @@
      You should have received a copy of the GNU General Public License
      along with this program; If not, see <https://www.gnu.org/licenses/>. */
@@ -20922,33 +19379,7 @@ diff -Naur ../orig/sed-4.7/sed/utils.c ./sed/utils.c
  #include <config.h>
  
  #include <stdio.h>
-@@ -175,14 +181,17 @@
- ck_mkstemp (char **p_filename, const char *tmpdir,
-             const char *base, const char *mode)
- {
-+  mode_t save_umask;
-+  int fd;
-+  FILE *fp;
-   char *template = xmalloc (strlen (tmpdir) + strlen (base) + 8);
-   sprintf (template, "%s/%sXXXXXX", tmpdir, base);
- 
-    /* The ownership might change, so omit some permissions at first
-       so unauthorized users cannot nip in before the file is ready.
-       mkstemp forces O_BINARY on cygwin, so use mkostemp instead.  */
--  mode_t save_umask = umask (0700);
--  int fd = mkostemp (template, 0);
-+  save_umask = umask (0700);
-+  fd = mkostemp (template, 0);
-   umask (save_umask);
-   if (fd == -1)
-     panic (_("couldn't open temporary file %s: %s"), template,
-@@ -193,21 +202,562 @@
- #endif
- 
-   *p_filename = template;
--  FILE *fp = fdopen (fd, mode);
-+  fp = fdopen (fd, mode);
-   register_open_file (fp, template);
+@@ -198,16 +204,557 @@
    return fp;
  }
  
@@ -21511,7 +19942,7 @@ diff -Naur ../orig/sed-4.7/sed/utils.c ./sed/utils.c
  }
  
  /* Panic on failing fread */
-@@ -215,7 +765,31 @@
+@@ -215,7 +762,31 @@
  ck_fread (void *ptr, size_t size, size_t nmemb, FILE *stream)
  {
    clearerr (stream);
@@ -21544,7 +19975,7 @@ diff -Naur ../orig/sed-4.7/sed/utils.c ./sed/utils.c
      panic (_("read error on %s: %s"), utils_fp_name (stream), strerror (errno));
  
    return nmemb;
-@@ -224,12 +798,24 @@
+@@ -224,12 +795,24 @@
  size_t
  ck_getdelim (char **text, size_t *buflen, char buffer_delimiter, FILE *stream)
  {
@@ -21572,12 +20003,12 @@ diff -Naur ../orig/sed-4.7/sed/utils.c ./sed/utils.c
      }
 diff -Naur ../orig/sed-4.7/sed/version.c ./sed/version.c
 --- ../orig/sed-4.7/sed/version.c	1970-01-01 03:00:00.000000000 +0300
-+++ ./sed/version.c	2019-12-20 16:19:52.557519600 +0300
++++ ./sed/version.c	2019-12-20 16:33:57.974874700 +0300
 @@ -0,0 +1,2 @@
 +#include <config.h>
 +char const *Version = "4.7";
 diff -Naur ../orig/sed-4.7/sed/version.h ./sed/version.h
 --- ../orig/sed-4.7/sed/version.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./sed/version.h	2019-12-20 16:19:52.643524500 +0300
++++ ./sed/version.h	2019-12-20 16:33:58.073880400 +0300
 @@ -0,0 +1 @@
 +extern char const *Version;
