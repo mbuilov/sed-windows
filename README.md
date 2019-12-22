@@ -15,6 +15,7 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 - native Sed is capable for resolving wildcards in file arguments
 - native Sed takes locale settings from environment variables LC_ALL, LC_CTYPE or LANG
 - new switch '-C' or '--ignore-locale' - forces Sed to use the standard "C" locale; this switch is most usable in binary mode, to avoid possible interpretation of input data as multi-byte encoded strings (depending on the system locale)
+- new switch '--locale' - to explicitly specify locale to use (and ignore environment variables LC_ALL, LC_CTYPE and LANG)
 
 ## Pre-built executables:
 - [`sed-4.7-x64.exe`](/sed-4.7-x64.exe) - sed 4.7 built for windows7 x64
