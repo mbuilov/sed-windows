@@ -92,7 +92,7 @@ diff -Naur sed-4.7/sed/execute.c sed-4.7-patched/sed/execute.c
          panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
 diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
 --- sed-4.7/sed/sed.c	2018-12-13 09:06:47.000000000 +0300
-+++ sed-4.7-patched/sed/sed.c	2019-12-20 16:14:46.324004100 +0300
++++ sed-4.7-patched/sed/sed.c	2019-12-22 12:54:32.643815600 +0300
 @@ -66,9 +66,17 @@
  /* How do we edit files in-place? (we don't if NULL) */
  char *in_place_extension = NULL;
@@ -112,7 +112,7 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  
  #if O_BINARY
  /* Additional flag for binary mode on platforms with O_BINARY/O_TEXT.  */
-@@ -116,7 +124,89 @@
+@@ -116,7 +124,145 @@
    G_file_to_unlink = NULL;
  }
  
@@ -123,15 +123,71 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
 +
 +#ifdef WINDOWS_NATIVE
 +
-+/* Set locale.  */
++/* Get value of command-line option:
++   --lo[cale]=locale-name or --lo[cale] locale-name,
++   Returns option value or NULL if the option is not specified.
++   Panics if the option specified without a value,
++   else terminates opt_name_array to the length of the option name.  */
++/* Note: before the call, opt_name_array must contain "--locale".  */
++static const wchar_t *
++get_specified_locale (wchar_t **wa, char opt_name_array[])
++{
++  const wchar_t *w = NULL;
++  for (; *wa; wa++)
++    {
++      w = *wa;
++      if (L'-' != w[0] || L'-' != w[1] || L'l' != w[2] || L'o' != w[3])
++        continue;
++      w += 4;
++      if (L'=' == *w || !*w)
++        break;
++      if (L'c' != *w)
++        continue;
++      w++;
++      if (L'=' == *w || !*w)
++        break;
++      if (L'a' != *w)
++        continue;
++      w++;
++      if (L'=' == *w || !*w)
++        break;
++      if (L'l' != *w)
++        continue;
++      w++;
++      if (L'=' == *w || !*w)
++        break;
++      if (L'e' != *w)
++        continue;
++      w++;
++      if (L'=' == *w || !*w)
++        break;
++    }
++
++  if (!*wa)
++    return NULL; /* --lo[cale] option wasn't found.  */
++
++  opt_name_array[(unsigned) (w - *wa)] = '\0';
++  if (*w)
++    return w + 1; /* --lo[cale]=locale-name, return locale-name.  */
++
++  /* --lo[cale] locale-name.  */
++  {
++    const wchar_t *locale_name = wa[1];
++    if (!locale_name)
++      panic (_("option '%s' requires an argument"), opt_name_array);
++    return locale_name;
++  }
++}
++
++/* Set locale based on the values of environment variables.  */
 +static void
-+set_locale_from_env(const char *def)
++set_locale_from_env (const char *def)
 +{
 +  const char *locale = getenv ("LC_ALL");
 +  if (locale && locale[0])
 +    {
 +      if (!setlocale (LC_ALL, locale))
-+        panic ("Bad locale: LC_ALL=%s", locale);
++        panic (_("Bad locale: LC_ALL=%s"), locale);
 +      return;
 +    }
 +
@@ -145,14 +201,14 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
 +    locale = def;
 +
 +  if (!setlocale (LC_ALL, locale))
-+    panic ("Bad locale: LANG=%s", locale);
++    panic (_("Bad locale: LANG=%s"), locale);
 +
 +  /* specific LC_... take precedence over LANG.  */
 +  locale = getenv ("LC_CTYPE");
 +  if (locale && locale[0])
 +    {
 +      if (!setlocale (LC_CTYPE, locale))
-+        panic ("Bad locale: LC_CTYPE=%s", locale);
++        panic (_("Bad locale: LC_CTYPE=%s"), locale);
 +    }
 +}
 +
@@ -188,7 +244,7 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
 +  return argv;
 +}
 +
-+/* Free arguments array allocated by convert_wargv().  */
++/* Free arguments array allocated by convert_wargv ().  */
 +static void
 +free_argv (char **argv)
 +{
@@ -203,7 +259,7 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  static void
  contact (int errmsg)
  {
-@@ -128,6 +218,9 @@
+@@ -128,6 +274,9 @@
       get reports for other people's bugs.  */
    if (!errmsg)
      fprintf (out, _("E-mail bug reports to: <%s>.\n"), PACKAGE_BUGREPORT);
@@ -213,16 +269,21 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  }
  
  _Noreturn static void
-@@ -159,6 +252,8 @@
+@@ -159,6 +308,13 @@
                   open files in binary mode (CR+LFs are not" \
                   " processed specially)\n"));
  #endif
 +  fprintf (out, _("  -C, --ignore-locale\n\
 +                 ignore system locale, operate in the default \"C\" locale\n"));
++#ifdef WINDOWS_NATIVE
++  fprintf (out, _("  --locale=locale-name\n\
++                 use the specified locale (ignore environment" \
++                 " variables LC_ALL, LC_CTYPE and LANG)\n"));
++#endif
    fprintf (out, _("  -l N, --line-length=N\n\
                   specify the desired line-wrap length for the `l' command\n"));
    fprintf (out, _("  --posix\n\
-@@ -191,9 +286,13 @@
+@@ -191,16 +347,24 @@
  }
  
  int
@@ -237,7 +298,10 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  
    enum { SANDBOX_OPTION = CHAR_MAX+1,
           DEBUG_OPTION
-@@ -201,6 +300,7 @@
++#ifdef WINDOWS_NATIVE
++         ,LOCALE_OPTION
++#endif
+     };
  
    static const struct option longopts[] = {
      {"binary", 0, NULL, 'b'},
@@ -245,7 +309,17 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
      {"regexp-extended", 0, NULL, 'r'},
      {"debug", 0, NULL, DEBUG_OPTION},
      {"expression", 1, NULL, 'e'},
-@@ -227,11 +327,58 @@
+@@ -220,6 +384,9 @@
+ #ifdef ENABLE_FOLLOW_SYMLINKS
+     {"follow-symlinks", 0, NULL, 'F'},
+ #endif
++#ifdef WINDOWS_NATIVE
++    {"locale", 1, NULL, LOCALE_OPTION},
++#endif
+     {NULL, 0, NULL, 0}
+   };
+ 
+@@ -227,11 +394,68 @@
    int return_code;
    const char *cols = getenv ("COLS");
  
@@ -253,13 +327,21 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
 +  char **old_argv = NULL;
 +  char **argv;
 +
++  /* Set locale according to user's wishes.
++     (Current locale is "C").  */
++  char opt_name_array[] = "--locale";
++  const wchar_t *spec_locale;
++
 +  /* Temporary set program name.
 +     This is needed for error messages - in case of bad locale.  */
 +  set_program_name ("sed");
 +
-+  /* Set locale according to user's wishes.
-+     (Current locale is "C").  */
-+  set_locale_from_env (def_locale);
++  /* Command-line option takes precedence over environment vars.  */
++  spec_locale = get_specified_locale (wargv, opt_name_array);
++  if (!spec_locale)
++    set_locale_from_env (def_locale);
++  else if (!_wsetlocale (LC_ALL, spec_locale))
++    panic (_("Bad locale name specified by the option '%s'"), opt_name_array);
 +
 +  /* Convert program arguments to multibyte strings.  */
 +  argv = convert_wargv (argc, wargv);
@@ -294,10 +376,12 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
 +  if (def_locale[0])
 +    {
 +      /* User wants to use "C"-locale.  */
++      if (spec_locale)
++        panic (_("Options '-C/--ignore-locale' and '--locale' cannot be used together."));
 +      setlocale (LC_ALL, def_locale);
 +
 +      /* Cannot free argv array now:
-+         argv[0] was passed to set_program_name().  */
++         argv[0] was passed to set_program_name ().  */
 +      old_argv = argv;
 +      argv = convert_wargv (argc, wargv);
 +    }
@@ -305,7 +389,7 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  #endif
    initialize_mbcs ();
    init_localeinfo (&localeinfo);
-@@ -320,6 +467,10 @@
+@@ -320,6 +544,10 @@
  #endif
            break;
  
@@ -316,7 +400,20 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
          case 'E':
          case 'r':
            extended_regexp_flags = REG_EXTENDED;
-@@ -374,6 +525,15 @@
+@@ -337,6 +565,12 @@
+           debug = true;
+           break;
+ 
++#ifdef WINDOWS_NATIVE
++        case LOCALE_OPTION:
++          /* already processed */
++          break;
++#endif
++
+         case 'u':
+           unbuffered = true;
+           break;
+@@ -374,6 +608,15 @@
         if (set_binary_mode ( fileno (stdout), O_BINARY) == -1)
           panic (_("failed to set binary mode on STDOUT"));
      }
@@ -332,7 +429,7 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  #endif
  
    if (debug)
-@@ -384,5 +544,11 @@
+@@ -384,5 +627,11 @@
    finish_program (the_program);
    ck_fclose (NULL);
  
@@ -346,7 +443,7 @@ diff -Naur sed-4.7/sed/sed.c sed-4.7-patched/sed/sed.c
  }
 diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
 --- sed-4.7/sed/utils.c	2018-12-13 09:06:47.000000000 +0300
-+++ sed-4.7-patched/sed/utils.c	2019-12-20 16:16:25.195659200 +0300
++++ sed-4.7-patched/sed/utils.c	2019-12-22 12:54:28.728208700 +0300
 @@ -14,6 +14,12 @@
      You should have received a copy of the GNU General Public License
      along with this program; If not, see <https://www.gnu.org/licenses/>. */
@@ -360,58 +457,26 @@ diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
  #include <config.h>
  
  #include <stdio.h>
-@@ -198,16 +204,557 @@
+@@ -198,16 +204,527 @@
    return fp;
  }
  
 +#ifdef WINDOWS_NATIVE
 +
-+/* Determine locale's codepage for the WideCharToMultiByte.  */
-+static unsigned int
-+get_locale_code_page (void)
-+{
-+  UINT codepage = CP_ACP; /* ANSI codepage by default */
-+  const char *current_locale = setlocale (LC_CTYPE, NULL);
-+  const char *pdot = strrchr (current_locale, '.');
-+
-+  /* After a dot may follow a codepage number, or the "utf8" string.  */
-+  if (pdot)
-+    {
-+      if (('u' == pdot[1] || 'U' == pdot[1]) &&
-+        ('t' == pdot[2] || 'T' == pdot[2]) &&
-+        ('f' == pdot[3] || 'F' == pdot[3]) &&
-+        (('8' == pdot[4] && '\0' == pdot[5]) ||
-+         ('-' == pdot[4] && '8' == pdot[5] && '\0' == pdot[6])))
-+        codepage = CP_UTF8; /* 65001 */
-+      else
-+        {
-+          /* Try to parse codepage number.  */
-+          unsigned cp;
-+          if (1 == sscanf (pdot + 1, "%u", &cp))
-+            codepage = cp;
-+        }
-+    }
-+
-+  return codepage;
-+}
-+
 +/* Convert wide-character string to multibyte.
 +   Returns NULL on error, else - malloc'ated '\0'-terminated
-+   string, which caller should free via free().
-+   Note: on error - check GetLastError().  */
++   string, which caller should free via free().  */
 +static char *
 +convert_wc_to_mb (const wchar_t *wc)
 +{
-+  unsigned int codepage = get_locale_code_page ();
-+  const int sz = WideCharToMultiByte (
-+    codepage, 0, wc, -1, NULL, 0, NULL, NULL);
++  const size_t need = wcstombs (NULL, wc, 0);
 +
-+  if (!sz)
-+    return NULL; /* Error.  Caller should check GetLastError().  */
++  if ((size_t) -1 == need)
++    return NULL; /* Error.  errno is set to EILSEQ.  */
 +
 +  {
-+    char *a = (char*) xmalloc (sz);
-+    WideCharToMultiByte (codepage, 0, wc, -1, a, sz, NULL, NULL);
++    char *a = (char*) xmalloc (need + 1);
++    wcstombs (a, wc, need + 1);
 +    return a;
 +  }
 +}
@@ -755,6 +820,7 @@ diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
 +stop_input:
 +  /* EOF: no error - both errno and last error are zero.  */
 +  errno = 0;
++  SetLastError (0);
 +  return (size_t) (d - (char*) ptr); /* < size */
 +}
 +
@@ -835,6 +901,7 @@ diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
 +
 +  /* EOF: no error - both errno and last error are zero.  */
 +  errno = 0;
++  SetLastError (0);
 +  return -1;
 +}
 +
@@ -923,7 +990,7 @@ diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
  }
  
  /* Panic on failing fread */
-@@ -215,7 +762,31 @@
+@@ -215,7 +732,31 @@
  ck_fread (void *ptr, size_t size, size_t nmemb, FILE *stream)
  {
    clearerr (stream);
@@ -956,7 +1023,7 @@ diff -Naur sed-4.7/sed/utils.c sed-4.7-patched/sed/utils.c
      panic (_("read error on %s: %s"), utils_fp_name (stream), strerror (errno));
  
    return nmemb;
-@@ -224,12 +795,24 @@
+@@ -224,12 +765,24 @@
  size_t
  ck_getdelim (char **text, size_t *buflen, char buffer_delimiter, FILE *stream)
  {
