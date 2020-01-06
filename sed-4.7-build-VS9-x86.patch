@@ -21112,7 +21112,7 @@ diff -Naur ../orig/sed-4.7/sed/utils.c ./sed/utils.c
 +    if (!msg)
 +      {
 +        /* Just get error message in English.  */
-+        n_chars = FormatMessage (
++        n_chars = FormatMessageA (
 +          FORMAT_MESSAGE_ALLOCATE_BUFFER |
 +          FORMAT_MESSAGE_FROM_SYSTEM |
 +          FORMAT_MESSAGE_IGNORE_INSERTS,
