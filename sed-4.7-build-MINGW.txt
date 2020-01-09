@@ -1,0 +1,46 @@
+Building native 64-bit SED with MINGW.
+
+1) Install MSYS2 (https://www.msys2.org/)
+
+2) Install gcc toolchain and utilities (in the MSYS2 window)
+  pacman -Sy mingw-w64-x86_64-toolchain
+  pacman -S wget
+  pacman -S tar
+  pacman -S patch
+  pacman -S make
+
+3) Restart MSYS2 (so configure script will be able to find gcc):
+  either find "MSYS2 MinGW 64-bit" from the start menu or run directly:
+  C:\msys64\msys2_shell.cmd -mingw64
+
+4) Download and unpack sed:
+  wget https://ftp.gnu.org/gnu/sed/sed-4.7.tar.xz
+  tar xf sed-4.7.tar.xz && cd sed-4.7
+
+5) Download sed patches:
+  wget https://raw.githubusercontent.com/mbuilov/sed-windows/master/sed-4.7-src.patch
+
+6) Apply patches to the sed:
+  patch -Np1 -i sed-4.7-src.patch
+
+7) Fix sed makefile for linking sed as a unicode application (https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/):
+  sed -i 's/^sed_sed_LINK = $(CCLD)/& -municode/' Makefile.in
+
+8) Fix sed makefile to avoid failing gnulib tests:
+  sed -i '/^SUBDIRS = /s/ gnulib-tests/# gnulib-tests/' Makefile.in
+
+9) Configure sed:
+  ./configure --disable-dependency-tracking --disable-nls
+
+10) Fix config.h - mingw-w64 may not support fortified functions, so don't define _FORTIFY_SOURCE:
+  sed -i '/# define _FORTIFY_SOURCE/d' config.h
+
+11) And finally, build sed:
+  make
+
+12) Check built executable:
+  sed/sed.exe
+
+BUGS:
+  Utf-8 locales don't seem to be supported on mingw64 builds right now.
+  It's possible to specify a code page to use, like "sed.exe --locale=.866", but code page 65001 isn't supported.
