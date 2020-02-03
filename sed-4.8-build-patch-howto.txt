@@ -99,7 +99,7 @@ Now it is possible to create a patch file - for compiling optimized sed.exe usin
 2) unpack sed:
   tar xf ../sed-4.8.tar.xz -C ../orig/
 
-3) diff current directory with original just unpacked sed-4.7.tar.xz in '../orig' directory
+3) diff current directory with original just unpacked sed-4.8.tar.xz in '../orig' directory
   diff -rql . ../orig/sed-4.8
 
 4) remove unneeded built files in current directory (object files, libs, etc...)
@@ -144,11 +144,11 @@ Now it is possible to create a patch file - for compiling optimized sed.exe usin
   Only in ./lib: inttypes.h
   Only in ./lib: langinfo.h
   Only in ./lib: limits.h
-  Files ./lib/localcharset.c and ../orig/sed-4.7/lib/localcharset.c differ
+  Files ./lib/localcharset.c and ../orig/sed-4.8/lib/localcharset.c differ
   Only in ./lib: locale.h
 * Files ./lib/localeinfo.c and ../orig/sed-4.8/lib/localeinfo.c differ
   Files ./lib/mbtowc-lock.h and ../orig/sed-4.8/lib/mbtowc-lock.h differ
-  Files ./lib/nl_langinfo.c and ../orig/sed-4.7/lib/nl_langinfo.c differ
+  Files ./lib/nl_langinfo.c and ../orig/sed-4.8/lib/nl_langinfo.c differ
 * Files ./lib/regcomp.c and ../orig/sed-4.8/lib/regcomp.c differ
 * Files ./lib/regexec.c and ../orig/sed-4.8/lib/regexec.c differ
   Only in ./lib: selinux
@@ -167,10 +167,10 @@ Now it is possible to create a patch file - for compiling optimized sed.exe usin
   Only in ./lib: wctype.h
   Only in .: make.bat
 * Files ./sed/debug.c and ../orig/sed-4.8/sed/debug.c differ
-  Files ./sed/execute.c and ../orig/sed-4.7/sed/execute.c differ
+  Files ./sed/execute.c and ../orig/sed-4.8/sed/execute.c differ
 * Files ./sed/regexp.c and ../orig/sed-4.8/sed/regexp.c differ
-  Files ./sed/sed.c and ../orig/sed-4.7/sed/sed.c differ
-  Files ./sed/utils.c and ../orig/sed-4.7/sed/utils.c differ
+  Files ./sed/sed.c and ../orig/sed-4.8/sed/sed.c differ
+  Files ./sed/utils.c and ../orig/sed-4.8/sed/utils.c differ
   Only in ./sed: version.c
   Only in ./sed: version.h
 
