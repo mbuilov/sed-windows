@@ -18,17 +18,17 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 - new switch '--locale' - to explicitly specify locale to use (and ignore environment variables LC_ALL, LC_CTYPE and LANG)
 
 ## Pre-built executables:
-- [`sed-4.7-x64.exe`](/sed-4.7-x64.exe) - sed 4.7 built for windows7 x64
-- [`sed-4.7-xp.exe`](/sed-4.7-xp.exe)   - sed 4.7 built for windowsXP x86 (does not support .UTF-8 locale)
+- [`sed-4.8-x64.exe`](/sed-4.8-x64.exe) - sed 4.8 built for windows7 x64
+- [`sed-4.8-xp.exe`](/sed-4.8-xp.exe)   - sed 4.8 built for windowsXP x86 (does not support .UTF-8 locale)
 
 ## Instructions how to create the build patch
-- [`sed-4.7-build-patch-howto.txt`](/sed-4.7-build-patch-howto.txt)
+- [`sed-4.8-build-patch-howto.txt`](/sed-4.8-build-patch-howto.txt)
 
 ## Prepared build patches
 For x64/Windows7/VS19:
-- [`sed-4.7-build-VS19-x64.patch`](/sed-4.7-build-VS19-x64.patch) - patch for building Sed as a native Windows application
-- [`sed-4.7-build-VS19-x64.txt`](/sed-4.7-build-VS19-x64.txt) - instructions how to apply the patch to compile Sed using native tools only
+- [`sed-4.8-build-VS19-x64.patch`](/sed-4.8-build-VS19-x64.patch) - patch for building Sed as a native Windows application
+- [`sed-4.8-build-VS19-x64.txt`](/sed-4.8-build-VS19-x64.txt) - instructions how to apply the patch to compile Sed using native tools only
 
 For x86/WindowsXP/VS9
-- [`sed-4.7-build-VS9-x86.patch`](/sed-4.7-build-VS9-x86.patch) - patch for building Sed as a native Windows application
-- [`sed-4.7-build-VS9-x86.txt`](/sed-4.7-build-VS9-x86.txt) - instructions how to apply the patch to compile Sed using native tools only
+- [`sed-4.8-build-VS9-x86.patch`](/sed-4.8-build-VS9-x86.patch) - patch for building Sed as a native Windows application
+- [`sed-4.8-build-VS9-x86.txt`](/sed-4.8-build-VS9-x86.txt) - instructions how to apply the patch to compile Sed using native tools only
