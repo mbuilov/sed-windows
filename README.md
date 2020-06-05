@@ -19,6 +19,7 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 
 ## Pre-built executables:
 - [`sed-4.8-x64.exe`](/sed-4.8-x64.exe) - sed 4.8 built for windows7 x64
+- [`sed-4.8-x86.exe`](/sed-4.8-x86.exe) - sed 4.8 built for windows7 x86
 - [`sed-4.8-xp.exe`](/sed-4.8-xp.exe)   - sed 4.8 built for windowsXP x86 (does not support .UTF-8 locale)
 
 ## Instructions how to create the build patch
