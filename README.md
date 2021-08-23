@@ -18,9 +18,9 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 - new switch '--locale' - to explicitly specify locale to use (and ignore environment variables LC_ALL, LC_CTYPE and LANG)
 
 ## Pre-built executables:
-- [`sed-4.8-x64.exe`](/sed-4.8-x64.exe) - sed 4.8 built for windows7 x64
-- [`sed-4.8-x86.exe`](/sed-4.8-x86.exe) - sed 4.8 built for windows7 x86
-- [`sed-4.8-xp.exe`](/sed-4.8-xp.exe)   - sed 4.8 built for windowsXP x86 (does not support .UTF-8 locale)
+- [`sed-4.8-x64.exe`](/sed-4.8-x64.exe) - sed 4.8 built for windows7 x64 (sha1sum: 92ae48678f993e5391c41da7a1e7ae44ef9ce0a9)
+- [`sed-4.8-x86.exe`](/sed-4.8-x86.exe) - sed 4.8 built for windows7 x86 (sha1sum: 47fd7cf06681fe68789ac3e45e6b8aa764200894)
+- [`sed-4.8-xp.exe`](/sed-4.8-xp.exe)   - sed 4.8 built for windowsXP x86 (does not support .UTF-8 locale) (sha1sum: 29b452f63e846e247fbed9ba46757ee47ca1397f)
 
 ## Instructions how to create the build patch
 - [`sed-4.8-build-patch-howto.txt`](/sed-4.8-build-patch-howto.txt)
