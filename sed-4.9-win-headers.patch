@@ -1,0 +1,219 @@
+diff -Naur sed-4.9/lib/assert.h sed-4.9-patched/lib/assert.h
+--- sed-4.9/lib/assert.h	2022-11-26 16:04:02.099843400 +0300
++++ sed-4.9-patched/lib/assert.h	2022-11-26 18:59:48.162730800 +0300
+@@ -23,7 +23,7 @@
+ #endif
+ 
+ 
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\assert.h"
+ 
+ /* The definition of static_assert is copied here.  */
+ /* Compile-time assert-like macros.
+diff -Naur sed-4.9/lib/ctype.h sed-4.9-patched/lib/ctype.h
+--- sed-4.9/lib/ctype.h	2022-11-26 16:04:02.271711100 +0300
++++ sed-4.9-patched/lib/ctype.h	2022-11-26 18:59:48.162730800 +0300
+@@ -32,7 +32,7 @@
+ 
+ /* Include the original <ctype.h>.  */
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\ctype.h"
+ 
+ #ifndef _GL_CTYPE_H
+ #define _GL_CTYPE_H
+diff -Naur sed-4.9/lib/errno.h sed-4.9-patched/lib/errno.h
+--- sed-4.9/lib/errno.h	2022-11-26 16:04:02.427972500 +0300
++++ sed-4.9-patched/lib/errno.h	2022-11-26 18:59:48.162730800 +0300
+@@ -24,7 +24,7 @@
+ 
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\errno.h"
+ 
+ #ifndef _GL_ERRNO_H
+ #define _GL_ERRNO_H
+diff -Naur sed-4.9/lib/fcntl.h sed-4.9-patched/lib/fcntl.h
+--- sed-4.9/lib/fcntl.h	2022-11-26 16:04:02.584226700 +0300
++++ sed-4.9-patched/lib/fcntl.h	2022-11-26 19:00:33.709244500 +0300
+@@ -38,7 +38,7 @@
+ #if !(defined __GLIBC__ || defined __UCLIBC__) || (defined __cplusplus && defined GNULIB_NAMESPACE && (defined __ICC || !(__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))))
+ # include <sys/stat.h>
+ #endif
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\fcntl.h"
+ 
+ /* Native Windows platforms declare open(), creat() in <io.h>.  */
+ #if (0 || 1 || defined GNULIB_POSIXCHECK) \
+@@ -64,7 +64,7 @@
+ # include <sys/stat.h>
+ #endif
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\fcntl.h"
+ 
+ /* Native Windows platforms declare open(), creat() in <io.h>.  */
+ #if (0 || 1 || defined GNULIB_POSIXCHECK) \
+diff -Naur sed-4.9/lib/limits.h sed-4.9-patched/lib/limits.h
+--- sed-4.9/lib/limits.h	2022-11-26 16:04:03.521717900 +0300
++++ sed-4.9-patched/lib/limits.h	2022-11-26 18:59:48.178388300 +0300
+@@ -38,7 +38,7 @@
+ # define _GL_ALREADY_INCLUDING_LIMITS_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-# include ""
++# include "X:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.34.31933\include\limits.h"
+ 
+ # undef _GL_ALREADY_INCLUDING_LIMITS_H
+ 
+diff -Naur sed-4.9/lib/locale.h sed-4.9-patched/lib/locale.h
+--- sed-4.9/lib/locale.h	2022-11-26 16:04:03.693586000 +0300
++++ sed-4.9-patched/lib/locale.h	2022-11-26 18:59:48.178388300 +0300
+@@ -38,7 +38,7 @@
+ #define _GL_ALREADY_INCLUDING_LOCALE_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\locale.h"
+ 
+ #undef _GL_ALREADY_INCLUDING_LOCALE_H
+ 
+diff -Naur sed-4.9/lib/stddef.h sed-4.9-patched/lib/stddef.h
+--- sed-4.9/lib/stddef.h	2022-11-26 16:04:04.443587600 +0300
++++ sed-4.9-patched/lib/stddef.h	2022-11-26 18:59:48.178388300 +0300
+@@ -76,7 +76,7 @@
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+ 
+-#  include ""
++#  include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\stddef.h"
+ 
+ /* On NetBSD 5.0, the definition of NULL lacks proper parentheses.  */
+ #  if (0 \
+diff -Naur sed-4.9/lib/stdint.h sed-4.9-patched/lib/stdint.h
+--- sed-4.9/lib/stdint.h	2022-11-26 16:04:04.631094700 +0300
++++ sed-4.9-patched/lib/stdint.h	2022-11-26 18:59:48.178388300 +0300
+@@ -74,7 +74,7 @@
+      in <inttypes.h> would reinclude us, skipping our contents because
+      _GL_STDINT_H is defined.
+      The include_next requires a split double-inclusion guard.  */
+-# include ""
++# include "X:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.34.31933\include\stdint.h"
+ #endif
+ 
+ #if ! defined _GL_STDINT_H && ! defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H
+diff -Naur sed-4.9/lib/stdio.h sed-4.9-patched/lib/stdio.h
+--- sed-4.9/lib/stdio.h	2022-11-26 16:04:04.865496000 +0300
++++ sed-4.9-patched/lib/stdio.h	2022-11-26 18:59:48.193914000 +0300
+@@ -40,7 +40,7 @@
+ #define _GL_ALREADY_INCLUDING_STDIO_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\stdio.h"
+ 
+ #undef _GL_ALREADY_INCLUDING_STDIO_H
+ 
+diff -Naur sed-4.9/lib/stdlib.h sed-4.9-patched/lib/stdlib.h
+--- sed-4.9/lib/stdlib.h	2022-11-26 16:04:05.131096900 +0300
++++ sed-4.9-patched/lib/stdlib.h	2022-11-26 18:59:48.193914000 +0300
+@@ -25,7 +25,7 @@
+ /* Special invocation conventions inside some gnulib header files,
+    and inside some glibc header files, respectively.  */
+ 
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\stdlib.h"
+ 
+ #else
+ /* Normal invocation convention.  */
+@@ -33,7 +33,7 @@
+ #ifndef _GL_STDLIB_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\stdlib.h"
+ 
+ #ifndef _GL_STDLIB_H
+ #define _GL_STDLIB_H
+diff -Naur sed-4.9/lib/string.h sed-4.9-patched/lib/string.h
+--- sed-4.9/lib/string.h	2022-11-26 16:04:05.334212700 +0300
++++ sed-4.9-patched/lib/string.h	2022-11-26 18:59:48.193914000 +0300
+@@ -38,7 +38,7 @@
+ #define _GL_ALREADY_INCLUDING_STRING_H
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\string.h"
+ 
+ #undef _GL_ALREADY_INCLUDING_STRING_H
+ 
+diff -Naur sed-4.9/lib/sys/stat.h sed-4.9-patched/lib/sys/stat.h
+--- sed-4.9/lib/sys/stat.h	2022-11-26 16:04:05.677960300 +0300
++++ sed-4.9-patched/lib/sys/stat.h	2022-11-26 18:59:48.193914000 +0300
+@@ -44,7 +44,7 @@
+ #include <time.h>
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\sys\stat.h"
+ 
+ #ifndef _GL_SYS_STAT_H
+ #define _GL_SYS_STAT_H
+diff -Naur sed-4.9/lib/sys/types.h sed-4.9-patched/lib/sys/types.h
+--- sed-4.9/lib/sys/types.h	2022-11-26 16:04:05.818593000 +0300
++++ sed-4.9-patched/lib/sys/types.h	2022-11-26 18:59:48.209592900 +0300
+@@ -36,7 +36,7 @@
+ 
+ /* The include_next requires a split double-inclusion guard.  */
+ # define _GL_INCLUDING_SYS_TYPES_H
+-#include ""
++#include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\sys\types.h"
+ # undef _GL_INCLUDING_SYS_TYPES_H
+ 
+ #ifndef _GL_SYS_TYPES_H
+diff -Naur sed-4.9/lib/time.h sed-4.9-patched/lib/time.h
+--- sed-4.9/lib/time.h	2022-11-26 16:04:06.178421100 +0300
++++ sed-4.9-patched/lib/time.h	2022-11-26 18:59:48.209592900 +0300
+@@ -32,7 +32,7 @@
+       && !defined __MINGW32__)                         \
+      || defined _GL_TIME_H)
+ 
+-# include ""
++# include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\time.h"
+ 
+ #else
+ 
+@@ -44,7 +44,7 @@
+ #  include <unistd.h>
+ # endif
+ 
+-# include ""
++# include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\time.h"
+ 
+ /* NetBSD 5.0 mis-defines NULL.  */
+ # include <stddef.h>
+diff -Naur sed-4.9/lib/wchar.h sed-4.9-patched/lib/wchar.h
+--- sed-4.9/lib/wchar.h	2022-11-26 16:04:06.724874000 +0300
++++ sed-4.9-patched/lib/wchar.h	2022-11-26 18:59:48.209592900 +0300
+@@ -77,7 +77,7 @@
+    Some builds of uClibc lack it.  */
+ /* The include_next requires a split double-inclusion guard.  */
+ #if 1
+-# include ""
++# include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\wchar.h"
+ #endif
+ 
+ #undef _GL_ALREADY_INCLUDING_WCHAR_H
+diff -Naur sed-4.9/lib/wctype.h sed-4.9-patched/lib/wctype.h
+--- sed-4.9/lib/wctype.h	2022-11-26 16:04:06.896756900 +0300
++++ sed-4.9-patched/lib/wctype.h	2022-11-26 18:59:48.209592900 +0300
+@@ -63,7 +63,7 @@
+    BeOS 5 has the functions but no <wctype.h>.  */
+ /* The include_next requires a split double-inclusion guard.  */
+ #if 1
+-# include ""
++# include "X:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\wctype.h"
+ #endif
+ 
+ #ifndef _GL_WCTYPE_H

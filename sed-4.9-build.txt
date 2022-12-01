@@ -1,0 +1,26 @@
+How to build native 32/64-bit Gnu sed.exe with Visual Studio 2022 and WDK10 or with Visual Studio 2008
+
+From cygwin or other unix shell:
+
+1) get sed archive:       wget https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz
+2) unpack sed archive:    tar xf sed-4.9.tar.xz
+3) go to sed sources:     cd sed-4.9
+4) run dos prompt:        cmd /c "start cmd.exe"
+5) setup compiler:
+  for 64-bit build:       "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
+  for 32-bit build:       "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86
+  for Visual Studio 2008: "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86
+6) temporary run sh:      sh
+7) copy build patch:
+  for 64-bit build:       cp -v ../sed-4.9-build-VS22-x64.patch ./build.patch
+  for 32-bit build:       cp -v ../sed-4.9-build-VS22-x86.patch ./build.patch
+  for Visual Studio 2008: cp -v ../sed-4.9-build-VS9-x86.patch  ./build.patch
+8) fix build patch - change paths to locations of Visual Studio 2022 and WDK10:
+                          sed -i '/Visual Studio/s@.:.*include@'"$(env | sed -n 's@\\@\\\\@g;/^INCLUDE/s@.*[=;]\([^=;]*\\\\VC\\\\[^=;]*[0-9]\\\\include\).*$@\1@p')"'@' ./build.patch
+                          sed -i '/Windows Kits/s@.:.*ucrt@'"$(env | sed -n 's@\\@\\\\@g;/^INCLUDE/s@.*[=;]\([^=;]*\\\\ucrt\).*$@\1@p')"'@'                             ./build.patch
+  --tip: for Visual Studio 2008:
+                          sed -i '/Visual Studio/s@.:.*[iI][nN][cC][lL][uU][dD][eE]@'"$(env | sed -n 's@\\@\\\\@g;/^INCLUDE/s@.*[=;]\([^=;]*\\\\VC\\\\[iI][nN][cC][lL][uU][dD][eE]\).*$@\1@p')"'@' ./build.patch
+9) patch sed:             patch -Np1 -i ./build.patch
+10) exit sh:              exit
+11) do compile:           make.bat
+12) check build result:   sed\sed.exe --version --locale=C

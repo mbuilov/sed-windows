@@ -1,0 +1,2034 @@
+--- sed-4.9-orig/lib/calloc.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/calloc.c	2022-12-01 13:47:01.379303700 +0300
+@@ -35,6 +35,8 @@
+ void *
+ rpl_calloc (size_t n, size_t s)
+ {
++  void *result;
++
+   if (n == 0 || s == 0)
+     n = s = 1;
+ 
+@@ -44,7 +46,7 @@
+       return NULL;
+     }
+ 
+-  void *result = calloc (n, s);
++  result = calloc (n, s);
+ 
+ #if !HAVE_MALLOC_POSIX
+   if (result == NULL)
+--- sed-4.9-orig/lib/canonicalize-lgpl.c	2022-11-06 22:05:32.000000000 +0300
++++ sed-4.9-patched/lib/canonicalize-lgpl.c	2022-11-28 11:29:29.914852400 +0300
+@@ -195,6 +195,10 @@
+   char const *start;
+   char const *end;
+   int num_links = 0;
++  char *rname;
++  bool end_in_extra_buffer = false;
++  bool failed = true;
++  idx_t prefix_len;
+ 
+   if (name == NULL)
+     {
+@@ -214,13 +218,11 @@
+       return NULL;
+     }
+ 
+-  char *rname = bufs->rname.data;
+-  bool end_in_extra_buffer = false;
+-  bool failed = true;
++  rname = bufs->rname.data;
+ 
+   /* This is always zero for Posix hosts, but can be 2 for MS-Windows
+      and MS-DOS X:/foo/bar file names.  */
+-  idx_t prefix_len = FILE_SYSTEM_PREFIX_LEN (name);
++  prefix_len = FILE_SYSTEM_PREFIX_LEN (name);
+ 
+   if (!IS_ABSOLUTE_FILE_NAME (name))
+     {
+@@ -255,6 +257,8 @@
+ 
+   for ( ; *start; start = end)
+     {
++      idx_t startlen;
++
+       /* Skip sequence of multiple file name separators.  */
+       while (ISSLASH (*start))
+         ++start;
+@@ -265,7 +269,7 @@
+ 
+       /* Length of this file name component; it can be zero if a file
+          name ends in '/'.  */
+-      idx_t startlen = end - start;
++      startlen = end - start;
+ 
+       if (startlen == 0)
+         break;
+@@ -284,6 +288,9 @@
+         }
+       else
+         {
++          char *buf;
++          ssize_t n;
++
+           if (!ISSLASH (dest[-1]))
+             *dest++ = '/';
+ 
+@@ -300,12 +307,10 @@
+           dest = __mempcpy (dest, start, startlen);
+           *dest = '\0';
+ 
+-          char *buf;
+-          ssize_t n;
+           while (true)
+             {
+-              buf = bufs->link.data;
+               idx_t bufsize = bufs->link.length;
++              buf = bufs->link.data;
+               n = __readlink (rname, buf, bufsize - 1);
+               if (n < bufsize - 1)
+                 break;
+@@ -314,6 +319,10 @@
+             }
+           if (0 <= n)
+             {
++              char *extra_buf;
++              idx_t end_idx IF_LINT (= 0);
++              size_t len;
++
+               if (++num_links > __eloop_threshold ())
+                 {
+                   __set_errno (ELOOP);
+@@ -322,11 +331,10 @@
+ 
+               buf[n] = '\0';
+ 
+-              char *extra_buf = bufs->extra.data;
+-              idx_t end_idx IF_LINT (= 0);
++              extra_buf = bufs->extra.data;
+               if (end_in_extra_buffer)
+                 end_idx = end - extra_buf;
+-              size_t len = strlen (end);
++              len = strlen (end);
+               if (INT_ADD_OVERFLOW (len, n))
+                 {
+                   __set_errno (ENOMEM);
+@@ -429,10 +437,11 @@
+ __realpath (const char *name, char *resolved)
+ {
+   struct realpath_bufs bufs;
++  char *result;
+   scratch_buffer_init (&bufs.rname);
+   scratch_buffer_init (&bufs.extra);
+   scratch_buffer_init (&bufs.link);
+-  char *result = realpath_stk (name, resolved, &bufs);
++  result = realpath_stk (name, resolved, &bufs);
+   scratch_buffer_free (&bufs.link);
+   scratch_buffer_free (&bufs.extra);
+   scratch_buffer_free (&bufs.rname);
+--- sed-4.9-orig/lib/dfa.c	2022-10-09 17:42:16.000000000 +0300
++++ sed-4.9-patched/lib/dfa.c	2022-12-01 13:53:56.664056600 +0300
+@@ -762,14 +762,16 @@
+ static void
+ fillset (charclass *s)
+ {
+-  for (int i = 0; i < CHARCLASS_WORDS; i++)
++  int i;
++  for (i = 0; i < CHARCLASS_WORDS; i++)
+     s->w[i] = CHARCLASS_WORD_MASK;
+ }
+ 
+ static void
+ notset (charclass *s)
+ {
+-  for (int i = 0; i < CHARCLASS_WORDS; ++i)
++  int i;
++  for (i = 0; i < CHARCLASS_WORDS; ++i)
+     s->w[i] = CHARCLASS_WORD_MASK & ~s->w[i];
+ }
+ 
+@@ -777,7 +779,8 @@
+ equal (charclass const *s1, charclass const *s2)
+ {
+   charclass_word w = 0;
+-  for (int i = 0; i < CHARCLASS_WORDS; i++)
++  int i;
++  for (i = 0; i < CHARCLASS_WORDS; i++)
+     w |= s1->w[i] ^ s2->w[i];
+   return w == 0;
+ }
+@@ -786,7 +789,8 @@
+ emptyset (charclass const *s)
+ {
+   charclass_word w = 0;
+-  for (int i = 0; i < CHARCLASS_WORDS; i++)
++  int i;
++  for (i = 0; i < CHARCLASS_WORDS; i++)
+     w |= s->w[i];
+   return w == 0;
+ }
+@@ -863,7 +867,8 @@
+ setbit_case_fold_c (int b, charclass *c)
+ {
+   int ub = toupper (b);
+-  for (int i = 0; i < NOTCHAR; i++)
++  int i;
++  for (i = 0; i < NOTCHAR; i++)
+     if (toupper (i) == ub)
+       setbit (i, c);
+ }
+@@ -927,7 +932,8 @@
+ static const struct dfa_ctype *_GL_ATTRIBUTE_PURE
+ find_pred (const char *str)
+ {
+-  for (int i = 0; prednames[i].name; i++)
++  int i;
++  for (i = 0; prednames[i].name; i++)
+     if (str_eq (str, prednames[i].name))
+       return &prednames[i];
+   return NULL;
+@@ -947,21 +953,21 @@
+      Bit 1 = last character is a colon.
+      Bit 2 = includes any other character but a colon.
+      Bit 3 = includes ranges, char/equiv classes or collation elements.  */
+-  int colon_warning_state;
++  int colon_warning_state, c, c1;
++  bool invert;
++  wint_t wc, wc1;
+ 
+-  dfa->lex.brack.nchars = 0;
+   charclass ccl;
++  dfa->lex.brack.nchars = 0;
+   zeroset (&ccl);
+-  int c = bracket_fetch_wc (dfa);
+-  bool invert = c == '^';
++  c = bracket_fetch_wc (dfa);
++  invert = c == '^';
+   if (invert)
+     {
+       c = bracket_fetch_wc (dfa);
+       known_bracket_exp = dfa->localeinfo.simple;
+     }
+-  wint_t wc = dfa->lex.wctok;
+-  int c1;
+-  wint_t wc1;
++  wc = dfa->lex.wctok;
+   colon_warning_state = (c == ':');
+   do
+     {
+@@ -1016,10 +1022,12 @@
+ 
+                   if (dfa->localeinfo.multibyte && !pred->single_byte_only)
+                     known_bracket_exp = false;
+-                  else
+-                    for (int c2 = 0; c2 < NOTCHAR; ++c2)
++                  else {
++                    int c2;
++                    for (c2 = 0; c2 < NOTCHAR; ++c2)
+                       if (pred->func (c2))
+                         setbit (c2, &ccl);
++                  }
+                 }
+               else
+                 known_bracket_exp = false;
+@@ -1090,7 +1098,8 @@
+                   if (dfa->localeinfo.simple
+                       || (c_isdigit (c) & c_isdigit (c2)))
+                     {
+-                      for (int ci = c; ci <= c2; ci++)
++                      int ci;
++                      for (ci = c; ci <= c2; ci++)
+                         if (dfa->syntax.case_fold && isalpha (ci))
+                           setbit_case_fold_c (ci, &ccl);
+                         else
+@@ -1123,8 +1132,9 @@
+           int n = (dfa->syntax.case_fold
+                    ? case_folded_counterparts (wc, folded + 1) + 1
+                    : 1);
++          int i;
+           folded[0] = wc;
+-          for (int i = 0; i < n; i++)
++          for (i = 0; i < n; i++)
+             if (!setbit_wc (folded[i], &ccl))
+               {
+                 dfa->lex.brack.chars
+@@ -1194,11 +1204,13 @@
+      On the plus side, this avoids having a duplicate of the
+      main switch inside the backslash case.  On the minus side,
+      it means that just about every case tests the backslash flag.  */
+-  for (int i = 0; i < 2; ++i)
++  int i;
++  for (i = 0; i < 2; ++i)
+     {
++      int c;
+       if (! dfa->lex.left)
+         return dfa->lex.lasttok = END;
+-      int c = fetch_wc (dfa);
++      c = fetch_wc (dfa);
+ 
+       switch (c)
+         {
+@@ -1361,6 +1373,7 @@
+           {
+             char const *p = dfa->lex.ptr;
+             char const *lim = p + dfa->lex.left;
++            bool invalid_content;
+             dfa->lex.minrep = dfa->lex.maxrep = -1;
+             for (; p != lim && c_isdigit (*p); p++)
+               dfa->lex.minrep = (dfa->lex.minrep < 0
+@@ -1383,7 +1396,7 @@
+                                   dfa->lex.maxrep * 10 + *p - '0'));
+                   }
+               }
+-            bool invalid_content
++            invalid_content
+               = ! ((! backslash || (p != lim && *p++ == '\\'))
+                    && p != lim && *p++ == '}'
+                    && 0 <= dfa->lex.minrep
+@@ -1453,10 +1466,12 @@
+                 clrbit ('\n', &ccl);
+               if (dfa->syntax.syntax_bits & RE_DOT_NOT_NULL)
+                 clrbit ('\0', &ccl);
+-              if (dfa->localeinfo.multibyte)
+-                for (int c2 = 0; c2 < NOTCHAR; c2++)
++              if (dfa->localeinfo.multibyte) {
++                int c2;
++                for (c2 = 0; c2 < NOTCHAR; c2++)
+                   if (dfa->localeinfo.sbctowc[c2] == WEOF)
+                     clrbit (c2, &ccl);
++              }
+               dfa->canychar = charclass_index (dfa, &ccl);
+             }
+           dfa->lex.laststart = false;
+@@ -1473,9 +1488,10 @@
+ 
+           if (!dfa->localeinfo.multibyte)
+             {
++              int c2;
+               charclass ccl;
+               zeroset (&ccl);
+-              for (int c2 = 0; c2 < NOTCHAR; ++c2)
++              for (c2 = 0; c2 < NOTCHAR; ++c2)
+                 if (isspace (c2))
+                   setbit (c2, &ccl);
+               if (c == 'S')
+@@ -1509,9 +1525,10 @@
+ 
+           if (!dfa->localeinfo.multibyte)
+             {
++              int c2;
+               charclass ccl;
+               zeroset (&ccl);
+-              for (int c2 = 0; c2 < NOTCHAR; ++c2)
++              for (c2 = 0; c2 < NOTCHAR; ++c2)
+                 if (dfa->syntax.sbit[c2] == CTX_LETTER)
+                   setbit (c2, &ccl);
+               if (c == 'W')
+@@ -1557,6 +1574,9 @@
+                 msg = _("stray \\ before white space");
+               else
+                 {
++#ifdef _WIN32
++#define snprintf _snprintf
++#endif
+                   int n = snprintf (msgbuf, sizeof msgbuf,
+                                     _("stray \\ before %lc"), dfa->lex.wctok);
+                   msg = 0 <= n && n < sizeof msgbuf ? msgbuf : _("stray \\");
+@@ -1657,7 +1677,8 @@
+ 
+       /* Extract wide characters into alternations for better performance.
+          This does not require UTF-8.  */
+-      for (idx_t i = 0; i < dfa->lex.brack.nchars; i++)
++      idx_t i;
++      for (i = 0; i < dfa->lex.brack.nchars; i++)
+         {
+           addtok_wc (dfa, dfa->lex.brack.chars[i]);
+           if (need_or)
+@@ -1693,7 +1714,7 @@
+   unsigned char buf[MB_LEN_MAX];
+   mbstate_t s = { 0 };
+   size_t stored_bytes = wcrtomb ((char *) buf, wc, &s);
+-  int buflen;
++  int buflen, i;
+ 
+   if (stored_bytes != (size_t) -1)
+     buflen = stored_bytes;
+@@ -1706,7 +1727,7 @@
+     }
+ 
+   addtok_mb (dfa, buf[0], buflen == 1 ? 3 : 1);
+-  for (int i = 1; i < buflen; i++)
++  for (i = 1; i < buflen; i++)
+     {
+       addtok_mb (dfa, buf[i], i == buflen - 1 ? 2 : 0);
+       addtok (dfa, CAT);
+@@ -1782,6 +1803,7 @@
+   /* Define the character classes that are needed below.  */
+   if (dfa->utf8_anychar_classes[0] == 0)
+     {
++      int i;
+       charclass c = utf8_classes[0];
+       if (! (dfa->syntax.syntax_bits & RE_DOT_NEWLINE))
+         clrbit ('\n', &c);
+@@ -1789,7 +1811,7 @@
+         clrbit ('\0', &c);
+       dfa->utf8_anychar_classes[0] = CSET + charclass_index (dfa, &c);
+ 
+-      for (int i = 1; i < sizeof utf8_classes / sizeof *utf8_classes; i++)
++      for (i = 1; i < sizeof utf8_classes / sizeof *utf8_classes; i++)
+         dfa->utf8_anychar_classes[i]
+           = CSET + charclass_index (dfa, &utf8_classes[i]);
+     }
+@@ -1818,12 +1840,15 @@
+   addtok (dfa, CAT);
+   addtok (dfa, OR);
+   addtok (dfa, dfa->utf8_anychar_classes[K]);
+-  for (int i = 0; i < 3; i++)
++  {
++    int i;
++    for (i = 0; i < 3; i++)
+     {
+       addtok (dfa, dfa->utf8_anychar_classes[C]);
+       addtok (dfa, CAT);
+       addtok (dfa, OR);
+     }
++  }
+ }
+ 
+ /* The grammar understood by the parser is as follows.
+@@ -1898,8 +1923,8 @@
+           if (dfa->syntax.case_fold)
+             {
+               wchar_t folded[CASE_FOLDED_BUFSIZE];
+-              int n = case_folded_counterparts (dfa->lex.wctok, folded);
+-              for (int i = 0; i < n; i++)
++              int i, n = case_folded_counterparts (dfa->lex.wctok, folded);
++              for (i = 0; i < n; i++)
+                 {
+                   addtok_wc (dfa, folded[i]);
+                   addtok (dfa, OR);
+@@ -1946,12 +1971,13 @@
+ static void
+ copytoks (struct dfa *dfa, idx_t tindex, idx_t ntokens)
+ {
++  idx_t i;
+   if (dfa->localeinfo.multibyte)
+-    for (idx_t i = 0; i < ntokens; i++)
++    for (i = 0; i < ntokens; i++)
+       addtok_mb (dfa, dfa->tokens[tindex + i],
+                  dfa->multibyte_prop[tindex + i]);
+   else
+-    for (idx_t i = 0; i < ntokens; i++)
++    for (i = 0; i < ntokens; i++)
+       addtok_mb (dfa, dfa->tokens[tindex + i], 3);
+ }
+ 
+@@ -1963,13 +1989,13 @@
+          || dfa->parse.tok == PLUS || dfa->parse.tok == REPMN)
+     if (dfa->parse.tok == REPMN && (dfa->lex.minrep || dfa->lex.maxrep))
+       {
++        int i;
+         idx_t ntokens = nsubtoks (dfa, dfa->tindex);
+         idx_t tindex = dfa->tindex - ntokens;
+         if (dfa->lex.maxrep < 0)
+           addtok (dfa, PLUS);
+         if (dfa->lex.minrep == 0)
+           addtok (dfa, QMARK);
+-        int i;
+         for (i = 1; i < dfa->lex.minrep; i++)
+           {
+             copytoks (dfa, tindex, ntokens);
+@@ -2086,7 +2112,7 @@
+ insert (position p, position_set *s)
+ {
+   idx_t count = s->nelem;
+-  idx_t lo = 0, hi = count;
++  idx_t lo = 0, hi = count, i;
+   while (lo < hi)
+     {
+       idx_t mid = (lo + hi) >> 1;
+@@ -2102,7 +2128,7 @@
+     }
+ 
+   s->elems = maybe_realloc (s->elems, count, &s->alloc, -1, sizeof *s->elems);
+-  for (idx_t i = count; i > lo; i--)
++  for (i = count; i > lo; i--)
+     s->elems[i] = s->elems[i - 1];
+   s->elems[lo] = p;
+   ++s->nelem;
+@@ -2169,7 +2195,8 @@
+ {
+   if (src->nelem < 4)
+     {
+-      for (idx_t i = 0; i < src->nelem; i++)
++      idx_t i;
++      for (i = 0; i < src->nelem; i++)
+         insert (src->elems[i], dst);
+     }
+    else
+@@ -2228,7 +2255,7 @@
+ {
+   size_t hash = 0;
+   int constraint = 0;
+-  state_num i;
++  state_num i, j;
+ 
+   for (i = 0; i < s->nelem; ++i)
+     {
+@@ -2242,7 +2269,6 @@
+       if (hash != d->states[i].hash || s->nelem != d->states[i].elems.nelem
+           || context != d->states[i].context)
+         continue;
+-      state_num j;
+       for (j = 0; j < s->nelem; ++j)
+         if (s->elems[j].constraint != d->states[i].elems.elems[j].constraint
+             || s->elems[j].index != d->states[i].elems.elems[j].index)
+@@ -2253,7 +2279,7 @@
+ 
+ #ifdef DEBUG
+   fprintf (stderr, "new state %td\n nextpos:", i);
+-  for (state_num j = 0; j < s->nelem; j++)
++  for (j = 0; j < s->nelem; j++)
+     {
+       fprintf (stderr, " %td:", s->elems[j].index);
+       prtok (d->tokens[s->elems[j].index]);
+@@ -2273,7 +2299,7 @@
+   fprintf (stderr, "\n");
+ #endif
+ 
+-  for (state_num j = 0; j < s->nelem; j++)
++  for (j = 0; j < s->nelem; j++)
+     {
+       int c = d->constraints[s->elems[j].index];
+ 
+@@ -2313,9 +2339,10 @@
+ static void
+ epsclosure (struct dfa const *d, position_set *backward)
+ {
++  idx_t i, j;
+   position_set tmp;
+   alloc_position_set (&tmp, d->nleaves);
+-  for (idx_t i = 0; i < d->tindex; i++)
++  for (i = 0; i < d->tindex; i++)
+     if (0 < d->follows[i].nelem)
+       {
+         unsigned int constraint;
+@@ -2349,10 +2376,10 @@
+ 
+         delete (i, &d->follows[i]);
+ 
+-        for (idx_t j = 0; j < backward[i].nelem; j++)
++        for (j = 0; j < backward[i].nelem; j++)
+           replace (&d->follows[backward[i].elems[j].index], i, &d->follows[i],
+                    constraint, &tmp);
+-        for (idx_t j = 0; j < d->follows[i].nelem; j++)
++        for (j = 0; j < d->follows[i].nelem; j++)
+           replace (&backward[d->follows[i].elems[j].index], i, &backward[i],
+                    NO_CONSTRAINT, &tmp);
+       }
+@@ -2365,9 +2392,9 @@
+ static int
+ charclass_context (struct dfa const *dfa, charclass const *c)
+ {
+-  int context = 0;
++  int context = 0, j;
+ 
+-  for (int j = 0; j < CHARCLASS_WORDS; j++)
++  for (j = 0; j < CHARCLASS_WORDS; j++)
+     {
+       if (c->w[j] & dfa->syntax.newline.w[j])
+         context |= CTX_NEWLINE;
+@@ -2390,8 +2417,9 @@
+ state_separate_contexts (struct dfa *d, position_set const *s)
+ {
+   int separate_contexts = 0;
++  idx_t j;
+ 
+-  for (idx_t j = 0; j < s->nelem; j++)
++  for (j = 0; j < s->nelem; j++)
+     separate_contexts |= d->separates[s->elems[j].index];
+ 
+   return separate_contexts;
+@@ -2422,9 +2450,9 @@
+                  position_set *merged)
+ {
+   position_set *follows = d->follows;
+-  idx_t nelem = 0;
++  idx_t nelem = 0, i;
+ 
+-  for (idx_t i = 0; i < follows[tindex].nelem; i++)
++  for (i = 0; i < follows[tindex].nelem; i++)
+     {
+       idx_t sindex = follows[tindex].elems[i].index;
+ 
+@@ -2491,12 +2519,13 @@
+ static void
+ reorder_tokens (struct dfa *d)
+ {
+-  idx_t nleaves = 0;
++  idx_t nleaves = 0, i, j;
+   ptrdiff_t *map = xnmalloc (d->tindex, sizeof *map);
+   map[0] = nleaves++;
+-  for (idx_t i = 1; i < d->tindex; i++)
++  for (i = 1; i < d->tindex; i++)
+     map[i] = -1;
+ 
++  {
+   token *tokens = xnmalloc (d->nleaves, sizeof *tokens);
+   position_set *follows = xnmalloc (d->nleaves, sizeof *follows);
+   int *constraints = xnmalloc (d->nleaves, sizeof *constraints);
+@@ -2504,7 +2533,7 @@
+                           ? xnmalloc (d->nleaves, sizeof *multibyte_prop)
+                           : NULL);
+ 
+-  for (idx_t i = 0; i < d->tindex; i++)
++  for (i = 0; i < d->tindex; i++)
+     {
+       if (map[i] < 0)
+         {
+@@ -2521,7 +2550,7 @@
+       if (multibyte_prop != NULL)
+         multibyte_prop[map[i]] = d->multibyte_prop[i];
+ 
+-      for (idx_t j = 0; j < d->follows[i].nelem; j++)
++      for (j = 0; j < d->follows[i].nelem; j++)
+         {
+           if (map[d->follows[i].elems[j].index] == -1)
+             map[d->follows[i].elems[j].index] = nleaves++;
+@@ -2533,7 +2562,7 @@
+              sizeof *d->follows[i].elems, compare);
+     }
+ 
+-  for (idx_t i = 0; i < nleaves; i++)
++  for (i = 0; i < nleaves; i++)
+     {
+       d->tokens[i] = tokens[i];
+       d->follows[i] = follows[i];
+@@ -2549,6 +2578,7 @@
+   free (follows);
+   free (constraints);
+   free (multibyte_prop);
++  }
+   free (map);
+ }
+ 
+@@ -2556,10 +2586,11 @@
+ dfaoptimize (struct dfa *d)
+ {
+   char *flags = xizalloc (d->tindex);
++  idx_t i, j;
+ 
+-  for (idx_t i = 0; i < d->tindex; i++)
++  for (i = 0; i < d->tindex; i++)
+     {
+-      for (idx_t j = 0; j < d->follows[i].nelem; j++)
++      for (j = 0; j < d->follows[i].nelem; j++)
+         {
+           if (d->follows[i].elems[j].index == i)
+             flags[d->follows[i].elems[j].index] |= OPT_REPEAT;
+@@ -2574,19 +2605,21 @@
+ 
+   flags[0] |= OPT_QUEUED;
+ 
++  {
+   position_set merged0;
+   position_set *merged = &merged0;
+   alloc_position_set (merged, d->nleaves);
+ 
+   d->constraints = xicalloc (d->tindex, sizeof *d->constraints);
+ 
+-  for (idx_t i = 0; i < d->tindex; i++)
++  for (i = 0; i < d->tindex; i++)
+     if (flags[i] & OPT_QUEUED)
+       merge_nfa_state (d, i, flags, merged);
+ 
+   reorder_tokens (d);
+ 
+   free (merged->elems);
++  }
+   free (flags);
+ }
+ 
+@@ -2665,13 +2698,15 @@
+   } *stkalloc = xnmalloc (d->depth, sizeof *stkalloc), *stk = stkalloc;
+ 
+   position_set merged;          /* Result of merging sets.  */
++  idx_t tindex, i, j;
++  position_set *backward;
+ 
+   addtok (d, CAT);
+-  idx_t tindex = d->tindex;
++  tindex = d->tindex;
+ 
+ #ifdef DEBUG
+   fprintf (stderr, "dfaanalyze:\n");
+-  for (idx_t i = 0; i < tindex; i++)
++  for (i = 0; i < tindex; i++)
+     {
+       fprintf (stderr, " %td:", i);
+       prtok (d->tokens[i]);
+@@ -2682,10 +2717,10 @@
+   d->searchflag = searchflag;
+   alloc_position_set (&merged, d->nleaves);
+   d->follows = xicalloc (tindex, sizeof *d->follows);
+-  position_set *backward
++  backward
+     = d->epsilon ? xicalloc (tindex, sizeof *backward) : NULL;
+ 
+-  for (idx_t i = 0; i < tindex; i++)
++  for (i = 0; i < tindex; i++)
+     {
+       switch (d->tokens[i])
+         {
+@@ -2704,9 +2739,10 @@
+              set of every element in the firstpos.  */
+           if (d->epsilon)
+             {
++              position *p;
+               tmp.elems = lastpos - stk[-1].nlastpos;
+               tmp.nelem = stk[-1].nlastpos;
+-              for (position *p = firstpos - stk[-1].nfirstpos;
++              for (p = firstpos - stk[-1].nfirstpos;
+                    p < firstpos; p++)
+                 merge2 (&backward[p->index], &tmp, &merged);
+             }
+@@ -2714,9 +2750,10 @@
+           /* Every element in the firstpos of the argument is in the follow
+              of every element in the lastpos.  */
+           {
++            position *p;
+             tmp.elems = firstpos - stk[-1].nfirstpos;
+             tmp.nelem = stk[-1].nfirstpos;
+-            for (position *p = lastpos - stk[-1].nlastpos; p < lastpos; p++)
++            for (p = lastpos - stk[-1].nlastpos; p < lastpos; p++)
+               merge2 (&d->follows[p->index], &tmp, &merged);
+           }
+           FALLTHROUGH;
+@@ -2732,9 +2769,10 @@
+              second argument.  */
+           if (backward)
+             {
++              position *p;
+               tmp.nelem = stk[-2].nlastpos;
+               tmp.elems = lastpos - stk[-1].nlastpos - stk[-2].nlastpos;
+-              for (position *p = firstpos - stk[-1].nfirstpos;
++              for (p = firstpos - stk[-1].nfirstpos;
+                    p < firstpos; p++)
+                 merge2 (&backward[p->index], &tmp, &merged);
+             }
+@@ -2742,10 +2780,11 @@
+           /* Every element in the firstpos of the second argument is in the
+              follow of every element in the lastpos of the first argument.  */
+           {
++            position *plim, *p;
+             tmp.nelem = stk[-1].nfirstpos;
+             tmp.elems = firstpos - stk[-1].nfirstpos;
+-            for (position *plim = lastpos - stk[-1].nlastpos,
+-                   *p = plim - stk[-2].nlastpos;
++            for (plim = lastpos - stk[-1].nlastpos,
++                   p = plim - stk[-2].nlastpos;
+                  p < plim; p++)
+               merge2 (&d->follows[p->index], &tmp, &merged);
+           }
+@@ -2764,7 +2803,7 @@
+           else
+             {
+               position *p = lastpos - stk[-1].nlastpos - stk[-2].nlastpos;
+-              for (idx_t j = 0; j < stk[-1].nlastpos; j++)
++              for (j = 0; j < stk[-1].nlastpos; j++)
+                 p[j] = p[j + stk[-2].nlastpos];
+               lastpos -= stk[-2].nlastpos;
+               stk[-2].nlastpos = stk[-1].nlastpos;
+@@ -2813,13 +2852,13 @@
+       fprintf (stderr,
+                stk[-1].nullable ? " nullable: yes\n" : " nullable: no\n");
+       fprintf (stderr, " firstpos:");
+-      for (idx_t j = 0; j < stk[-1].nfirstpos; j++)
++      for (j = 0; j < stk[-1].nfirstpos; j++)
+         {
+           fprintf (stderr, " %td:", firstpos[j - stk[-1].nfirstpos].index);
+           prtok (d->tokens[firstpos[j - stk[-1].nfirstpos].index]);
+         }
+       fprintf (stderr, "\n lastpos:");
+-      for (idx_t j = 0; j < stk[-1].nlastpos; j++)
++      for (j = 0; j < stk[-1].nlastpos; j++)
+         {
+           fprintf (stderr, " %td:", lastpos[j - stk[-1].nlastpos].index);
+           prtok (d->tokens[lastpos[j - stk[-1].nlastpos].index]);
+@@ -2834,7 +2873,7 @@
+          replace it with its epsilon closure.  */
+       epsclosure (d, backward);
+ 
+-      for (idx_t i = 0; i < tindex; i++)
++      for (i = 0; i < tindex; i++)
+         free (backward[i].elems);
+       free (backward);
+     }
+@@ -2842,7 +2881,7 @@
+   dfaoptimize (d);
+ 
+ #ifdef DEBUG
+-  for (idx_t i = 0; i < tindex; i++)
++  for (i = 0; i < tindex; i++)
+     if (d->tokens[i] == BEG || d->tokens[i] < NOTCHAR
+         || d->tokens[i] == BACKREF || d->tokens[i] == ANYCHAR
+         || d->tokens[i] == MBCSET || d->tokens[i] >= CSET)
+@@ -2850,7 +2889,7 @@
+         fprintf (stderr, "follows(%td:", i);
+         prtok (d->tokens[i]);
+         fprintf (stderr, "):");
+-        for (idx_t j = 0; j < d->follows[i].nelem; j++)
++        for (j = 0; j < d->follows[i].nelem; j++)
+           {
+             fprintf (stderr, " %td:", d->follows[i].elems[j].index);
+             prtok (d->tokens[d->follows[i].elems[j].index]);
+@@ -2868,14 +2907,14 @@
+ 
+   d->separates = xicalloc (tindex, sizeof *d->separates);
+ 
+-  for (idx_t i = 0; i < tindex; i++)
++  for (i = 0; i < tindex; i++)
+     {
+       if (prev_newline_dependent (d->constraints[i]))
+         d->separates[i] |= CTX_NEWLINE;
+       if (prev_letter_dependent (d->constraints[i]))
+         d->separates[i] |= CTX_LETTER;
+ 
+-      for (idx_t j = 0; j < d->follows[i].nelem; j++)
++      for (j = 0; j < d->follows[i].nelem; j++)
+         {
+           if (prev_newline_dependent (d->follows[i].elems[j].constraint))
+             d->separates[i] |= CTX_NEWLINE;
+@@ -2884,6 +2923,7 @@
+         }
+     }
+ 
++  {
+   /* Context wanted by some position.  */
+   int separate_contexts = state_separate_contexts (d, &tmp);
+ 
+@@ -2896,6 +2936,7 @@
+     d->min_trcount = state_index (d, &tmp, CTX_LETTER);
+   d->min_trcount++;
+   d->trcount = 0;
++  }
+ 
+   free (posalloc);
+   free (stkalloc);
+@@ -2912,11 +2953,12 @@
+     {
+       state_num **realtrans = d->trans ? d->trans - 2 : NULL;
+       idx_t newalloc1 = realtrans ? d->tralloc + 2 : 0;
++      idx_t newalloc;
+       realtrans = xpalloc (realtrans, &newalloc1, d->sindex - oldalloc,
+                            -1, sizeof *realtrans);
+       realtrans[0] = realtrans[1] = NULL;
+       d->trans = realtrans + 2;
+-      idx_t newalloc = d->tralloc = newalloc1 - 2;
++      newalloc = d->tralloc = newalloc1 - 2;
+       d->fails = xreallocarray (d->fails, newalloc, sizeof *d->fails);
+       d->success = xreallocarray (d->success, newalloc, sizeof *d->success);
+       d->newlines = xreallocarray (d->newlines, newalloc, sizeof *d->newlines);
+@@ -2974,6 +3016,7 @@
+ static state_num
+ build_state (state_num s, struct dfa *d, unsigned char uc)
+ {
++  idx_t i, j, k;
+   position_set follows;         /* Union of the follows for each
+                                    position of the current state.  */
+   position_set group;           /* Positions that match the input char.  */
+@@ -2981,6 +3024,7 @@
+   state_num state;              /* New state.  */
+   state_num state_newline;      /* New state on a newline transition.  */
+   state_num state_letter;       /* New state on a letter transition.  */
++  charclass label;
+ 
+ #ifdef DEBUG
+   fprintf (stderr, "build state %td\n", s);
+@@ -2992,17 +3036,19 @@
+ 
+   if (!trans)
+     {
++      int x;
+       /* MAX_TRCOUNT is an arbitrary upper limit on the number of
+          transition tables that can exist at once, other than for
+          initial states.  Often-used transition tables are quickly
+          rebuilt, whereas rarely-used ones are cleared away.  */
+       if (MAX_TRCOUNT <= d->trcount)
+         {
+-          for (state_num i = d->min_trcount; i < d->tralloc; i++)
++          state_num n;
++          for (n = d->min_trcount; n < d->tralloc; n++)
+             {
+-              free (d->trans[i]);
+-              free (d->fails[i]);
+-              d->trans[i] = d->fails[i] = NULL;
++              free (d->trans[n]);
++              free (d->fails[n]);
++              d->trans[n] = d->fails[n] = NULL;
+             }
+           d->trcount = 0;
+         }
+@@ -3012,8 +3058,8 @@
+ 
+       /* Fill transition table with a default value which means that the
+          transited state has not been calculated yet.  */
+-      for (int i = 0; i < NOTCHAR; i++)
+-        trans[i] = -2;
++      for (x = 0; x < NOTCHAR; x++)
++        trans[x] = -2;
+     }
+ 
+   /* Set up the success bits for this state.  */
+@@ -3029,8 +3075,8 @@
+ 
+   /* Find the union of the follows of the positions of the group.
+      This is a hideously inefficient loop.  Fix it someday.  */
+-  for (idx_t j = 0; j < d->states[s].elems.nelem; j++)
+-    for (idx_t k = 0;
++  for (j = 0; j < d->states[s].elems.nelem; j++)
++    for (k = 0;
+          k < d->follows[d->states[s].elems.elems[j].index].nelem; ++k)
+       insert (d->follows[d->states[s].elems.elems[j].index].elems[k],
+               &follows);
+@@ -3039,10 +3085,9 @@
+   alloc_position_set (&group, d->nleaves);
+ 
+   /* The group's label.  */
+-  charclass label;
+   fillset (&label);
+ 
+-  for (idx_t i = 0; i < follows.nelem; i++)
++  for (i = 0; i < follows.nelem; i++)
+     {
+       charclass matches;            /* Set of matching characters.  */
+       position pos = follows.elems[i];
+@@ -3087,18 +3132,19 @@
+          they fail in the current context.  */
+       if (pos.constraint != NO_CONSTRAINT)
+         {
++          int x;
+           if (!succeeds_in_context (pos.constraint,
+                                     d->states[s].context, CTX_NEWLINE))
+-            for (int j = 0; j < CHARCLASS_WORDS; j++)
+-              matches.w[j] &= ~d->syntax.newline.w[j];
++            for (x = 0; x < CHARCLASS_WORDS; x++)
++              matches.w[x] &= ~d->syntax.newline.w[x];
+           if (!succeeds_in_context (pos.constraint,
+                                     d->states[s].context, CTX_LETTER))
+-            for (int j = 0; j < CHARCLASS_WORDS; ++j)
+-              matches.w[j] &= ~d->syntax.letters.w[j];
++            for (x = 0; x < CHARCLASS_WORDS; ++x)
++              matches.w[x] &= ~d->syntax.letters.w[x];
+           if (!succeeds_in_context (pos.constraint,
+                                     d->states[s].context, CTX_NONE))
+-            for (int j = 0; j < CHARCLASS_WORDS; ++j)
+-              matches.w[j] &= d->syntax.letters.w[j] | d->syntax.newline.w[j];
++            for (x = 0; x < CHARCLASS_WORDS; ++x)
++              matches.w[x] &= d->syntax.letters.w[x] | d->syntax.newline.w[x];
+ 
+           /* If there are no characters left, there's no point in going on.  */
+           if (emptyset (&matches))
+@@ -3115,22 +3161,27 @@
+       fprintf (stderr, " nextpos %td:", pos.index);
+       prtok (d->tokens[pos.index]);
+       fprintf (stderr, " of");
+-      for (unsigned j = 0; j < NOTCHAR; j++)
+-        if (tstbit (j, &matches))
+-          fprintf (stderr, " 0x%02x", j);
++      {
++      unsigned x;
++      for (x = 0; x < NOTCHAR; x++)
++        if (tstbit (x, &matches))
++          fprintf (stderr, " 0x%02x", x);
++      }
+       fprintf (stderr, "\n");
+ #endif
+ 
+       if (matched)
+         {
+-          for (int k = 0; k < CHARCLASS_WORDS; ++k)
+-            label.w[k] &= matches.w[k];
++          int x;
++          for (x = 0; x < CHARCLASS_WORDS; ++x)
++            label.w[x] &= matches.w[x];
+           append (pos, &group);
+         }
+       else
+         {
+-          for (int k = 0; k < CHARCLASS_WORDS; ++k)
+-            label.w[k] &= ~matches.w[k];
++          int x;
++          for (x = 0; x < CHARCLASS_WORDS; ++x)
++            label.w[x] &= ~matches.w[x];
+         }
+     }
+ 
+@@ -3138,6 +3189,8 @@
+ 
+   if (group.nelem > 0)
+     {
++      int possible_contexts;
++      int separate_contexts;
+       /* If we are building a searching matcher, throw in the positions
+          of state 0 as well, if possible.  */
+       if (d->searchflag)
+@@ -3163,7 +3216,7 @@
+           if (!mergeit)
+             {
+               mergeit = true;
+-              for (idx_t j = 0; mergeit && j < group.nelem; j++)
++              for (j = 0; mergeit && j < group.nelem; j++)
+                 mergeit &= d->multibyte_prop[group.elems[j].index];
+             }
+           if (mergeit)
+@@ -3173,8 +3226,8 @@
+       /* Find out if the new state will want any context information,
+          by calculating possible contexts that the group can match,
+          and separate contexts that the new state wants to know.  */
+-      int possible_contexts = charclass_context (d, &label);
+-      int separate_contexts = state_separate_contexts (d, &group);
++      possible_contexts = charclass_context (d, &label);
++      separate_contexts = state_separate_contexts (d, &group);
+ 
+       /* Find the state(s) corresponding to the union of the follows.  */
+       if (possible_contexts & ~separate_contexts)
+@@ -3211,29 +3264,35 @@
+     }
+ 
+   /* Set the transitions for each character in the label.  */
+-  for (int i = 0; i < NOTCHAR; i++)
+-    if (tstbit (i, &label))
+-      switch (d->syntax.sbit[i])
++  {
++  int x;
++  for (x = 0; x < NOTCHAR; x++)
++    if (tstbit (x, &label))
++      switch (d->syntax.sbit[x])
+         {
+         case CTX_NEWLINE:
+-          trans[i] = state_newline;
++          trans[x] = state_newline;
+           break;
+         case CTX_LETTER:
+-          trans[i] = state_letter;
++          trans[x] = state_letter;
+           break;
+         default:
+-          trans[i] = state;
++          trans[x] = state;
+           break;
+         }
++  }
+ 
+ #ifdef DEBUG
+   fprintf (stderr, "trans table %td", s);
+-  for (int i = 0; i < NOTCHAR; ++i)
++  {
++  int x;
++  for (int x = 0; x < NOTCHAR; ++x)
+     {
+-      if (!(i & 0xf))
++      if (!(x & 0xf))
+         fprintf (stderr, "\n");
+-      fprintf (stderr, " %2td", trans[i]);
++      fprintf (stderr, " %2td", trans[x]);
+     }
++  }
+   fprintf (stderr, "\n");
+ #endif
+ 
+@@ -3296,13 +3355,14 @@
+ 
+   int mbclen = mbs_to_wchar (&wc, (char const *) *pp, end - *pp, d);
+ 
++  state_num s1 = s;
++  int mbci;
++
+   /* This state has some operators which can match a multibyte character.  */
+   d->mb_follows.nelem = 0;
+ 
+   /* Calculate the state which can be reached from the state 's' by
+      consuming 'mbclen' single bytes from the buffer.  */
+-  state_num s1 = s;
+-  int mbci;
+   for (mbci = 0; mbci < mbclen && (mbci == 0 || d->min_trcount <= s); mbci++)
+     s = transit_state_singlebyte (d, s, pp);
+   *pp += mbclen - mbci;
+@@ -3320,14 +3380,14 @@
+     {
+       if (MAX_TRCOUNT <= d->mb_trcount)
+         {
+-          state_num s3;
++          state_num s3, i;
+           for (s3 = -1; s3 < d->tralloc; s3++)
+             {
+               free (d->mb_trans[s3]);
+               d->mb_trans[s3] = NULL;
+             }
+ 
+-          for (state_num i = 0; i < d->sindex; i++)
++          for (i = 0; i < d->sindex; i++)
+             d->states[i].mb_trindex = -1;
+           d->mb_trcount = 0;
+         }
+@@ -3336,10 +3396,11 @@
+ 
+   if (! d->mb_trans[s])
+     {
++      int i;
+       enum { TRANSPTR_SIZE = sizeof *d->mb_trans[s] };
+       enum { TRANSALLOC_SIZE = MAX_TRCOUNT * TRANSPTR_SIZE };
+       d->mb_trans[s] = xmalloc (TRANSALLOC_SIZE);
+-      for (int i = 0; i < MAX_TRCOUNT; i++)
++      for (i = 0; i < MAX_TRCOUNT; i++)
+         d->mb_trans[s][i] = -1;
+     }
+   else if (d->mb_trans[s][d->states[s1].mb_trindex] >= 0)
+@@ -3350,6 +3411,7 @@
+   else
+     merge (&d->states[s1].mbps, &d->states[s].elems, &d->mb_follows);
+ 
++  {
+   int separate_contexts = state_separate_contexts (d, &d->mb_follows);
+   state_num s2 = state_index (d, &d->mb_follows, separate_contexts ^ CTX_ANY);
+   realloc_trans_if_necessary (d);
+@@ -3357,6 +3419,7 @@
+   d->mb_trans[s][d->states[s1].mb_trindex] = s2;
+ 
+   return s2;
++  }
+ }
+ 
+ /* The initial state may encounter a byte which is not a single byte character
+@@ -3415,7 +3478,8 @@
+ {
+   if (MAX_TRCOUNT <= d->sindex)
+     {
+-      for (state_num s = d->min_trcount; s < d->sindex; s++)
++      state_num s;
++      for (s = d->min_trcount; s < d->sindex; s++)
+         {
+           free (d->states[s].elems.elems);
+           free (d->states[s].mbps.elems);
+@@ -3424,7 +3488,7 @@
+ 
+       if (d->trans)
+         {
+-          for (state_num s = 0; s < d->tralloc; s++)
++          for (s = 0; s < d->tralloc; s++)
+             {
+               free (d->trans[s]);
+               free (d->fails[s]);
+@@ -3435,12 +3499,12 @@
+ 
+       if (d->localeinfo.multibyte && d->mb_trans)
+         {
+-          for (state_num s = -1; s < d->tralloc; s++)
++          for (s = -1; s < d->tralloc; s++)
+             {
+               free (d->mb_trans[s]);
+               d->mb_trans[s] = NULL;
+             }
+-          for (state_num s = 0; s < d->min_trcount; s++)
++          for (s = 0; s < d->min_trcount; s++)
+             d->states[s].mb_trindex = -1;
+           d->mb_trcount = 0;
+         }
+@@ -3449,12 +3513,14 @@
+   if (!d->tralloc)
+     realloc_trans_if_necessary (d);
+ 
++  {
+   /* Current state.  */
+   state_num s = 0, s1 = 0;
+ 
+   /* Current input character.  */
+   unsigned char const *p = (unsigned char const *) begin;
+   unsigned char const *mbp = p;
++  idx_t nlcount = 0;
+ 
+   /* Copy of d->trans so it can be optimized into a register.  */
+   state_num **trans = d->trans;
+@@ -3469,7 +3535,6 @@
+         alloc_position_set (&d->mb_follows, d->nleaves);
+     }
+ 
+-  idx_t nlcount = 0;
+   for (;;)
+     {
+       state_num *t;
+@@ -3587,6 +3652,7 @@
+     *count += nlcount;
+   *end = saved_end;
+   return (char *) p;
++  }
+ }
+ 
+ /* Specialized versions of dfaexec for multibyte and single-byte cases.
+@@ -3659,7 +3725,8 @@
+ bool
+ dfasupported (struct dfa const *d)
+ {
+-  for (idx_t i = 0; i < d->tindex; i++)
++  idx_t i;
++  for (i = 0; i < d->tindex; i++)
+     {
+       switch (d->tokens[i])
+         {
+@@ -3686,8 +3753,10 @@
+   if (!d->localeinfo.using_utf8)
+     return;
+ 
++  {
+   bool have_backref = false;
+-  for (idx_t i = 0; i < d->tindex; i++)
++  idx_t i;
++  for (i = 0; i < d->tindex; i++)
+     {
+       switch (d->tokens[i])
+         {
+@@ -3712,6 +3781,7 @@
+       free (d->superset);
+       d->superset = NULL;
+     }
++  }
+ 
+   free_mbdata (d);
+   d->localeinfo.multibyte = false;
+@@ -3723,6 +3793,9 @@
+ dfassbuild (struct dfa *d)
+ {
+   struct dfa *sup = dfaalloc ();
++  bool have_achar = false;
++  bool have_nchar = false;
++  idx_t i, j;
+ 
+   *sup = *d;
+   sup->localeinfo.multibyte = false;
+@@ -3750,10 +3823,7 @@
+   sup->tokens = xnmalloc (d->tindex, 2 * sizeof *sup->tokens);
+   sup->talloc = d->tindex * 2;
+ 
+-  bool have_achar = false;
+-  bool have_nchar = false;
+-  idx_t j;
+-  for (idx_t i = j = 0; i < d->tindex; i++)
++  for (i = j = 0; i < d->tindex; i++)
+     {
+       switch (d->tokens[i])
+         {
+@@ -3834,6 +3904,7 @@
+ void
+ dfafree (struct dfa *d)
+ {
++  idx_t i;
+   free (d->charclasses);
+   free (d->tokens);
+ 
+@@ -3843,7 +3914,7 @@
+   free (d->constraints);
+   free (d->separates);
+ 
+-  for (idx_t i = 0; i < d->sindex; i++)
++  for (i = 0; i < d->sindex; i++)
+     {
+       free (d->states[i].elems.elems);
+       free (d->states[i].mbps.elems);
+@@ -3852,14 +3923,14 @@
+ 
+   if (d->follows)
+     {
+-      for (idx_t i = 0; i < d->tindex; i++)
++      for (i = 0; i < d->tindex; i++)
+         free (d->follows[i].elems);
+       free (d->follows);
+     }
+ 
+   if (d->trans)
+     {
+-      for (idx_t i = 0; i < d->tralloc; i++)
++      for (i = 0; i < d->tralloc; i++)
+         {
+           free (d->trans[i]);
+           free (d->fails[i]);
+@@ -3966,10 +4037,12 @@
+   idx_t newsize = strlen (new);
+   if (newsize == 0)
+     return old;
++  {
+   idx_t oldsize = strlen (old);
+   char *result = xirealloc (old, oldsize + newsize + 1);
+   memcpy (result + oldsize, new, newsize + 1);
+   return result;
++  }
+ }
+ 
+ static void
+@@ -3983,7 +4056,7 @@
+ enlistnew (char **cpp, char *new)
+ {
+   /* Is there already something in the list that's new (or longer)?  */
+-  idx_t i;
++  idx_t i, j;
+   for (i = 0; cpp[i] != NULL; i++)
+     if (strstr (cpp[i], new) != NULL)
+       {
+@@ -3991,7 +4064,7 @@
+         return cpp;
+       }
+   /* Eliminate any obsoleted strings.  */
+-  for (idx_t j = 0; cpp[j] != NULL; )
++  for (j = 0; cpp[j] != NULL; )
+     if (strstr (new, cpp[j]) == NULL)
+       ++j;
+     else
+@@ -4021,8 +4094,9 @@
+ comsubs (char *left, char const *right)
+ {
+   char **cpp = xzalloc (sizeof *cpp);
++  char *lcp;
+ 
+-  for (char *lcp = left; *lcp != '\0'; lcp++)
++  for (lcp = left; *lcp != '\0'; lcp++)
+     {
+       idx_t len = 0;
+       char *rcp = strchr (right, *lcp);
+@@ -4055,10 +4129,11 @@
+ inboth (char **left, char **right)
+ {
+   char **both = xzalloc (sizeof *both);
++  idx_t lnum, rnum;
+ 
+-  for (idx_t lnum = 0; left[lnum] != NULL; lnum++)
++  for (lnum = 0; left[lnum] != NULL; lnum++)
+     {
+-      for (idx_t rnum = 0; right[rnum] != NULL; rnum++)
++      for (rnum = 0; right[rnum] != NULL; rnum++)
+         {
+           char **temp = comsubs (left[lnum], right[rnum]);
+           both = addlists (both, temp);
+@@ -4128,8 +4203,9 @@
+   bool need_begline = false;
+   bool need_endline = false;
+   bool case_fold_unibyte = d->syntax.case_fold & !d->localeinfo.multibyte;
++  idx_t ri;
+ 
+-  for (idx_t ri = 1; ri + 1 < d->tindex; ri++)
++  for (ri = 1; ri + 1 < d->tindex; ri++)
+     {
+       token t = d->tokens[ri];
+       switch (t)
+@@ -4168,11 +4244,11 @@
+         case OR:
+           {
+             char **new;
+-            must *rmp = mp;
++            idx_t i, j, ln, rn, n;
++            must *rmp = mp, *lmp;
+             assume_nonnull (rmp);
+-            must *lmp = mp = mp->prev;
++            lmp = mp = mp->prev;
+             assume_nonnull (lmp);
+-            idx_t j, ln, rn, n;
+ 
+             /* Guaranteed to be.  Unlikely, but ...  */
+             if (str_eq (lmp->is, rmp->is))
+@@ -4187,7 +4263,7 @@
+                 lmp->endline = false;
+               }
+             /* Left side--easy */
+-            idx_t i = 0;
++            i = 0;
+             while (lmp->left[i] != '\0' && lmp->left[i] == rmp->left[i])
+               ++i;
+             lmp->left[i] = '\0';
+@@ -4216,10 +4292,11 @@
+           mp->is[0] = '\0';
+           break;
+ 
+-        case END:
++        case END: {
++          idx_t i;
+           assume_nonnull (mp);
+           assert (!mp->prev);
+-          for (idx_t i = 0; mp->in[i] != NULL; i++)
++          for (i = 0; mp->in[i] != NULL; i++)
+             if (strlen (mp->in[i]) > strlen (result))
+               result = mp->in[i];
+           if (str_eq (result, mp->is))
+@@ -4231,12 +4308,13 @@
+               endline = mp->endline;
+             }
+           goto done;
++        }
+ 
+         case CAT:
+           {
+-            must *rmp = mp;
++            must *rmp = mp, *lmp;
+             assume_nonnull (rmp);
+-            must *lmp = mp = mp->prev;
++            lmp = mp = mp->prev;
+             assume_nonnull (lmp);
+ 
+             /* In.  Everything in left, plus everything in
+@@ -4310,6 +4388,7 @@
+                 }
+             }
+ 
++          {
+           idx_t rj = ri + 2;
+           if (d->tokens[ri + 1] == CAT)
+             {
+@@ -4325,6 +4404,7 @@
+           mp->is[0] = mp->left[0] = mp->right[0]
+             = case_fold_unibyte ? toupper (t) : t;
+ 
++          {
+           idx_t i;
+           for (i = 1; ri + 2 < rj; i++)
+             {
+@@ -4335,11 +4415,14 @@
+             }
+           mp->is[i] = mp->left[i] = mp->right[i] = '\0';
+           mp->in = enlist (mp->in, mp->is, i);
++          }
++          }
+           break;
+         }
+     }
+  done:;
+ 
++  {
+   struct dfamust *dm = NULL;
+   if (*result)
+     {
+@@ -4358,6 +4441,7 @@
+     }
+ 
+   return dm;
++  }
+ }
+ 
+ void
+@@ -4377,6 +4461,7 @@
+ dfasyntax (struct dfa *dfa, struct localeinfo const *linfo,
+            reg_syntax_t bits, int dfaopts)
+ {
++  int i;
+   memset (dfa, 0, offsetof (struct dfa, dfaexec));
+   dfa->dfaexec = linfo->multibyte ? dfaexec_mb : dfaexec_sb;
+   dfa->localeinfo = *linfo;
+@@ -4390,7 +4475,7 @@
+   dfa->syntax.syntax_bits = bits;
+   dfa->syntax.dfaopts = dfaopts;
+ 
+-  for (int i = CHAR_MIN; i <= CHAR_MAX; ++i)
++  for (i = CHAR_MIN; i <= CHAR_MAX; ++i)
+     {
+       unsigned char uc = i;
+ 
+--- sed-4.9-orig/lib/localeinfo.c	2022-10-09 17:42:28.000000000 +0300
++++ sed-4.9-patched/lib/localeinfo.c	2022-11-30 14:40:42.454861300 +0300
+@@ -49,6 +49,7 @@
+ static bool
+ using_simple_locale (bool multibyte)
+ {
++  int i;
+   /* The native character set is known to be compatible with
+      the C locale.  The following test isn't perfect, but it's good
+      enough in practice, as only ASCII and EBCDIC are in common use
+@@ -74,9 +75,13 @@
+      although it would be invalid for artificially-constructed locales
+      where the native order is the collating-sequence order but there
+      are multi-character collating elements.  */
+-  for (int i = 0; i < UCHAR_MAX; i++)
+-    if (0 <= strcoll (((char []) {i, 0}), ((char []) {i + 1, 0})))
+-      return false;
++  for (i = 0; i < UCHAR_MAX; i++)
++    {
++      const char a[] = {i, 0};
++      const char b[] = {i + 1, 0};
++      if (0 <= strcoll (a, b))
++        return false;
++    }
+ 
+   return true;
+ }
+@@ -86,11 +91,12 @@
+ void
+ init_localeinfo (struct localeinfo *localeinfo)
+ {
++  int i;
+   localeinfo->multibyte = MB_CUR_MAX > 1;
+   localeinfo->simple = using_simple_locale (localeinfo->multibyte);
+   localeinfo->using_utf8 = is_using_utf8 ();
+ 
+-  for (int i = CHAR_MIN; i <= CHAR_MAX; i++)
++  for (i = CHAR_MIN; i <= CHAR_MAX; i++)
+     {
+       char c = i;
+       unsigned char uc = i;
+--- sed-4.9-orig/lib/malloc/dynarray_emplace_enlarge.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/malloc/dynarray_emplace_enlarge.c	2022-11-30 14:41:33.071756400 +0300
+@@ -31,6 +31,8 @@
+                                  void *scratch, size_t element_size)
+ {
+   size_t new_allocated;
++  size_t new_size;
++  void *new_array;
+   if (list->allocated == 0)
+     {
+       /* No scratch buffer provided.  Choose a reasonable default
+@@ -55,10 +57,8 @@
+         }
+     }
+ 
+-  size_t new_size;
+   if (INT_MULTIPLY_WRAPV (new_allocated, element_size, &new_size))
+     return false;
+-  void *new_array;
+   if (list->array == scratch)
+     {
+       /* The previous array was not heap-allocated.  */
+--- sed-4.9-orig/lib/malloc/dynarray_finalize.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/malloc/dynarray_finalize.c	2022-11-30 14:44:11.878839700 +0300
+@@ -29,11 +29,15 @@
+                           void *scratch, size_t element_size,
+                           struct dynarray_finalize_result *result)
+ {
++  size_t used;
++  size_t allocation_size;
++  void *heap_array;
++
+   if (__dynarray_error (list))
+     /* The caller will reported the deferred error.  */
+     return false;
+ 
+-  size_t used = list->used;
++  used = list->used;
+ 
+   /* Empty list.  */
+   if (used == 0)
+@@ -42,12 +46,15 @@
+          array.  Free it if necessary.  */
+       if (list->array != scratch)
+         free (list->array);
+-      *result = (struct dynarray_finalize_result) { NULL, 0 };
++      {
++        const struct dynarray_finalize_result r = { NULL, 0 };
++        *result = r;
++      }
+       return true;
+     }
+ 
+-  size_t allocation_size = used * element_size;
+-  void *heap_array = malloc (allocation_size);
++  allocation_size = used * element_size;
++  heap_array = malloc (allocation_size);
+   if (heap_array != NULL)
+     {
+       /* The new array takes ownership of the strings.  */
+@@ -55,8 +62,10 @@
+         memcpy (heap_array, list->array, allocation_size);
+       if (list->array != scratch)
+         free (list->array);
+-      *result = (struct dynarray_finalize_result)
+-        { .array = heap_array, .length = used };
++      {
++        const struct dynarray_finalize_result r = { heap_array, used };
++        *result = r;
++      }
+       return true;
+     }
+   else
+--- sed-4.9-orig/lib/malloc/dynarray_resize.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/malloc/dynarray_resize.c	2022-11-30 14:44:36.524249300 +0300
+@@ -30,6 +30,9 @@
+ __libc_dynarray_resize (struct dynarray_header *list, size_t size,
+                         void *scratch, size_t element_size)
+ {
++  void *new_array;
++  size_t new_size_bytes;
++
+   /* The existing allocation provides sufficient room.  */
+   if (size <= list->allocated)
+     {
+@@ -41,14 +44,12 @@
+      expected to provide the final size of the array, so there is no
+      over-allocation here.  */
+ 
+-  size_t new_size_bytes;
+   if (INT_MULTIPLY_WRAPV (size, element_size, &new_size_bytes))
+     {
+       /* Overflow.  */
+       __set_errno (ENOMEM);
+       return false;
+     }
+-  void *new_array;
+   if (list->array == scratch)
+     {
+       /* The previous array was not heap-allocated.  */
+--- sed-4.9-orig/lib/malloc/dynarray_resize_clear.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/malloc/dynarray_resize_clear.c	2022-11-30 14:45:03.923816500 +0300
+@@ -27,11 +27,12 @@
+ __libc_dynarray_resize_clear (struct dynarray_header *list, size_t size,
+                               void *scratch, size_t element_size)
+ {
++  char *array;
+   size_t old_size = list->used;
+   if (!__libc_dynarray_resize (list, size, scratch, element_size))
+     return false;
+   /* __libc_dynarray_resize already checked for overflow.  */
+-  char *array = list->array;
++  array = list->array;
+   memset (array + (old_size * element_size), 0,
+           (size - old_size) * element_size);
+   return true;
+--- sed-4.9-orig/lib/malloc/scratch_buffer_set_array_size.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/malloc/scratch_buffer_set_array_size.c	2022-11-30 14:45:33.158488600 +0300
+@@ -28,6 +28,7 @@
+ __libc_scratch_buffer_set_array_size (struct scratch_buffer *buffer,
+ 				      size_t nelem, size_t size)
+ {
++  char *new_ptr;
+   size_t new_length = nelem * size;
+ 
+   /* Avoid overflow check if both values are small. */
+@@ -48,7 +49,7 @@
+   /* Discard old buffer.  */
+   scratch_buffer_free (buffer);
+ 
+-  char *new_ptr = malloc (new_length);
++  new_ptr = malloc (new_length);
+   if (new_ptr == NULL)
+     {
+       /* Buffer must remain valid to free.  */
+--- sed-4.9-orig/lib/malloc.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/malloc.c	2022-12-01 13:47:23.231553600 +0300
+@@ -31,6 +31,8 @@
+ void *
+ rpl_malloc (size_t n)
+ {
++  void *result;
++
+   if (n == 0)
+     n = 1;
+ 
+@@ -40,7 +42,7 @@
+       return NULL;
+     }
+ 
+-  void *result = malloc (n);
++  result = malloc (n);
+ 
+ #if !HAVE_MALLOC_POSIX
+   if (result == NULL)
+--- sed-4.9-orig/lib/malloca.c	2022-10-09 17:42:28.000000000 +0300
++++ sed-4.9-patched/lib/malloca.c	2022-11-30 14:46:20.450193600 +0300
+@@ -60,6 +60,7 @@
+           /* The ckd_add avoids signed integer overflow on
+              theoretical platforms where UINTPTR_MAX <= INT_MAX.  */
+           ckd_add (&umemplus, umem, sizeof (small_t) + sa_alignment_max - 1);
++          {
+           idx_t offset = ((umemplus & ~alignment2_mask)
+                           + sa_alignment_max - umem);
+           void *vp = mem + offset;
+@@ -72,6 +73,7 @@
+           p[-1] = offset;
+           /* p ≡ sa_alignment_max mod 2*sa_alignment_max.  */
+           return p;
++          }
+         }
+     }
+   /* Out of memory.  */
+--- sed-4.9-orig/lib/rawmemchr.c	2022-10-09 17:42:28.000000000 +0300
++++ sed-4.9-patched/lib/rawmemchr.c	2022-11-30 14:47:35.919510200 +0300
+@@ -47,6 +47,7 @@
+     if (*char_ptr == c)
+       return (void *) char_ptr;
+ 
++  {
+   longword const *longword_ptr = s = char_ptr;
+ 
+   /* Compute auxiliary longword values:
+@@ -107,6 +108,7 @@
+     }
+ 
+   char_ptr = s = longword_ptr;
++  }
+ 
+   /* At this point, we know that one of the sizeof (longword) bytes
+      starting at char_ptr is == c.  If we knew endianness, we
+--- sed-4.9-orig/lib/realloc.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/realloc.c	2022-12-01 13:47:42.870676900 +0300
+@@ -37,6 +37,8 @@
+ void *
+ rpl_realloc (void *p, size_t n)
+ {
++  void *result;
++
+   if (p == NULL)
+     return malloc (n);
+ 
+@@ -52,7 +54,7 @@
+       return NULL;
+     }
+ 
+-  void *result = realloc (p, n);
++  result = realloc (p, n);
+ 
+ #if !HAVE_MALLOC_POSIX
+   if (result == NULL)
+--- sed-4.9-orig/lib/regcomp.c	2022-10-09 17:42:17.000000000 +0300
++++ sed-4.9-patched/lib/regcomp.c	2022-12-01 13:26:11.443480200 +0300
+@@ -2652,6 +2652,9 @@
+ 		 int_fast32_t table_size, const void *symb_table,
+ 		 const unsigned char *extra)
+ {
++  unsigned int start_ch, end_ch;
++  wint_t start_wc, end_wc;
++
+   /* Equivalence Classes and Character Classes can't be a range start/end.  */
+   if (__glibc_unlikely (start_elem->type == EQUIV_CLASS
+ 			|| start_elem->type == CHAR_CLASS
+@@ -2667,17 +2670,16 @@
+ 			    && strlen ((char *) end_elem->opr.name) > 1)))
+     return REG_ECOLLATE;
+ 
+-  unsigned int
+-    start_ch = ((start_elem->type == SB_CHAR) ? start_elem->opr.ch
++  start_ch = ((start_elem->type == SB_CHAR) ? start_elem->opr.ch
+ 		: ((start_elem->type == COLL_SYM) ? start_elem->opr.name[0]
+-		   : 0)),
+-    end_ch = ((end_elem->type == SB_CHAR) ? end_elem->opr.ch
++		   : 0));
++  end_ch = ((end_elem->type == SB_CHAR) ? end_elem->opr.ch
+ 	      : ((end_elem->type == COLL_SYM) ? end_elem->opr.name[0]
+ 		 : 0));
+-  wint_t
+-    start_wc = ((start_elem->type == SB_CHAR || start_elem->type == COLL_SYM)
+-		? parse_byte (start_ch, dfa) : start_elem->opr.wch),
+-    end_wc = ((end_elem->type == SB_CHAR || end_elem->type == COLL_SYM)
++
++  start_wc = ((start_elem->type == SB_CHAR || start_elem->type == COLL_SYM)
++		? parse_byte (start_ch, dfa) : start_elem->opr.wch);
++  end_wc = ((end_elem->type == SB_CHAR || end_elem->type == COLL_SYM)
+ 	      ? parse_byte (end_ch, dfa) : end_elem->opr.wch);
+ 
+   if (start_wc == WEOF || end_wc == WEOF)
+@@ -2726,12 +2728,15 @@
+       mbcset->range_ends[mbcset->nranges++] = end_wc;
+     }
+ 
++  {
+   /* Build the table for single byte characters.  */
+-  for (wchar_t wc = 0; wc < SBC_MAX; ++wc)
++  wchar_t wc;
++  for (wc = 0; wc < SBC_MAX; ++wc)
+     {
+       if (start_wc <= wc && wc <= end_wc)
+         bitset_set (sbcset, wc);
+     }
++  }
+ 
+   return REG_NOERROR;
+ }
+@@ -3585,8 +3590,11 @@
+   if (dfa->mb_cur_max > 1)
+     bitset_mask (sbcset, dfa->sb_char);
+ 
++  {
+   /* Build a tree for simple bracket.  */
+-  re_token_t br_token = { .type = SIMPLE_BRACKET, .opr.sbcset = sbcset };
++  re_token_t br_token = { 0 };
++  br_token.type = SIMPLE_BRACKET;
++  br_token.opr.sbcset = sbcset;
+   tree = create_token_tree (dfa, NULL, NULL, &br_token);
+   if (__glibc_unlikely (tree == NULL))
+     goto build_word_op_espace;
+@@ -3611,6 +3619,7 @@
+       free_charset (mbcset);
+       return tree;
+     }
++  }
+ 
+  build_word_op_espace:
+   re_free (sbcset);
+@@ -3669,7 +3678,8 @@
+ create_tree (re_dfa_t *dfa, bin_tree_t *left, bin_tree_t *right,
+ 	     re_token_type_t type)
+ {
+-  re_token_t t = { .type = type };
++  re_token_t t = { 0 };
++  t.type = type;
+   return create_token_tree (dfa, left, right, &t);
+ }
+ 
+--- sed-4.9-orig/lib/regexec.c	2022-10-09 17:42:17.000000000 +0300
++++ sed-4.9-patched/lib/regexec.c	2022-12-01 13:29:31.249908500 +0300
+@@ -592,11 +592,12 @@
+   Idx extra_nmatch;
+   bool sb;
+   int ch;
+-  re_match_context_t mctx = { .dfa = dfa };
+   char *fastmap = ((preg->fastmap != NULL && preg->fastmap_accurate
+ 		    && start != last_start && !preg->can_be_null)
+ 		   ? preg->fastmap : NULL);
+   RE_TRANSLATE_TYPE t = preg->translate;
++  re_match_context_t mctx = { 0 };
++  *(const re_dfa_t **)(&mctx.dfa) = dfa;
+ 
+   extra_nmatch = (nmatch > preg->re_nsub) ? nmatch - (preg->re_nsub + 1) : 0;
+   nmatch -= extra_nmatch;
+@@ -1204,6 +1205,7 @@
+   const re_dfa_t *const dfa = mctx->dfa;
+   if (IS_EPSILON_NODE (dfa->nodes[node].type))
+     {
++      Idx dest_node = -1, i;
+       re_node_set *cur_nodes = &mctx->state_log[*pidx]->nodes;
+       re_node_set *edests = &dfa->edests[node];
+ 
+@@ -1215,8 +1217,7 @@
+         }
+ 
+       /* Pick a valid destination, or return -1 if none is found.  */
+-      Idx dest_node = -1;
+-      for (Idx i = 0; i < edests->nelem; i++)
++      for (i = 0; i < edests->nelem; i++)
+ 	{
+ 	  Idx candidate = edests->elems[i];
+ 	  if (!re_node_set_contains (cur_nodes, candidate))
+@@ -1336,9 +1337,10 @@
+ 		regmatch_t *regs, regmatch_t *prevregs,
+ 		re_node_set *eps_via_nodes)
+ {
++  Idx num;
+   if (fs == NULL || fs->num == 0)
+     return -1;
+-  Idx num = --fs->num;
++  num = --fs->num;
+   *pidx = fs->stack[num].idx;
+   memcpy (regs, fs->stack[num].regs, sizeof (regmatch_t) * nregs);
+   memcpy (prevregs, fs->stack[num].regs + nregs, sizeof (regmatch_t) * nregs);
+@@ -1371,6 +1373,7 @@
+   struct re_fail_stack_t *fs;
+   struct re_fail_stack_t fs_body = { 0, 2, NULL };
+   struct regmatch_list prev_match;
++  regmatch_t *prev_idx_match;
+   regmatch_list_init (&prev_match);
+ 
+   DEBUG_ASSERT (nmatch > 1);
+@@ -1394,7 +1397,7 @@
+       free_fail_stack_return (fs);
+       return REG_ESPACE;
+     }
+-  regmatch_t *prev_idx_match = regmatch_list_begin (&prev_match);
++  prev_idx_match = regmatch_list_begin (&prev_match);
+   memcpy (prev_idx_match, pmatch, sizeof (regmatch_t) * nmatch);
+ 
+   for (idx = pmatch[0].rm_so; idx <= pmatch[0].rm_eo ;)
+--- sed-4.9-orig/lib/strverscmp.c	2022-07-02 21:22:03.000000000 +0300
++++ sed-4.9-patched/lib/strverscmp.c	2022-12-01 13:43:13.440266400 +0300
+@@ -73,6 +73,7 @@
+   if (p1 == p2)
+     return 0;
+ 
++  {
+   unsigned char c1 = *p1++;
+   unsigned char c2 = *p2++;
+   /* Hint: '0' is a digit too.  */
+@@ -107,6 +108,7 @@
+     default:
+       return state;
+   }
++  }
+ }
+ libc_hidden_def (__strverscmp)
+ weak_alias (__strverscmp, strverscmp)
+--- sed-4.9-orig/lib/tempname.c	2022-10-09 17:42:28.000000000 +0300
++++ sed-4.9-patched/lib/tempname.c	2022-12-01 13:46:13.936590200 +0300
+@@ -92,6 +92,8 @@
+ static bool
+ random_bits (random_value *r, random_value s)
+ {
++  random_value v;
++
+   /* Without GRND_NONBLOCK it can be blocked for minutes on some systems.  */
+   if (__getrandom (r, sizeof *r, GRND_NONBLOCK) == sizeof *r)
+     return true;
+@@ -104,7 +106,7 @@
+ 
+      Of course we are in a state of sin here.  */
+ 
+-  random_value v = s;
++  v = s;
+ 
+ #if _LIBC || (defined CLOCK_REALTIME && HAVE_CLOCK_GETTIME)
+   struct __timespec64 tv;
+@@ -174,10 +176,11 @@
+ {
+   static int (*const tryfunc[]) (char *, void *) =
+     {
+-      [__GT_FILE] = try_file,
+-      [__GT_DIR] = try_dir,
+-      [__GT_NOCREATE] = try_nocreate
++      /*[__GT_FILE]* = */try_file,
++      /*[__GT_DIR] = */try_dir,
++      /*[__GT_NOCREATE] = */try_nocreate
+     };
++  (void)sizeof(int[1-2*(__GT_FILE != 0 || __GT_DIR != 1 || __GT_NOCREATE != 2)]);
+   return try_tempname_len (tmpl, suffixlen, &flags, tryfunc[kind],
+                            x_suffix_len);
+ }
+@@ -238,7 +241,8 @@
+ 
+   for (count = 0; count < attempts; ++count)
+     {
+-      for (size_t i = 0; i < x_suffix_len; i++)
++      size_t i;
++      for (i = 0; i < x_suffix_len; i++)
+         {
+           if (vdigits == 0)
+             {
+--- sed-4.9-orig/lib/xmalloc.c	2022-10-16 20:37:16.000000000 +0300
++++ sed-4.9-patched/lib/xmalloc.c	2022-12-01 13:46:41.334157200 +0300
+@@ -242,6 +242,7 @@
+   if (0 <= n_max && n_max < n)
+     n = n_max;
+ 
++  {
+   /* NBYTES is of a type suitable for holding the count of bytes in an object.
+      This is typically idx_t, but it should be size_t on (theoretical?)
+      platforms where SIZE_MAX < IDX_MAX so xpalloc does not pass
+@@ -271,6 +272,7 @@
+   pa = xrealloc (pa, nbytes);
+   *pn = n;
+   return pa;
++  }
+ }
+ 
+ /* Allocate S bytes of zeroed memory dynamically, with error checking.
+--- sed-4.9-orig/sed/debug.c	2022-01-02 02:00:07.000000000 +0300
++++ sed-4.9-patched/sed/debug.c	2022-11-28 10:28:37.546433700 +0300
+@@ -154,11 +154,11 @@
+ debug_print_subst_replacement (const struct replacement *r)
+ {
+   enum replacement_types last_repl_type = REPL_ASIS;
++  const struct replacement *p = r;
+ 
+   if (!r)
+     return;
+ 
+-  const struct replacement *p = r;
+   while (p)
+     {
+       if (p->repl_type != last_repl_type)
+@@ -408,6 +408,7 @@
+ void
+ debug_print_command (const struct vector *program, const struct sed_cmd *sc)
+ {
++  int j;
+   bool addr_bang;
+   if (!program)
+     return;
+@@ -415,7 +416,7 @@
+   if (sc->cmd == '}')
+     --block_level;
+ 
+-  for (int j = 0; j < block_level; ++j)
++  for (j = 0; j < block_level; ++j)
+     fputs ("  ", stdout);
+ 
+   debug_print_addr (sc->a1);
+@@ -445,12 +446,13 @@
+ void
+ debug_print_program (const struct vector *program)
+ {
++  size_t i;
+   if (!program)
+     return;
+ 
+   block_level = 1;
+   puts ("SED PROGRAM:");
+-  for (size_t i = 0; i < program->v_length; ++i)
++  for (i = 0; i < program->v_length; ++i)
+     debug_print_command (program, &program->v[i]);
+   block_level = 0;
+ }
+--- sed-4.9-orig/sed/execute.c	2022-11-27 20:26:19.935638600 +0300
++++ sed-4.9-patched/sed/execute.c	2022-11-28 10:28:37.546433700 +0300
+@@ -1028,10 +1028,11 @@
+ 
+   if (debug)
+     {
++      int i;
+       if (regs.num_regs>0 && regs.start[0] != -1)
+         puts ("MATCHED REGEX REGISTERS");
+ 
+-      for (int i = 0; i < regs.num_regs; ++i)
++      for (i = 0; i < regs.num_regs; ++i)
+         {
+           if (regs.start[i] == -1)
+             break;
+@@ -1211,6 +1212,7 @@
+               bool move_remain_buffer = false;
+               const char *tr = trans[2*i+1];
+               size_t trans_len = *tr == '\0' ? 1 : strlen (tr);
++              size_t prev_idx;
+ 
+               if (mbclen < trans_len)
+                 {
+@@ -1229,7 +1231,7 @@
+                   /* We must truncate the line buffer.  */
+                   move_remain_buffer = true;
+                 }
+-              size_t prev_idx = idx;
++              prev_idx = idx;
+               if (move_remain_buffer)
+                 {
+                   /* Move the remaining with \0.  */
+--- sed-4.9-orig/sed/regexp.c	2022-01-02 02:00:07.000000000 +0300
++++ sed-4.9-patched/sed/regexp.c	2022-11-28 10:28:37.556433700 +0300
+@@ -126,10 +126,11 @@
+               needed_sub - 1);
+       bad_prog (buf);
+     }
+-
++  {
+   int dfaopts = buffer_delimiter == '\n' ? 0 : DFA_EOL_NUL;
+   new_regex->dfa = dfaalloc ();
+   dfasyntax (new_regex->dfa, &localeinfo, syntax, dfaopts);
++  }
+   dfacomp (new_regex->re, new_regex->sz, new_regex->dfa, 1);
+ 
+   /* The patterns which consist of only ^ or $ often appear in
+--- sed-4.9-orig/sed/utils.c	2022-11-27 20:26:19.935638600 +0300
++++ sed-4.9-patched/sed/utils.c	2022-11-28 11:24:36.471441400 +0300
+@@ -194,14 +194,15 @@
+   char *template = xmalloc (strlen (tmpdir) + strlen (base) + 8);
+   sprintf (template, "%s/%sXXXXXX", tmpdir, base);
+ 
++  {
+    /* The ownership might change, so omit some permissions at first
+       so unauthorized users cannot nip in before the file is ready.
+       mkstemp forces O_BINARY on cygwin, so use mkostemp instead.  */
+   mode_t save_umask = umask (0077);
+   int fd = mkostemp (template, 0);
+   int err = errno;
+-  umask (save_umask);
+   FILE *fp = NULL;
++  umask (save_umask);
+ 
+   if (0 <= fd)
+     {
+@@ -223,6 +224,7 @@
+ 
+   register_open_file (fp, template);
+   return fp;
++  }
+ }
+ 
+ #ifdef WINDOWS_NATIVE

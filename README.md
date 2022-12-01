@@ -3,7 +3,7 @@ Instructions for building [Gnu Sed](https://www.gnu.org/software/sed) as a nativ
 
 All patches under the same license as sources of [Gnu Sed](https://www.gnu.org/software/sed): [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) or later
 
-Author of the patches: Michael M. Builov (mbuilov@gmail.com)
+Author of the patches: Michael M. Builov (mbuilov@yandex.ru)
 
 ## Fixed bugs:
 - wrong directory of input file in in-place editing mode ('-i' switch) (sed: cannot rename ./sed8JEw8l: Improper link)
@@ -18,18 +18,22 @@ Author of the patches: Michael M. Builov (mbuilov@gmail.com)
 - new switch '--locale' - to explicitly specify locale to use (and ignore environment variables LC_ALL, LC_CTYPE and LANG)
 
 ## Pre-built executables:
-- [`sed-4.8-x64.exe`](/sed-4.8-x64.exe) - sed 4.8 built for windows7 x64 (sha1sum: 92ae48678f993e5391c41da7a1e7ae44ef9ce0a9)
-- [`sed-4.8-x86.exe`](/sed-4.8-x86.exe) - sed 4.8 built for windows7 x86 (sha1sum: 47fd7cf06681fe68789ac3e45e6b8aa764200894)
-- [`sed-4.8-xp.exe`](/sed-4.8-xp.exe)   - sed 4.8 built for windowsXP x86 (does not support .UTF-8 locale) (sha1sum: 29b452f63e846e247fbed9ba46757ee47ca1397f)
+- [`sed-4.9-x64.exe`](/sed-4.9-x64.exe) - sed 4.9 built for Windows10 x64 (sha1sum: 51f8d34533bbc8f5ac6cdc422c8a3911039be81c)
+- [`sed-4.9-x86.exe`](/sed-4.9-x86.exe) - sed 4.9 built for Windows10 x86 (sha1sum: ecf1bbc23264ebb19ea71332c5fa0f90e9f23465)
+- [`sed-4.9-xp.exe`](/sed-4.9-xp.exe)   - sed 4.9 built for windowsXP x86 (does not support .UTF-8 locale) (sha1sum: 6b2f68bdb53b59f090e9bfc1c97df219f5622e55)
 
 ## Instructions how to create the build patch
-- [`sed-4.8-build-patch-howto.txt`](/sed-4.8-build-patch-howto.txt)
+- [`sed-4.9-build-patch-howto.txt`](/sed-4.9-build-patch-howto.txt)
+
+## Instructions how to apply build patch to compile sed using native tools only
+- [`sed-4.9-build.txt`](/sed-4.9-build.txt)
 
 ## Prepared build patches
-For x64/Windows7/VS19:
-- [`sed-4.8-build-VS19-x64.patch`](/sed-4.8-build-VS19-x64.patch) - patch for building Sed as a native Windows application
-- [`sed-4.8-build-VS19-x64.txt`](/sed-4.8-build-VS19-x64.txt) - instructions how to apply the patch to compile Sed using native tools only
+For x64/Windows10/VS22:
+- [`sed-4.9-build-VS22-x64.patch`](/sed-4.9-build-VS22-x64.patch)
+
+For x86/Windows10/VS22
+- [`sed-4.9-build-VS22-x86.patch`](/sed-4.9-build-VS22-x86.patch)
 
 For x86/WindowsXP/VS9
-- [`sed-4.8-build-VS9-x86.patch`](/sed-4.8-build-VS9-x86.patch) - patch for building Sed as a native Windows application
-- [`sed-4.8-build-VS9-x86.txt`](/sed-4.8-build-VS9-x86.txt) - instructions how to apply the patch to compile Sed using native tools only
+- [`sed-4.9-build-VS9-x86.patch`](/sed-4.9-build-VS9-x86.patch)
