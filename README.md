@@ -18,9 +18,9 @@ Author of the patches: Michael M. Builov (mbuilov@yandex.ru)
 - new switch '--locale' - to explicitly specify locale to use (and ignore environment variables LC_ALL, LC_CTYPE and LANG)
 
 ## Pre-built executables:
-- [`sed-4.9-x64.exe`](/sed-4.9-x64.exe) - sed 4.9 built for Windows10 x64 (sha1sum: 51f8d34533bbc8f5ac6cdc422c8a3911039be81c)
-- [`sed-4.9-x86.exe`](/sed-4.9-x86.exe) - sed 4.9 built for Windows10 x86 (sha1sum: ecf1bbc23264ebb19ea71332c5fa0f90e9f23465)
-- [`sed-4.9-xp.exe`](/sed-4.9-xp.exe)   - sed 4.9 built for windowsXP x86 (does not support .UTF-8 locale) (sha1sum: 6b2f68bdb53b59f090e9bfc1c97df219f5622e55)
+- [`sed-4.9-x64.exe`](/../../raw/master/sed-4.9-x64.exe) - sed 4.9 built for Windows10 x64 (sha1sum: 51f8d34533bbc8f5ac6cdc422c8a3911039be81c)
+- [`sed-4.9-x86.exe`](/../../raw/master/sed-4.9-x86.exe) - sed 4.9 built for Windows10 x86 (sha1sum: ecf1bbc23264ebb19ea71332c5fa0f90e9f23465)
+- [`sed-4.9-xp.exe`](/../../raw/master/sed-4.9-xp.exe)   - sed 4.9 built for windowsXP x86 (does not support .UTF-8 locale) (sha1sum: 6b2f68bdb53b59f090e9bfc1c97df219f5622e55)
 
 ## Instructions how to create the build patch
 - [`sed-4.9-build-patch-howto.txt`](/sed-4.9-build-patch-howto.txt)
