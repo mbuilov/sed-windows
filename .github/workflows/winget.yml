@@ -13,7 +13,7 @@ jobs:
         run: |
           version=$(echo "${{ github.event.release.tag_name }}" | sed "s/^sed-//")
           echo "version=$version" >> $GITHUB_OUTPUT
-      - uses: vedantmgoyal2009/winget-releaser@v2
+      - uses: vedantmgoyal9/winget-releaser@main
         with:
           identifier: mbuilov.sed
           version: ${{ steps.extract_version.outputs.version }}
