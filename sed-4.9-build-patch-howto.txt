@@ -41,6 +41,13 @@ From CYGWIN shell:
   make --version
 
 9) configure sed:
+  - for 64-bit build:
+  CFLAGS= \
+  CC="cl /Dssize_t=__int64" \
+  CPP="cl /Dssize_t=__int64 /E" \
+  LD=lib ARFLAGS="/OUT:" ./configure --enable-threads=windows --disable-dependency-tracking --disable-silent-rules --disable-nls gl_cv_sys_struct_lconv_ok=yes gt_cv_ssize_t=yes
+
+  - for 32-bit build:
   CFLAGS= CC=cl CPP="cl /E" LD=lib ARFLAGS="/OUT:" ./configure --enable-threads=windows --disable-dependency-tracking --disable-silent-rules --disable-nls gl_cv_sys_struct_lconv_ok=yes
 
   --tip: for Visual Studio 2008, add "/D_WIN32_WINNT=0x501 /D__bool_true_false_are_defined /Dbool=int /Dtrue=1 /Dfalse=0" compiler switches:
@@ -99,7 +106,10 @@ From CYGWIN shell:
     should extract path to MSVC headers, like:
     C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\VC\\INCLUDE
 
- b) now patch the previously generated headers with updated patch-file:
+ b) lib/assert.h header file may not be generated if system has builtin static_assert support, fix the patch to avoid patching missing lib/assert.h
+  test -f ./lib/assert.h || sed -i -n '\@diff -Naur .*/assert.h@{:b;n;/diff -Naur/!b b};p' ./sed-4.9-win-headers.patch
+
+ c) now patch the previously generated headers with updated patch-file:
   patch -Np1 -i ./sed-4.9-win-headers.patch
 
 15) add missing getopt sources:
@@ -187,7 +197,7 @@ Now it is possible to create a patch file - for compiling optimized sed.exe usin
   diff -rql . ../orig/sed-4.9
   Only in .: config.h
   Only in ./lib: alloca.h
-  Only in ./lib: assert.h
+# Only in ./lib: assert.h
 * Files ./lib/calloc.c and ../orig/sed-4.9/lib/calloc.c differ
 * Files ./lib/canonicalize-lgpl.c and ../orig/sed-4.9/lib/canonicalize-lgpl.c differ
   Only in ./lib: ctype.h
@@ -251,6 +261,7 @@ Now it is possible to create a patch file - for compiling optimized sed.exe usin
   Only in ./sed: version.h
 * Only in .: stdbool.h
 
+# -- if ./lib/assert.h was generated
 * -- if sed-4.9-src-non-c99.patch was applied
 
 6) edit make.bat

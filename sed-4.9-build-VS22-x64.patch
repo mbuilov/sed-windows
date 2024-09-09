@@ -1,6 +1,6 @@
 diff -Naur ../orig/sed-4.9/config.h ./config.h
 --- ../orig/sed-4.9/config.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./config.h	2022-11-27 18:29:32.988993100 +0300
++++ ./config.h	2024-09-09 13:50:27.058304800 +0300
 @@ -0,0 +1,2576 @@
 +/* config.h.  Generated from config_h.in by configure.  */
 +/* config_h.in.  Generated from configure.ac by autoheader.  */
@@ -630,7 +630,7 @@ diff -Naur ../orig/sed-4.9/config.h ./config.h
 +/* #undef HAVE_C_BOOL */
 +
 +/* Define to 1 if the static_assert keyword works. */
-+/* #undef HAVE_C_STATIC_ASSERT */
++#define HAVE_C_STATIC_ASSERT 1
 +
 +/* Define to 1 if C supports variable-length arrays. */
 +/* #undef HAVE_C_VARARRAYS */
@@ -1529,7 +1529,7 @@ diff -Naur ../orig/sed-4.9/config.h ./config.h
 +/* #undef LOCALENAME_ENHANCE_LOCALE_FUNCS */
 +
 +/* Define to 1 if lseek does not detect pipes. */
-+/* #undef LSEEK_PIPE_BROKEN */
++#define LSEEK_PIPE_BROKEN 1
 +
 +/* Define to 1 if 'lstat' dereferences a symlink specified with a trailing
 +   slash. */
@@ -2479,7 +2479,7 @@ diff -Naur ../orig/sed-4.9/config.h ./config.h
 +/* #undef socklen_t */
 +
 +/* Define as a signed type of the same size as size_t. */
-+#define ssize_t int
++/* #undef ssize_t */
 +
 +/* Define to 'int' if <sys/types.h> doesn't define. */
 +#define uid_t int
@@ -2580,7 +2580,7 @@ diff -Naur ../orig/sed-4.9/config.h ./config.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/alloca.h ./lib/alloca.h
 --- ../orig/sed-4.9/lib/alloca.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/alloca.h	2022-11-27 18:46:20.567185300 +0300
++++ ./lib/alloca.h	2024-09-09 13:52:10.580966200 +0300
 @@ -0,0 +1,73 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Memory allocation on the stack.
@@ -2655,295 +2655,9 @@ diff -Naur ../orig/sed-4.9/lib/alloca.h ./lib/alloca.h
 +#endif
 +
 +#endif /* _GL_ALLOCA_H */
-diff -Naur ../orig/sed-4.9/lib/assert.h ./lib/assert.h
---- ../orig/sed-4.9/lib/assert.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/assert.h	2022-11-27 18:47:12.286131600 +0300
-@@ -0,0 +1,282 @@
-+/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
-+/* Substitute for and wrapper around <assert.h>
-+   Copyright (C) 2011-2022 Free Software Foundation, Inc.
-+
-+   This file is free software: you can redistribute it and/or modify
-+   it under the terms of the GNU Lesser General Public License as
-+   published by the Free Software Foundation; either version 2.1 of the
-+   License, or (at your option) any later version.
-+
-+   This file is distributed in the hope that it will be useful,
-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+   GNU Lesser General Public License for more details.
-+
-+   You should have received a copy of the GNU Lesser General Public License
-+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
-+
-+/* Do not guard the include, since <assert.h> is supposed to define
-+   the assert macro each time it is included.  */
-+
-+#if __GNUC__ >= 3
-+
-+#endif
-+
-+
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\assert.h"
-+
-+/* The definition of static_assert is copied here.  */
-+/* Compile-time assert-like macros.
-+
-+   Copyright (C) 2005-2006, 2009-2022 Free Software Foundation, Inc.
-+
-+   This file is free software: you can redistribute it and/or modify
-+   it under the terms of the GNU Lesser General Public License as
-+   published by the Free Software Foundation; either version 2.1 of the
-+   License, or (at your option) any later version.
-+
-+   This file is distributed in the hope that it will be useful,
-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+   GNU Lesser General Public License for more details.
-+
-+   You should have received a copy of the GNU Lesser General Public License
-+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
-+
-+/* Written by Paul Eggert, Bruno Haible, and Jim Meyering.  */
-+
-+#ifndef _GL_STATIC_ASSERT_H
-+#define _GL_STATIC_ASSERT_H
-+
-+
-+/* Define _GL_HAVE__STATIC_ASSERT to 1 if _Static_assert (R, DIAGNOSTIC)
-+   works as per C11.  This is supported by GCC 4.6.0+ and by clang 4+.
-+
-+   Define _GL_HAVE__STATIC_ASSERT1 to 1 if _Static_assert (R) works as
-+   per C23.  This is supported by GCC 9.1+.
-+
-+   Support compilers claiming conformance to the relevant standard,
-+   and also support GCC when not pedantic.  If we were willing to slow
-+   'configure' down we could also use it with other compilers, but
-+   since this affects only the quality of diagnostics, why bother?  */
-+#ifndef __cplusplus
-+# if (201112 <= __STDC_VERSION__ \
-+      || (!defined __STRICT_ANSI__ \
-+          && (4 < __GNUC__ + (6 <= __GNUC_MINOR__) || 5 <= __clang_major__)))
-+#  define _GL_HAVE__STATIC_ASSERT 1
-+# endif
-+# if (202000 <= __STDC_VERSION__ \
-+      || (!defined __STRICT_ANSI__ && 9 <= __GNUC__))
-+#  define _GL_HAVE__STATIC_ASSERT1 1
-+# endif
-+#endif
-+
-+/* FreeBSD 9.1 <sys/cdefs.h>, included by <stddef.h> and lots of other
-+   system headers, defines a conflicting _Static_assert that is no
-+   better than ours; override it.  */
-+#ifndef _GL_HAVE__STATIC_ASSERT
-+# include <stddef.h>
-+# undef _Static_assert
-+#endif
-+
-+/* Each of these macros verifies that its argument R is nonzero.  To
-+   be portable, R should be an integer constant expression.  Unlike
-+   assert (R), there is no run-time overhead.
-+
-+   If _Static_assert works, verify (R) uses it directly.  Similarly,
-+   _GL_STATIC_ASSERT_TRUE works by packaging a _Static_assert inside a struct
-+   that is an operand of sizeof.
-+
-+   The code below uses several ideas for C++ compilers, and for C
-+   compilers that do not support _Static_assert:
-+
-+   * The first step is ((R) ? 1 : -1).  Given an expression R, of
-+     integral or boolean or floating-point type, this yields an
-+     expression of integral type, whose value is later verified to be
-+     constant and nonnegative.
-+
-+   * Next this expression W is wrapped in a type
-+     struct _gl_static_assert_type {
-+       unsigned int _gl_static_assert_error_if_negative: W;
-+     }.
-+     If W is negative, this yields a compile-time error.  No compiler can
-+     deal with a bit-field of negative size.
-+
-+     One might think that an array size check would have the same
-+     effect, that is, that the type struct { unsigned int dummy[W]; }
-+     would work as well.  However, inside a function, some compilers
-+     (such as C++ compilers and GNU C) allow local parameters and
-+     variables inside array size expressions.  With these compilers,
-+     an array size check would not properly diagnose this misuse of
-+     the verify macro:
-+
-+       void function (int n) { verify (n < 0); }
-+
-+   * For the verify macro, the struct _gl_static_assert_type will need to
-+     somehow be embedded into a declaration.  To be portable, this
-+     declaration must declare an object, a constant, a function, or a
-+     typedef name.  If the declared entity uses the type directly,
-+     such as in
-+
-+       struct dummy {...};
-+       typedef struct {...} dummy;
-+       extern struct {...} *dummy;
-+       extern void dummy (struct {...} *);
-+       extern struct {...} *dummy (void);
-+
-+     two uses of the verify macro would yield colliding declarations
-+     if the entity names are not disambiguated.  A workaround is to
-+     attach the current line number to the entity name:
-+
-+       #define _GL_CONCAT0(x, y) x##y
-+       #define _GL_CONCAT(x, y) _GL_CONCAT0 (x, y)
-+       extern struct {...} * _GL_CONCAT (dummy, __LINE__);
-+
-+     But this has the problem that two invocations of verify from
-+     within the same macro would collide, since the __LINE__ value
-+     would be the same for both invocations.  (The GCC __COUNTER__
-+     macro solves this problem, but is not portable.)
-+
-+     A solution is to use the sizeof operator.  It yields a number,
-+     getting rid of the identity of the type.  Declarations like
-+
-+       extern int dummy [sizeof (struct {...})];
-+       extern void dummy (int [sizeof (struct {...})]);
-+       extern int (*dummy (void)) [sizeof (struct {...})];
-+
-+     can be repeated.
-+
-+   * Should the implementation use a named struct or an unnamed struct?
-+     Which of the following alternatives can be used?
-+
-+       extern int dummy [sizeof (struct {...})];
-+       extern int dummy [sizeof (struct _gl_static_assert_type {...})];
-+       extern void dummy (int [sizeof (struct {...})]);
-+       extern void dummy (int [sizeof (struct _gl_static_assert_type {...})]);
-+       extern int (*dummy (void)) [sizeof (struct {...})];
-+       extern int (*dummy (void)) [sizeof (struct _gl_static_assert_type {...})];
-+
-+     In the second and sixth case, the struct type is exported to the
-+     outer scope; two such declarations therefore collide.  GCC warns
-+     about the first, third, and fourth cases.  So the only remaining
-+     possibility is the fifth case:
-+
-+       extern int (*dummy (void)) [sizeof (struct {...})];
-+
-+   * GCC warns about duplicate declarations of the dummy function if
-+     -Wredundant-decls is used.  GCC 4.3 and later have a builtin
-+     __COUNTER__ macro that can let us generate unique identifiers for
-+     each dummy function, to suppress this warning.
-+
-+   * This implementation exploits the fact that older versions of GCC,
-+     which do not support _Static_assert, also do not warn about the
-+     last declaration mentioned above.
-+
-+   * GCC warns if -Wnested-externs is enabled and 'verify' is used
-+     within a function body; but inside a function, you can always
-+     arrange to use verify_expr instead.
-+
-+   * In C++, any struct definition inside sizeof is invalid.
-+     Use a template type to work around the problem.  */
-+
-+/* Concatenate two preprocessor tokens.  */
-+#define _GL_CONCAT(x, y) _GL_CONCAT0 (x, y)
-+#define _GL_CONCAT0(x, y) x##y
-+
-+/* _GL_COUNTER is an integer, preferably one that changes each time we
-+   use it.  Use __COUNTER__ if it works, falling back on __LINE__
-+   otherwise.  __LINE__ isn't perfect, but it's better than a
-+   constant.  */
-+#if defined __COUNTER__ && __COUNTER__ != __COUNTER__
-+# define _GL_COUNTER __COUNTER__
-+#else
-+# define _GL_COUNTER __LINE__
-+#endif
-+
-+/* Generate a symbol with the given prefix, making it unique if
-+   possible.  */
-+#define _GL_GENSYM(prefix) _GL_CONCAT (prefix, _GL_COUNTER)
-+
-+/* Verify requirement R at compile-time, as an integer constant expression
-+   that returns 1.  If R is false, fail at compile-time, preferably
-+   with a diagnostic that includes the string-literal DIAGNOSTIC.  */
-+
-+#define _GL_STATIC_ASSERT_TRUE(R, DIAGNOSTIC) \
-+   (!!sizeof (_GL_STATIC_ASSERT_TYPE (R, DIAGNOSTIC)))
-+
-+#ifdef __cplusplus
-+# if !GNULIB_defined_struct__gl_static_assert_type
-+template <int w>
-+  struct _gl_static_assert_type {
-+    unsigned int _gl_static_assert_error_if_negative: w;
-+  };
-+#  define GNULIB_defined_struct__gl_static_assert_type 1
-+# endif
-+# define _GL_STATIC_ASSERT_TYPE(R, DIAGNOSTIC) \
-+    _gl_static_assert_type<(R) ? 1 : -1>
-+#elif defined _GL_HAVE__STATIC_ASSERT
-+# define _GL_STATIC_ASSERT_TYPE(R, DIAGNOSTIC) \
-+    struct {                                   \
-+      _Static_assert (R, DIAGNOSTIC);          \
-+      int _gl_dummy;                          \
-+    }
-+#else
-+# define _GL_STATIC_ASSERT_TYPE(R, DIAGNOSTIC) \
-+    struct { unsigned int _gl_static_assert_error_if_negative: (R) ? 1 : -1; }
-+#endif
-+
-+/* Verify requirement R at compile-time, as a declaration without a
-+   trailing ';'.  If R is false, fail at compile-time.
-+
-+   This macro requires three or more arguments but uses at most the first
-+   two, so that the _Static_assert macro optionally defined below supports
-+   both the C11 two-argument syntax and the C23 one-argument syntax.
-+
-+   Unfortunately, unlike C11, this implementation must appear as an
-+   ordinary declaration, and cannot appear inside struct { ... }.  */
-+
-+#if 202311 <= __STDC_VERSION__ || 200410 <= __cpp_static_assert
-+# define _GL_STATIC_ASSERT(R, DIAGNOSTIC, ...) static_assert (R, DIAGNOSTIC)
-+#elif defined _GL_HAVE__STATIC_ASSERT
-+# define _GL_STATIC_ASSERT(R, DIAGNOSTIC, ...) _Static_assert (R, DIAGNOSTIC)
-+#else
-+# define _GL_STATIC_ASSERT(R, DIAGNOSTIC, ...)                                \
-+    extern int (*_GL_GENSYM (_gl_static_assert_function) (void))	       \
-+      [_GL_STATIC_ASSERT_TRUE (R, DIAGNOSTIC)]
-+# if 4 < __GNUC__ + (6 <= __GNUC_MINOR__)
-+#  pragma GCC diagnostic ignored "-Wnested-externs"
-+# endif
-+#endif
-+
-+/* _GL_STATIC_ASSERT_H is defined if this code is copied into assert.h.  */
-+#ifdef _GL_STATIC_ASSERT_H
-+# if !defined _GL_HAVE__STATIC_ASSERT1 && !defined _Static_assert
-+#  define _Static_assert(R, ...) \
-+     _GL_STATIC_ASSERT ((R), "static assertion failed", -)
-+# endif
-+# if (!defined static_assert \
-+      && __STDC_VERSION__ < 202311 \
-+      && (!defined __cplusplus \
-+          || (__cpp_static_assert < 201411 \
-+              && __GNUG__ < 6 && __clang_major__ < 6)))
-+#  if defined __cplusplus && _MSC_VER >= 1900 && !defined __clang__
-+/* MSVC 14 in C++ mode supports the two-arguments static_assert but not
-+   the one-argument static_assert, and it does not support _Static_assert.
-+   We have to play preprocessor tricks to distinguish the two cases.
-+   Since the MSVC preprocessor is not ISO C compliant (cf.
-+   <https://stackoverflow.com/questions/5134523/>), the solution is specific
-+   to MSVC.  */
-+#   define _GL_EXPAND(x) x
-+#   define _GL_SA1(a1) static_assert ((a1), "static assertion failed")
-+#   define _GL_SA2 static_assert
-+#   define _GL_SA3 static_assert
-+#   define _GL_SA_PICK(x1,x2,x3,x4,...) x4
-+#   define static_assert(...) _GL_EXPAND(_GL_SA_PICK(__VA_ARGS__,_GL_SA3,_GL_SA2,_GL_SA1)) (__VA_ARGS__)
-+#  else
-+#   define static_assert _Static_assert /* C11 requires this #define. */
-+#  endif
-+# endif
-+#endif
-+
-+
-+#endif
 diff -Naur ../orig/sed-4.9/lib/ctype.h ./lib/ctype.h
 --- ../orig/sed-4.9/lib/ctype.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/ctype.h	2022-11-27 18:47:12.286131600 +0300
++++ ./lib/ctype.h	2024-09-09 14:11:33.944228200 +0300
 @@ -0,0 +1,538 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <ctype.h>, for platforms on which it is incomplete.
@@ -2979,7 +2693,7 @@ diff -Naur ../orig/sed-4.9/lib/ctype.h ./lib/ctype.h
 +
 +/* Include the original <ctype.h>.  */
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\ctype.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\ctype.h"
 +
 +#ifndef _GL_CTYPE_H
 +#define _GL_CTYPE_H
@@ -3485,7 +3199,7 @@ diff -Naur ../orig/sed-4.9/lib/ctype.h ./lib/ctype.h
 +#endif /* _GL_CTYPE_H */
 diff -Naur ../orig/sed-4.9/lib/errno.h ./lib/errno.h
 --- ../orig/sed-4.9/lib/errno.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/errno.h	2022-11-27 18:47:12.286131600 +0300
++++ ./lib/errno.h	2024-09-09 14:11:33.944228200 +0300
 @@ -0,0 +1,280 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A POSIX-like <errno.h>.
@@ -3513,7 +3227,7 @@ diff -Naur ../orig/sed-4.9/lib/errno.h ./lib/errno.h
 +
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\errno.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\errno.h"
 +
 +#ifndef _GL_ERRNO_H
 +#define _GL_ERRNO_H
@@ -3769,7 +3483,7 @@ diff -Naur ../orig/sed-4.9/lib/errno.h ./lib/errno.h
 +#endif /* _GL_ERRNO_H */
 diff -Naur ../orig/sed-4.9/lib/fcntl.h ./lib/fcntl.h
 --- ../orig/sed-4.9/lib/fcntl.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/fcntl.h	2022-11-27 18:47:12.301788300 +0300
++++ ./lib/fcntl.h	2024-09-09 14:11:33.944228200 +0300
 @@ -0,0 +1,952 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Like <fcntl.h>, but with non-working flags defined to 0.
@@ -3811,7 +3525,7 @@ diff -Naur ../orig/sed-4.9/lib/fcntl.h ./lib/fcntl.h
 +#if !(defined __GLIBC__ || defined __UCLIBC__) || (defined __cplusplus && defined GNULIB_NAMESPACE && (defined __ICC || !(__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))))
 +# include <sys/stat.h>
 +#endif
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\fcntl.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\fcntl.h"
 +
 +/* Native Windows platforms declare open(), creat() in <io.h>.  */
 +#if (0 || 1 || defined GNULIB_POSIXCHECK) \
@@ -3837,7 +3551,7 @@ diff -Naur ../orig/sed-4.9/lib/fcntl.h ./lib/fcntl.h
 +# include <sys/stat.h>
 +#endif
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\fcntl.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\fcntl.h"
 +
 +/* Native Windows platforms declare open(), creat() in <io.h>.  */
 +#if (0 || 1 || defined GNULIB_POSIXCHECK) \
@@ -4725,7 +4439,7 @@ diff -Naur ../orig/sed-4.9/lib/fcntl.h ./lib/fcntl.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
 --- ../orig/sed-4.9/lib/getopt-cdefs.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-cdefs.h	2022-11-27 18:47:22.020505200 +0300
++++ ./lib/getopt-cdefs.h	2024-09-09 14:12:13.445271700 +0300
 @@ -0,0 +1,68 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* getopt-on-non-glibc compatibility macros.
@@ -4797,7 +4511,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt-cdefs.h ./lib/getopt-cdefs.h
 +#endif /* _GETOPT_CDEFS_H */
 diff -Naur ../orig/sed-4.9/lib/getopt-core.h ./lib/getopt-core.h
 --- ../orig/sed-4.9/lib/getopt-core.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-core.h	2022-11-27 18:47:22.036077100 +0300
++++ ./lib/getopt-core.h	2024-09-09 14:12:13.445271700 +0300
 @@ -0,0 +1,96 @@
 +/* Declarations for getopt (basic, portable features only).
 +   Copyright (C) 1989-2020 Free Software Foundation, Inc.
@@ -4897,7 +4611,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt-core.h ./lib/getopt-core.h
 +#endif /* _GETOPT_CORE_H */
 diff -Naur ../orig/sed-4.9/lib/getopt-ext.h ./lib/getopt-ext.h
 --- ../orig/sed-4.9/lib/getopt-ext.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-ext.h	2022-11-27 18:47:22.036077100 +0300
++++ ./lib/getopt-ext.h	2024-09-09 14:12:13.445271700 +0300
 @@ -0,0 +1,77 @@
 +/* Declarations for getopt (GNU extensions).
 +   Copyright (C) 1989-2020 Free Software Foundation, Inc.
@@ -4978,7 +4692,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt-ext.h ./lib/getopt-ext.h
 +#endif /* _GETOPT_EXT_H */
 diff -Naur ../orig/sed-4.9/lib/getopt-pfx-core.h ./lib/getopt-pfx-core.h
 --- ../orig/sed-4.9/lib/getopt-pfx-core.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-pfx-core.h	2022-11-27 18:47:22.036077100 +0300
++++ ./lib/getopt-pfx-core.h	2024-09-09 14:12:13.445271700 +0300
 @@ -0,0 +1,59 @@
 +/* getopt (basic, portable features) gnulib wrapper header.
 +   Copyright (C) 1989-2020 Free Software Foundation, Inc.
@@ -5041,7 +4755,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt-pfx-core.h ./lib/getopt-pfx-core.h
 +#endif /* _GETOPT_PFX_CORE_H */
 diff -Naur ../orig/sed-4.9/lib/getopt-pfx-ext.h ./lib/getopt-pfx-ext.h
 --- ../orig/sed-4.9/lib/getopt-pfx-ext.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt-pfx-ext.h	2022-11-27 18:47:22.051887400 +0300
++++ ./lib/getopt-pfx-ext.h	2024-09-09 14:12:13.445271700 +0300
 @@ -0,0 +1,71 @@
 +/* getopt (GNU extensions) gnulib wrapper header.
 +   Copyright (C) 1989-2020 Free Software Foundation, Inc.
@@ -5116,7 +4830,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt-pfx-ext.h ./lib/getopt-pfx-ext.h
 +#endif /* _GETOPT_PFX_EXT_H */
 diff -Naur ../orig/sed-4.9/lib/getopt.c ./lib/getopt.c
 --- ../orig/sed-4.9/lib/getopt.c	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt.c	2022-11-27 18:47:22.067437000 +0300
++++ ./lib/getopt.c	2024-09-09 14:12:13.456757000 +0300
 @@ -0,0 +1,811 @@
 +/* Getopt for GNU.
 +   Copyright (C) 1987-2020 Free Software Foundation, Inc.
@@ -5931,7 +5645,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt.c ./lib/getopt.c
 +#endif /* TEST */
 diff -Naur ../orig/sed-4.9/lib/getopt.h ./lib/getopt.h
 --- ../orig/sed-4.9/lib/getopt.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt.h	2022-11-27 18:47:22.067437000 +0300
++++ ./lib/getopt.h	2024-09-09 14:12:13.468090200 +0300
 @@ -0,0 +1,88 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Declarations for getopt.
@@ -6023,7 +5737,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt.h ./lib/getopt.h
 +#endif /* _GL_GETOPT_H */
 diff -Naur ../orig/sed-4.9/lib/getopt1.c ./lib/getopt1.c
 --- ../orig/sed-4.9/lib/getopt1.c	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt1.c	2022-11-27 18:47:22.083130300 +0300
++++ ./lib/getopt1.c	2024-09-09 14:12:13.468090200 +0300
 @@ -0,0 +1,159 @@
 +/* getopt_long and getopt_long_only entry points for GNU getopt.
 +   Copyright (C) 1987-2020 Free Software Foundation, Inc.
@@ -6186,7 +5900,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt1.c ./lib/getopt1.c
 +#endif /* TEST */
 diff -Naur ../orig/sed-4.9/lib/getopt_int.h ./lib/getopt_int.h
 --- ../orig/sed-4.9/lib/getopt_int.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/getopt_int.h	2022-11-27 18:47:22.083130300 +0300
++++ ./lib/getopt_int.h	2024-09-09 14:12:13.468090200 +0300
 @@ -0,0 +1,118 @@
 +/* Internal declarations for getopt.
 +   Copyright (C) 1989-2020 Free Software Foundation, Inc.
@@ -6308,7 +6022,7 @@ diff -Naur ../orig/sed-4.9/lib/getopt_int.h ./lib/getopt_int.h
 +#endif /* getopt_int.h */
 diff -Naur ../orig/sed-4.9/lib/inttypes.h ./lib/inttypes.h
 --- ../orig/sed-4.9/lib/inttypes.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/inttypes.h	2022-11-27 18:46:22.004569200 +0300
++++ ./lib/inttypes.h	2024-09-09 13:52:11.752335900 +0300
 @@ -0,0 +1,1509 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Copyright (C) 2006-2022 Free Software Foundation, Inc.
@@ -7821,7 +7535,7 @@ diff -Naur ../orig/sed-4.9/lib/inttypes.h ./lib/inttypes.h
 +#endif /* !defined INTTYPES_H && !defined _GL_JUST_INCLUDE_SYSTEM_INTTYPES_H */
 diff -Naur ../orig/sed-4.9/lib/langinfo.h ./lib/langinfo.h
 --- ../orig/sed-4.9/lib/langinfo.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/langinfo.h	2022-11-27 18:46:22.176442300 +0300
++++ ./lib/langinfo.h	2024-09-09 13:52:11.870214400 +0300
 @@ -0,0 +1,703 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for and wrapper around <langinfo.h>.
@@ -8528,7 +8242,7 @@ diff -Naur ../orig/sed-4.9/lib/langinfo.h ./lib/langinfo.h
 +#endif /* _GL_LANGINFO_H */
 diff -Naur ../orig/sed-4.9/lib/limits.h ./lib/limits.h
 --- ../orig/sed-4.9/lib/limits.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/limits.h	2022-11-27 18:47:12.301788300 +0300
++++ ./lib/limits.h	2024-09-09 14:11:33.944228200 +0300
 @@ -0,0 +1,132 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <limits.h>.
@@ -8570,7 +8284,7 @@ diff -Naur ../orig/sed-4.9/lib/limits.h ./lib/limits.h
 +# define _GL_ALREADY_INCLUDING_LIMITS_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+# include "e:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.34.31933\include\limits.h"
++# include "e:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.41.34120\include\limits.h"
 +
 +# undef _GL_ALREADY_INCLUDING_LIMITS_H
 +
@@ -8664,7 +8378,7 @@ diff -Naur ../orig/sed-4.9/lib/limits.h ./lib/limits.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/localcharset.c ./lib/localcharset.c
 --- ../orig/sed-4.9/lib/localcharset.c	2022-07-02 21:22:03.000000000 +0300
-+++ ./lib/localcharset.c	2022-11-27 18:25:03.113939000 +0300
++++ ./lib/localcharset.c	2024-09-09 13:47:18.349922900 +0300
 @@ -925,25 +925,32 @@
    char *current_locale = setlocale (LC_CTYPE, NULL);
    char *pdot = strrchr (current_locale, '.');
@@ -8716,7 +8430,7 @@ diff -Naur ../orig/sed-4.9/lib/localcharset.c ./lib/localcharset.c
      }
 diff -Naur ../orig/sed-4.9/lib/locale.h ./lib/locale.h
 --- ../orig/sed-4.9/lib/locale.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/locale.h	2022-11-27 18:47:12.301788300 +0300
++++ ./lib/locale.h	2024-09-09 14:11:33.944228200 +0300
 @@ -0,0 +1,812 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A POSIX <locale.h>.
@@ -8758,7 +8472,7 @@ diff -Naur ../orig/sed-4.9/lib/locale.h ./lib/locale.h
 +#define _GL_ALREADY_INCLUDING_LOCALE_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\locale.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\locale.h"
 +
 +#undef _GL_ALREADY_INCLUDING_LOCALE_H
 +
@@ -9532,7 +9246,7 @@ diff -Naur ../orig/sed-4.9/lib/locale.h ./lib/locale.h
 +#endif /* !(__need_locale_t || _GL_ALREADY_INCLUDING_LOCALE_H) */
 diff -Naur ../orig/sed-4.9/lib/malloc/dynarray-skeleton.gl.h ./lib/malloc/dynarray-skeleton.gl.h
 --- ../orig/sed-4.9/lib/malloc/dynarray-skeleton.gl.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/malloc/dynarray-skeleton.gl.h	2022-11-27 18:46:21.660813800 +0300
++++ ./lib/malloc/dynarray-skeleton.gl.h	2024-09-09 13:52:11.382188600 +0300
 @@ -0,0 +1,529 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Type-safe arrays which grow dynamically.
@@ -10065,7 +9779,7 @@ diff -Naur ../orig/sed-4.9/lib/malloc/dynarray-skeleton.gl.h ./lib/malloc/dynarr
 +#undef DYNARRAY_FINAL_TYPE
 diff -Naur ../orig/sed-4.9/lib/malloc/dynarray.gl.h ./lib/malloc/dynarray.gl.h
 --- ../orig/sed-4.9/lib/malloc/dynarray.gl.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/malloc/dynarray.gl.h	2022-11-27 18:46:21.473319800 +0300
++++ ./lib/malloc/dynarray.gl.h	2024-09-09 13:52:11.212377700 +0300
 @@ -0,0 +1,173 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Type-safe arrays which grow dynamically.  Shared definitions.
@@ -10242,7 +9956,7 @@ diff -Naur ../orig/sed-4.9/lib/malloc/dynarray.gl.h ./lib/malloc/dynarray.gl.h
 +#endif /* _DYNARRAY_H */
 diff -Naur ../orig/sed-4.9/lib/malloc/scratch_buffer.gl.h ./lib/malloc/scratch_buffer.gl.h
 --- ../orig/sed-4.9/lib/malloc/scratch_buffer.gl.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/malloc/scratch_buffer.gl.h	2022-11-27 18:46:21.832689000 +0300
++++ ./lib/malloc/scratch_buffer.gl.h	2024-09-09 13:52:11.537649200 +0300
 @@ -0,0 +1,133 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Variable-sized buffer with on-stack default allocation.
@@ -10379,7 +10093,7 @@ diff -Naur ../orig/sed-4.9/lib/malloc/scratch_buffer.gl.h ./lib/malloc/scratch_b
 +#endif /* _SCRATCH_BUFFER_H */
 diff -Naur ../orig/sed-4.9/lib/mbtowc-lock.h ./lib/mbtowc-lock.h
 --- ../orig/sed-4.9/lib/mbtowc-lock.h	2022-07-02 21:22:03.000000000 +0300
-+++ ./lib/mbtowc-lock.h	2022-11-27 18:25:03.176433200 +0300
++++ ./lib/mbtowc-lock.h	2024-09-09 13:47:18.361050100 +0300
 @@ -44,7 +44,7 @@
  
  #elif defined _WIN32 && !defined __CYGWIN__
@@ -10391,7 +10105,7 @@ diff -Naur ../orig/sed-4.9/lib/mbtowc-lock.h ./lib/mbtowc-lock.h
  mbtowc_with_lock (wchar_t *pwc, const char *p, size_t m)
 diff -Naur ../orig/sed-4.9/lib/nl_langinfo.c ./lib/nl_langinfo.c
 --- ../orig/sed-4.9/lib/nl_langinfo.c	2022-07-02 21:22:03.000000000 +0300
-+++ ./lib/nl_langinfo.c	2022-11-27 18:25:03.129564500 +0300
++++ ./lib/nl_langinfo.c	2024-09-09 13:47:18.349922900 +0300
 @@ -113,21 +113,27 @@
       GetACP, which returns the locale's codepage as a number (although
       this doesn't change according to what the 'setlocale' call specified).
@@ -10432,7 +10146,7 @@ diff -Naur ../orig/sed-4.9/lib/nl_langinfo.c ./lib/nl_langinfo.c
    return result;
 diff -Naur ../orig/sed-4.9/lib/selinux/context.h ./lib/selinux/context.h
 --- ../orig/sed-4.9/lib/selinux/context.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/context.h	2022-11-27 18:46:22.801443900 +0300
++++ ./lib/selinux/context.h	2024-09-09 13:52:12.450418900 +0300
 @@ -0,0 +1,86 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* SELinux-related headers.
@@ -10522,7 +10236,7 @@ diff -Naur ../orig/sed-4.9/lib/selinux/context.h ./lib/selinux/context.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/selinux/label.h ./lib/selinux/label.h
 --- ../orig/sed-4.9/lib/selinux/label.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/label.h	2022-11-27 18:46:22.926453800 +0300
++++ ./lib/selinux/label.h	2024-09-09 13:52:12.561275100 +0300
 @@ -0,0 +1,71 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Replacement <selinux/label.h> for platforms that lack it.
@@ -10597,7 +10311,7 @@ diff -Naur ../orig/sed-4.9/lib/selinux/label.h ./lib/selinux/label.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/selinux/selinux.h ./lib/selinux/selinux.h
 --- ../orig/sed-4.9/lib/selinux/selinux.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/selinux/selinux.h	2022-11-27 18:46:22.692059000 +0300
++++ ./lib/selinux/selinux.h	2024-09-09 13:52:12.322422500 +0300
 @@ -0,0 +1,131 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Replacement <selinux/selinux.h> for platforms that lack it.
@@ -10732,7 +10446,7 @@ diff -Naur ../orig/sed-4.9/lib/selinux/selinux.h ./lib/selinux/selinux.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/stdalign.h ./lib/stdalign.h
 --- ../orig/sed-4.9/lib/stdalign.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdalign.h	2022-11-27 18:46:23.051458700 +0300
++++ ./lib/stdalign.h	2024-09-09 13:52:12.681405300 +0300
 @@ -0,0 +1,134 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C11 <stdalign.h>.
@@ -10870,7 +10584,7 @@ diff -Naur ../orig/sed-4.9/lib/stdalign.h ./lib/stdalign.h
 +#endif /* _GL_STDALIGN_H */
 diff -Naur ../orig/sed-4.9/lib/stdckdint.h ./lib/stdckdint.h
 --- ../orig/sed-4.9/lib/stdckdint.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdckdint.h	2022-11-27 18:46:23.192071800 +0300
++++ ./lib/stdckdint.h	2024-09-09 13:52:12.832651700 +0300
 @@ -0,0 +1,36 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* stdckdint.h -- checked integer arithmetic
@@ -10910,7 +10624,7 @@ diff -Naur ../orig/sed-4.9/lib/stdckdint.h ./lib/stdckdint.h
 +#endif /* _GL_STDCKDINT_H */
 diff -Naur ../orig/sed-4.9/lib/stddef.h ./lib/stddef.h
 --- ../orig/sed-4.9/lib/stddef.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stddef.h	2022-11-27 18:47:12.301788300 +0300
++++ ./lib/stddef.h	2024-09-09 14:11:33.953402900 +0300
 @@ -0,0 +1,148 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for POSIX 2008 <stddef.h>, for platforms that have issues.
@@ -10990,7 +10704,7 @@ diff -Naur ../orig/sed-4.9/lib/stddef.h ./lib/stddef.h
 +
 +/* The include_next requires a split double-inclusion guard.  */
 +
-+#  include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\stddef.h"
++#  include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stddef.h"
 +
 +/* On NetBSD 5.0, the definition of NULL lacks proper parentheses.  */
 +#  if (0 \
@@ -11062,7 +10776,7 @@ diff -Naur ../orig/sed-4.9/lib/stddef.h ./lib/stddef.h
 +#endif /* __need_XXX */
 diff -Naur ../orig/sed-4.9/lib/stdint.h ./lib/stdint.h
 --- ../orig/sed-4.9/lib/stdint.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdint.h	2022-11-27 18:47:12.317324500 +0300
++++ ./lib/stdint.h	2024-09-09 14:11:33.954413100 +0300
 @@ -0,0 +1,741 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Copyright (C) 2001-2002, 2004-2022 Free Software Foundation, Inc.
@@ -11140,7 +10854,7 @@ diff -Naur ../orig/sed-4.9/lib/stdint.h ./lib/stdint.h
 +     in <inttypes.h> would reinclude us, skipping our contents because
 +     _GL_STDINT_H is defined.
 +     The include_next requires a split double-inclusion guard.  */
-+# include "e:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.34.31933\include\stdint.h"
++# include "e:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.41.34120\include\stdint.h"
 +#endif
 +
 +#if ! defined _GL_STDINT_H && ! defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H
@@ -11807,7 +11521,7 @@ diff -Naur ../orig/sed-4.9/lib/stdint.h ./lib/stdint.h
 +#endif /* !defined _GL_STDINT_H && !defined _GL_JUST_INCLUDE_SYSTEM_STDINT_H */
 diff -Naur ../orig/sed-4.9/lib/stdio.h ./lib/stdio.h
 --- ../orig/sed-4.9/lib/stdio.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdio.h	2022-11-27 18:47:12.317324500 +0300
++++ ./lib/stdio.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,2218 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <stdio.h>.
@@ -11851,7 +11565,7 @@ diff -Naur ../orig/sed-4.9/lib/stdio.h ./lib/stdio.h
 +#define _GL_ALREADY_INCLUDING_STDIO_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\stdio.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdio.h"
 +
 +#undef _GL_ALREADY_INCLUDING_STDIO_H
 +
@@ -14029,7 +13743,7 @@ diff -Naur ../orig/sed-4.9/lib/stdio.h ./lib/stdio.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/stdlib.h ./lib/stdlib.h
 --- ../orig/sed-4.9/lib/stdlib.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/stdlib.h	2022-11-27 18:47:12.317324500 +0300
++++ ./lib/stdlib.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,2115 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <stdlib.h>.
@@ -14058,7 +13772,7 @@ diff -Naur ../orig/sed-4.9/lib/stdlib.h ./lib/stdlib.h
 +/* Special invocation conventions inside some gnulib header files,
 +   and inside some glibc header files, respectively.  */
 +
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\stdlib.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h"
 +
 +#else
 +/* Normal invocation convention.  */
@@ -14066,7 +13780,7 @@ diff -Naur ../orig/sed-4.9/lib/stdlib.h ./lib/stdlib.h
 +#ifndef _GL_STDLIB_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\stdlib.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h"
 +
 +#ifndef _GL_STDLIB_H
 +#define _GL_STDLIB_H
@@ -16148,7 +15862,7 @@ diff -Naur ../orig/sed-4.9/lib/stdlib.h ./lib/stdlib.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/string.h ./lib/string.h
 --- ../orig/sed-4.9/lib/string.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/string.h	2022-11-27 18:47:12.332980100 +0300
++++ ./lib/string.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,1805 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A GNU-like <string.h>.
@@ -16190,7 +15904,7 @@ diff -Naur ../orig/sed-4.9/lib/string.h ./lib/string.h
 +#define _GL_ALREADY_INCLUDING_STRING_H
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\string.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\string.h"
 +
 +#undef _GL_ALREADY_INCLUDING_STRING_H
 +
@@ -17957,7 +17671,7 @@ diff -Naur ../orig/sed-4.9/lib/string.h ./lib/string.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/sys/random.h ./lib/sys/random.h
 --- ../orig/sed-4.9/lib/sys/random.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/random.h	2022-11-27 18:46:24.535828100 +0300
++++ ./lib/sys/random.h	2024-09-09 13:52:13.852402000 +0300
 @@ -0,0 +1,607 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for <sys/random.h>.
@@ -18568,7 +18282,7 @@ diff -Naur ../orig/sed-4.9/lib/sys/random.h ./lib/sys/random.h
 +#endif /* _GL_SYS_RANDOM_H */
 diff -Naur ../orig/sed-4.9/lib/sys/stat.h ./lib/sys/stat.h
 --- ../orig/sed-4.9/lib/sys/stat.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/stat.h	2022-11-27 18:47:12.332980100 +0300
++++ ./lib/sys/stat.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,1461 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/stat.h header file.
@@ -18616,7 +18330,7 @@ diff -Naur ../orig/sed-4.9/lib/sys/stat.h ./lib/sys/stat.h
 +#include <time.h>
 +
 +/* The include_next requires a split double-inclusion guard.  */
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\sys\stat.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\sys\stat.h"
 +
 +#ifndef _GL_SYS_STAT_H
 +#define _GL_SYS_STAT_H
@@ -20033,7 +19747,7 @@ diff -Naur ../orig/sed-4.9/lib/sys/stat.h ./lib/sys/stat.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/sys/types.h ./lib/sys/types.h
 --- ../orig/sed-4.9/lib/sys/types.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/sys/types.h	2022-11-27 18:47:12.332980100 +0300
++++ ./lib/sys/types.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,107 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Provide a more complete sys/types.h.
@@ -20073,7 +19787,7 @@ diff -Naur ../orig/sed-4.9/lib/sys/types.h ./lib/sys/types.h
 +
 +/* The include_next requires a split double-inclusion guard.  */
 +# define _GL_INCLUDING_SYS_TYPES_H
-+#include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\sys\types.h"
++#include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\sys\types.h"
 +# undef _GL_INCLUDING_SYS_TYPES_H
 +
 +#ifndef _GL_SYS_TYPES_H
@@ -20144,7 +19858,7 @@ diff -Naur ../orig/sed-4.9/lib/sys/types.h ./lib/sys/types.h
 +#endif /* __need_XXX */
 diff -Naur ../orig/sed-4.9/lib/time.h ./lib/time.h
 --- ../orig/sed-4.9/lib/time.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/time.h	2022-11-27 18:47:12.348511800 +0300
++++ ./lib/time.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,963 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A more-standard <time.h>.
@@ -20180,7 +19894,7 @@ diff -Naur ../orig/sed-4.9/lib/time.h ./lib/time.h
 +      && !defined __MINGW32__)                         \
 +     || defined _GL_TIME_H)
 +
-+# include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\time.h"
++# include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\time.h"
 +
 +#else
 +
@@ -20192,7 +19906,7 @@ diff -Naur ../orig/sed-4.9/lib/time.h ./lib/time.h
 +#  include <unistd.h>
 +# endif
 +
-+# include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\time.h"
++# include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\time.h"
 +
 +/* NetBSD 5.0 mis-defines NULL.  */
 +# include <stddef.h>
@@ -21111,7 +20825,7 @@ diff -Naur ../orig/sed-4.9/lib/time.h ./lib/time.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/unistd.h ./lib/unistd.h
 --- ../orig/sed-4.9/lib/unistd.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/unistd.h	2022-11-27 18:46:25.426438400 +0300
++++ ./lib/unistd.h	2024-09-09 13:52:14.632312000 +0300
 @@ -0,0 +1,2836 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* Substitute for and wrapper around <unistd.h>.
@@ -23298,7 +23012,7 @@ diff -Naur ../orig/sed-4.9/lib/unistd.h ./lib/unistd.h
 +   Return the new offset if successful, otherwise -1 and errno set.
 +   See the POSIX:2008 specification
 +   <https://pubs.opengroup.org/onlinepubs/9699919799/functions/lseek.html>.  */
-+# if 0
++# if 1
 +#  if !(defined __cplusplus && defined GNULIB_NAMESPACE)
 +#   define lseek rpl_lseek
 +#  endif
@@ -23951,7 +23665,7 @@ diff -Naur ../orig/sed-4.9/lib/unistd.h ./lib/unistd.h
 +#endif /* _GL_UNISTD_H */
 diff -Naur ../orig/sed-4.9/lib/wchar.h ./lib/wchar.h
 --- ../orig/sed-4.9/lib/wchar.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/wchar.h	2022-11-27 18:47:12.348511800 +0300
++++ ./lib/wchar.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,1863 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <wchar.h>, for platforms that have issues.
@@ -24032,7 +23746,7 @@ diff -Naur ../orig/sed-4.9/lib/wchar.h ./lib/wchar.h
 +   Some builds of uClibc lack it.  */
 +/* The include_next requires a split double-inclusion guard.  */
 +#if 1
-+# include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\wchar.h"
++# include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\wchar.h"
 +#endif
 +
 +#undef _GL_ALREADY_INCLUDING_WCHAR_H
@@ -25818,7 +25532,7 @@ diff -Naur ../orig/sed-4.9/lib/wchar.h ./lib/wchar.h
 +#endif
 diff -Naur ../orig/sed-4.9/lib/wctype.h ./lib/wctype.h
 --- ../orig/sed-4.9/lib/wctype.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./lib/wctype.h	2022-11-27 18:47:12.348511800 +0300
++++ ./lib/wctype.h	2024-09-09 14:11:33.966695700 +0300
 @@ -0,0 +1,1213 @@
 +/* DO NOT EDIT! GENERATED AUTOMATICALLY! */
 +/* A substitute for ISO C99 <wctype.h>, for platforms that lack it.
@@ -25885,7 +25599,7 @@ diff -Naur ../orig/sed-4.9/lib/wctype.h ./lib/wctype.h
 +   BeOS 5 has the functions but no <wctype.h>.  */
 +/* The include_next requires a split double-inclusion guard.  */
 +#if 1
-+# include "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt\wctype.h"
++# include "z:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\wctype.h"
 +#endif
 +
 +#ifndef _GL_WCTYPE_H
@@ -27035,111 +26749,111 @@ diff -Naur ../orig/sed-4.9/lib/wctype.h ./lib/wctype.h
 +#endif
 diff -Naur ../orig/sed-4.9/make.bat ./make.bat
 --- ../orig/sed-4.9/make.bat	1970-01-01 03:00:00.000000000 +0300
-+++ ./make.bat	2022-11-27 18:53:16.723328100 +0300
++++ ./make.bat	2024-09-09 14:18:28.765340000 +0300
 @@ -0,0 +1,100 @@
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-compile.obj sed\compile.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-debug.obj sed\debug.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-execute.obj sed\execute.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-mbcs.obj sed\mbcs.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-regexp.obj sed\regexp.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-sed.obj sed\sed.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-utils.obj sed\utils.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-copy-acl.obj lib\copy-acl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-set-acl.obj lib\set-acl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-acl-errno-valid.obj lib\acl-errno-valid.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-acl-internal.obj lib\acl-internal.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-get-permissions.obj lib\get-permissions.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-set-permissions.obj lib\set-permissions.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-basename-lgpl.obj lib\basename-lgpl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-binary-io.obj lib\binary-io.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-c-ctype.obj lib\c-ctype.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-c-strcasecmp.obj lib\c-strcasecmp.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-c-strncasecmp.obj lib\c-strncasecmp.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-canonicalize-lgpl.obj lib\canonicalize-lgpl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-cloexec.obj lib\cloexec.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-close.obj lib\close.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-close-stream.obj lib\close-stream.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-closeout.obj lib\closeout.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-dfa.obj lib\dfa.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-localeinfo.obj lib\localeinfo.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-dirname-lgpl.obj lib\dirname-lgpl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-stripslash.obj lib\stripslash.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-dup2.obj lib\dup2.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-error.obj lib\error.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-exitfail.obj lib\exitfail.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fcntl.obj lib\fcntl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fd-hook.obj lib\fd-hook.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fpending.obj lib\fpending.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-free.obj lib\free.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fwriting.obj lib\fwriting.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getdelim.obj lib\getdelim.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getdtablesize.obj lib\getdtablesize.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getprogname.obj lib\getprogname.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getrandom.obj lib\getrandom.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_at_failure.obj lib\malloc\dynarray_at_failure.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_emplace_enlarge.obj lib\malloc\dynarray_emplace_enlarge.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_finalize.obj lib\malloc\dynarray_finalize.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_resize.obj lib\malloc\dynarray_resize.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_resize_clear.obj lib\malloc\dynarray_resize_clear.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-scratch_buffer_grow.obj lib\malloc\scratch_buffer_grow.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-scratch_buffer_grow_preserve.obj lib\malloc\scratch_buffer_grow_preserve.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-scratch_buffer_set_array_size.obj lib\malloc\scratch_buffer_set_array_size.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-hard-locale.obj lib\hard-locale.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-ialloc.obj lib\ialloc.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-localcharset.obj lib\localcharset.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\glthread\libsed_a-lock.obj lib\glthread\lock.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-malloca.obj lib\malloca.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mbrlen.obj lib\mbrlen.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mbrtowc.obj lib\mbrtowc.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mbsinit.obj lib\mbsinit.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mempcpy.obj lib\mempcpy.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-memrchr.obj lib\memrchr.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mkdir.obj lib\mkdir.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mkostemp.obj lib\mkostemp.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-msvc-inval.obj lib\msvc-inval.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-msvc-nothrow.obj lib\msvc-nothrow.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-nl_langinfo.obj lib\nl_langinfo.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-obstack.obj lib\obstack.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-open.obj lib\open.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-progname.obj lib\progname.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-qcopy-acl.obj lib\qcopy-acl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-qset-acl.obj lib\qset-acl.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-quotearg.obj lib\quotearg.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-rawmemchr.obj lib\rawmemchr.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-readlink.obj lib\readlink.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-reallocarray.obj lib\reallocarray.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-regex.obj lib\regex.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-rename.obj lib\rename.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-rmdir.obj lib\rmdir.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-se-context.obj lib\se-context.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-se-label.obj lib\se-label.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-se-selinux.obj lib\se-selinux.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-setlocale_null.obj lib\setlocale_null.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-stat-time.obj lib\stat-time.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-strerror.obj lib\strerror.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-strerror-override.obj lib\strerror-override.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-strverscmp.obj lib\strverscmp.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-tempname.obj lib\tempname.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\glthread\libsed_a-threadlib.obj lib\glthread\threadlib.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-unistd.obj lib\unistd.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-version-etc.obj lib\version-etc.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-version-etc-fsf.obj lib\version-etc-fsf.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-wcrtomb.obj lib\wcrtomb.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-wctob.obj lib\wctob.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-wctype-h.obj lib\wctype-h.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-xmalloc.obj lib\xmalloc.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-xalloc-die.obj lib\xalloc-die.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE_LOCALE=1 /Folib\lc-charset-dispatch.obj lib\lc-charset-dispatch.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Folib\mbtowc-lock.obj lib\mbtowc-lock.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Folib\getopt.obj lib\getopt.c || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Folib\getopt1.obj lib\getopt1.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-compile.obj sed\compile.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-debug.obj sed\debug.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-execute.obj sed\execute.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-mbcs.obj sed\mbcs.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-regexp.obj sed\regexp.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-sed.obj sed\sed.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /DLOCALEDIR="" /c /nologo /Fosed\sed-utils.obj sed\utils.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-copy-acl.obj lib\copy-acl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-set-acl.obj lib\set-acl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-acl-errno-valid.obj lib\acl-errno-valid.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-acl-internal.obj lib\acl-internal.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-get-permissions.obj lib\get-permissions.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-set-permissions.obj lib\set-permissions.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-basename-lgpl.obj lib\basename-lgpl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-binary-io.obj lib\binary-io.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-c-ctype.obj lib\c-ctype.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-c-strcasecmp.obj lib\c-strcasecmp.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-c-strncasecmp.obj lib\c-strncasecmp.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-canonicalize-lgpl.obj lib\canonicalize-lgpl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-cloexec.obj lib\cloexec.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-close.obj lib\close.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-close-stream.obj lib\close-stream.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-closeout.obj lib\closeout.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-dfa.obj lib\dfa.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-localeinfo.obj lib\localeinfo.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-dirname-lgpl.obj lib\dirname-lgpl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-stripslash.obj lib\stripslash.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-dup2.obj lib\dup2.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-error.obj lib\error.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-exitfail.obj lib\exitfail.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fcntl.obj lib\fcntl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fd-hook.obj lib\fd-hook.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fpending.obj lib\fpending.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-free.obj lib\free.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-fwriting.obj lib\fwriting.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getdelim.obj lib\getdelim.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getdtablesize.obj lib\getdtablesize.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getprogname.obj lib\getprogname.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-getrandom.obj lib\getrandom.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_at_failure.obj lib\malloc\dynarray_at_failure.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_emplace_enlarge.obj lib\malloc\dynarray_emplace_enlarge.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_finalize.obj lib\malloc\dynarray_finalize.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_resize.obj lib\malloc\dynarray_resize.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-dynarray_resize_clear.obj lib\malloc\dynarray_resize_clear.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-scratch_buffer_grow.obj lib\malloc\scratch_buffer_grow.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-scratch_buffer_grow_preserve.obj lib\malloc\scratch_buffer_grow_preserve.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\malloc\libsed_a-scratch_buffer_set_array_size.obj lib\malloc\scratch_buffer_set_array_size.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-hard-locale.obj lib\hard-locale.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-ialloc.obj lib\ialloc.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-localcharset.obj lib\localcharset.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\glthread\libsed_a-lock.obj lib\glthread\lock.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-malloca.obj lib\malloca.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mbrlen.obj lib\mbrlen.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mbrtowc.obj lib\mbrtowc.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mbsinit.obj lib\mbsinit.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mempcpy.obj lib\mempcpy.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-memrchr.obj lib\memrchr.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mkdir.obj lib\mkdir.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-mkostemp.obj lib\mkostemp.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-msvc-inval.obj lib\msvc-inval.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-msvc-nothrow.obj lib\msvc-nothrow.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-nl_langinfo.obj lib\nl_langinfo.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-obstack.obj lib\obstack.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-open.obj lib\open.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-progname.obj lib\progname.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-qcopy-acl.obj lib\qcopy-acl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-qset-acl.obj lib\qset-acl.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-quotearg.obj lib\quotearg.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-rawmemchr.obj lib\rawmemchr.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-readlink.obj lib\readlink.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-reallocarray.obj lib\reallocarray.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-regex.obj lib\regex.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-rename.obj lib\rename.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-rmdir.obj lib\rmdir.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-se-context.obj lib\se-context.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-se-label.obj lib\se-label.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-se-selinux.obj lib\se-selinux.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-setlocale_null.obj lib\setlocale_null.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-stat-time.obj lib\stat-time.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-strerror.obj lib\strerror.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-strerror-override.obj lib\strerror-override.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-strverscmp.obj lib\strverscmp.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-tempname.obj lib\tempname.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\glthread\libsed_a-threadlib.obj lib\glthread\threadlib.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-unistd.obj lib\unistd.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-version-etc.obj lib\version-etc.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-version-etc-fsf.obj lib\version-etc-fsf.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-wcrtomb.obj lib\wcrtomb.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-wctob.obj lib\wctob.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-wctype-h.obj lib\wctype-h.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-xmalloc.obj lib\xmalloc.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed  /c /nologo /Folib\libsed_a-xalloc-die.obj lib\xalloc-die.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /DGNULIB_WCHAR_SINGLE_LOCALE=1 /Folib\lc-charset-dispatch.obj lib\lc-charset-dispatch.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Folib\mbtowc-lock.obj lib\mbtowc-lock.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Folib\getopt.obj lib\getopt.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Folib\getopt1.obj lib\getopt1.c || exit /b 1
 +lib /LTCG /nologo /OUT:lib\libsed.a lib\libsed_a-copy-acl.obj lib\libsed_a-set-acl.obj lib\libsed_a-acl-errno-valid.obj lib\libsed_a-acl-internal.obj lib\libsed_a-get-permissions.obj lib\libsed_a-set-permissions.obj lib\libsed_a-basename-lgpl.obj lib\libsed_a-binary-io.obj  lib\libsed_a-c-ctype.obj lib\libsed_a-c-strcasecmp.obj lib\libsed_a-c-strncasecmp.obj lib\libsed_a-canonicalize-lgpl.obj lib\libsed_a-cloexec.obj lib\libsed_a-close.obj lib\libsed_a-close-stream.obj lib\libsed_a-closeout.obj lib\libsed_a-dfa.obj lib\libsed_a-localeinfo.obj lib\libsed_a-dirname-lgpl.obj lib\libsed_a-stripslash.obj lib\libsed_a-dup2.obj lib\libsed_a-error.obj lib\libsed_a-exitfail.obj lib\libsed_a-fcntl.obj lib\libsed_a-fd-hook.obj lib\libsed_a-fpending.obj lib\libsed_a-free.obj  lib\libsed_a-fwriting.obj lib\libsed_a-getdelim.obj lib\libsed_a-getdtablesize.obj lib\libsed_a-getprogname.obj lib\libsed_a-getrandom.obj lib\malloc\libsed_a-dynarray_at_failure.obj lib\malloc\libsed_a-dynarray_emplace_enlarge.obj lib\malloc\libsed_a-dynarray_finalize.obj lib\malloc\libsed_a-dynarray_resize.obj lib\malloc\libsed_a-dynarray_resize_clear.obj lib\malloc\libsed_a-scratch_buffer_grow.obj lib\malloc\libsed_a-scratch_buffer_grow_preserve.obj lib\malloc\libsed_a-scratch_buffer_set_array_size.obj lib\libsed_a-hard-locale.obj lib\libsed_a-ialloc.obj lib\libsed_a-localcharset.obj  lib\glthread\libsed_a-lock.obj  lib\libsed_a-malloca.obj lib\libsed_a-mbrlen.obj lib\libsed_a-mbrtowc.obj lib\libsed_a-mbsinit.obj   lib\libsed_a-mempcpy.obj lib\libsed_a-memrchr.obj lib\libsed_a-mkdir.obj lib\libsed_a-mkostemp.obj lib\libsed_a-msvc-inval.obj lib\libsed_a-msvc-nothrow.obj lib\libsed_a-nl_langinfo.obj  lib\libsed_a-obstack.obj lib\libsed_a-open.obj lib\libsed_a-progname.obj lib\libsed_a-qcopy-acl.obj lib\libsed_a-qset-acl.obj lib\libsed_a-quotearg.obj lib\libsed_a-rawmemchr.obj lib\libsed_a-readlink.obj lib\libsed_a-reallocarray.obj lib\libsed_a-regex.obj lib\libsed_a-rename.obj lib\libsed_a-rmdir.obj  lib\libsed_a-se-context.obj lib\libsed_a-se-label.obj lib\libsed_a-se-selinux.obj lib\libsed_a-setlocale_null.obj   lib\libsed_a-stat-time.obj   lib\libsed_a-strerror.obj lib\libsed_a-strerror-override.obj lib\libsed_a-strverscmp.obj lib\libsed_a-tempname.obj lib\glthread\libsed_a-threadlib.obj lib\libsed_a-unistd.obj lib\libsed_a-version-etc.obj lib\libsed_a-version-etc-fsf.obj lib\libsed_a-wcrtomb.obj lib\libsed_a-wctob.obj  lib\libsed_a-wctype-h.obj     lib\libsed_a-xmalloc.obj lib\libsed_a-xalloc-die.obj lib\lc-charset-dispatch.obj lib\mbtowc-lock.obj lib\getopt.obj lib\getopt1.obj  || exit /b 1
-+cl /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Fosed\version.obj sed\version.c || exit /b 1
++cl /Dssize_t=__int64 /Ox /GF /Gy /GS- /GL /EHsc /DHAVE_CONFIG_H /I. /I.\lib /I.\sed /c /nologo /Fosed\version.obj sed\version.c || exit /b 1
 +lib /LTCG /nologo /OUT:sed\libver.a sed\version.obj  || exit /b 1
 +link /nologo /LTCG /SUBSYSTEM:CONSOLE /OUT:sed\sed.exe /DEFAULTLIB:Advapi32.lib /DEFAULTLIB:LIBCPMT.lib wsetargv.obj sed\sed-compile.obj sed\sed-debug.obj sed\sed-execute.obj sed\sed-mbcs.obj sed\sed-regexp.obj sed\sed-sed.obj sed\sed-utils.obj sed\libver.a lib\libsed.a     || exit /b 1
 diff -Naur ../orig/sed-4.9/sed/execute.c ./sed/execute.c
 --- ../orig/sed-4.9/sed/execute.c	2022-07-03 01:22:03.000000000 +0300
-+++ ./sed/execute.c	2022-11-27 18:25:03.145189100 +0300
++++ ./sed/execute.c	2024-09-09 13:47:18.359034700 +0300
 @@ -37,6 +37,8 @@
  #include "progname.h"
  #include "xalloc.h"
@@ -27179,7 +26893,7 @@ diff -Naur ../orig/sed-4.9/sed/execute.c ./sed/execute.c
          panic (_("couldn't edit %s: is a terminal"), input->in_file_name);
 diff -Naur ../orig/sed-4.9/sed/sed.c ./sed/sed.c
 --- ../orig/sed-4.9/sed/sed.c	2022-09-15 22:51:33.000000000 +0300
-+++ ./sed/sed.c	2022-11-27 18:25:03.160808600 +0300
++++ ./sed/sed.c	2024-09-09 13:47:18.360044700 +0300
 @@ -67,9 +67,17 @@
  /* How do we edit files in-place? (we don't if NULL) */
  char *in_place_extension = NULL;
@@ -27529,7 +27243,7 @@ diff -Naur ../orig/sed-4.9/sed/sed.c ./sed/sed.c
  }
 diff -Naur ../orig/sed-4.9/sed/utils.c ./sed/utils.c
 --- ../orig/sed-4.9/sed/utils.c	2022-09-15 22:51:33.000000000 +0300
-+++ ./sed/utils.c	2022-11-27 18:25:03.160808600 +0300
++++ ./sed/utils.c	2024-09-09 13:47:18.361050100 +0300
 @@ -14,6 +14,12 @@
      You should have received a copy of the GNU General Public License
      along with this program; If not, see <https://www.gnu.org/licenses/>. */
@@ -28137,12 +27851,12 @@ diff -Naur ../orig/sed-4.9/sed/utils.c ./sed/utils.c
      }
 diff -Naur ../orig/sed-4.9/sed/version.c ./sed/version.c
 --- ../orig/sed-4.9/sed/version.c	1970-01-01 03:00:00.000000000 +0300
-+++ ./sed/version.c	2022-11-27 18:47:40.192309200 +0300
++++ ./sed/version.c	2024-09-09 14:13:07.778747100 +0300
 @@ -0,0 +1,2 @@
 +#include <config.h>
 +char const *Version = "4.9";
 diff -Naur ../orig/sed-4.9/sed/version.h ./sed/version.h
 --- ../orig/sed-4.9/sed/version.h	1970-01-01 03:00:00.000000000 +0300
-+++ ./sed/version.h	2022-11-27 18:47:40.317261200 +0300
++++ ./sed/version.h	2024-09-09 14:13:07.946602200 +0300
 @@ -0,0 +1 @@
 +extern char const *Version;
